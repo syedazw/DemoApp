@@ -55,7 +55,7 @@ export default function Dashboard() {
             </div>
             <div className="container-fluid">
                 <div className="row">
-                    <h4 className="fw-bold text-center">Critical Patients</h4>
+                    <h4 className="fw-bold text-center">CRITICAL PATIENTS</h4>
                 </div>
 
                 <div className="row">

@@ -36,6 +36,7 @@ import Account from './Form/Account'
 import LoginUser from './Form/loginUser'
 import DoctorInfo from './Form/doctorInfo'
 import PatientInfo from './Form/patientInfo'
+import CreateAccount from './Form/CreateAccount' //import page for creating doctor account
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />}></Route>
           <Route path="/admin/portal" element={<AdminPortal />}></Route>
+          <Route path="/admin/create/account" element={<CreateAccount />}></Route>
 
           {/*declaring the route for dashboard pages */}
           <Route path="/dashboard" element={< Dashboard/>}></Route>

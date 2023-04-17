@@ -12,7 +12,7 @@ export default function AdminPortal() {
                     <div className="col-12 ">
                         <div className="position-absolute top-50 start-50 translate-middle">
                             <Link to="/user/id" className="btn mx-2" style={buttonStyle}>DATABASE</Link>
-                            <Link to="/create/user" className="btn mx-2" style={buttonStyle}>CREATE ACCOUNT</Link>                            
+                            <Link to="/admin/create/account" className="btn mx-2" style={buttonStyle}>CREATE ACCOUNT</Link>                            
                             <Outlet/>
                         </div>
                     </div>

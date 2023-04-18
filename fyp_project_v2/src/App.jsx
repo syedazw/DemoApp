@@ -43,9 +43,9 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<MainPage />}></Route>
+          <Route path="/" element={<LoginUser />}></Route>
           <Route path="/admin/portal" element={<AdminPortal />}></Route>
-          <Route path="/admin/create/account" element={<CreateAccount />}></Route>
+          <Route path="/admin/create/account" element={<Account />}></Route>
 
           {/*declaring the route for dashboard pages */}
           <Route path="/dashboard" element={< Dashboard/>}></Route>

@@ -37,20 +37,30 @@ export const usefirebase = () => useContext(FirebaseContext);
 export const FirebaseProvider = (props) => {
 
     const [user, setuser] = useState(null);
+    const [newRole, setNewRole] = useState(null)
     useEffect(() => {
         onAuthStateChanged(firebaseAuth, (user) => {
-            if (user) setuser(user);
-            else setuser(null);
-            console.log("user", user);
+            if (user) {
+                setuser(user);
+                setNewRole(user)
+            }
+            else
+                setuser(null);
+            console.log("user", user.metadata.creationTime);
 
         });
     }, []);
+    console.log("Current user is ", newRole)
+
+
     // creating a function for signup
     const signupUserWithEmailAndPassword = (username, password) => {
-        return createUserWithEmailAndPassword(firebaseAuth, username, password);
-
-    };
-    // function for signin user
+        return createUserWithEmailAndPassword(firebaseAuth, username, password,{
+            role: 'admin'
+        })
+        };
+    
+        // function for signin user
     const signinUserWithEmailAndPassword = (username, password) => {
         const result = signInWithEmailAndPassword(firebaseAuth, username, password);
         console.log("successful", result);
@@ -84,26 +94,26 @@ export const FirebaseProvider = (props) => {
     };
 
     // Add sub collections(medication)
-    const addMedToCollection = async (PatientID , data) => {
-        const medref = collection(db,"Patients" , PatientID, "Medication")
-        const result = await addDoc(medref,{
+    const addMedToCollection = async (PatientID, data) => {
+        const medref = collection(db, "Patients", PatientID, "Medication")
+        const result = await addDoc(medref, {
             data,
             AddedAt: serverTimestamp()
         })
         return result;
     };
     // Add sub collections(Report)
-    const addReportToCollection = async (PatientId,testName, testFile) => {
-        
-           const fileRef = ref(storage, `uploads/TestFiles/${Date.now()}-${testFile}`);
-            const uploadResult = await uploadBytes(fileRef, testFile);
-            const repref = collection(db, "Patients" ,PatientId, "Reports");
-            const result = await addDoc(repref, {
-                testName,
-                TestFile: uploadResult.ref.fullPath,
-                AddedAt: serverTimestamp()
-            });
-            return result;
+    const addReportToCollection = async (PatientId, testName, testFile) => {
+
+        const fileRef = ref(storage, `uploads/TestFiles/${Date.now()}-${testFile}`);
+        const uploadResult = await uploadBytes(fileRef, testFile);
+        const repref = collection(db, "Patients", PatientId, "Reports");
+        const result = await addDoc(repref, {
+            testName,
+            TestFile: uploadResult.ref.fullPath,
+            AddedAt: serverTimestamp()
+        });
+        return result;
 
 
     };
@@ -128,7 +138,7 @@ export const FirebaseProvider = (props) => {
 
     };
     // GETTING PATIENT DATA ON HOME SCREEN
-    const getpatdata = async() =>{
+    const getpatdata = async () => {
         return getDocs(collection(db, "Patients", "2qJuGO3p9BjuRLo6Ftm2"))
 
 
@@ -151,26 +161,26 @@ export const FirebaseProvider = (props) => {
 
     };
 
-        //   GET NOTES DATA
-    const getNotesById = async(PatientID) => {
-        const noteref = collection(db, "Patients",PatientID, "Notes")
+    //   GET NOTES DATA
+    const getNotesById = async (PatientID) => {
+        const noteref = collection(db, "Patients", PatientID, "Notes")
         const result = await getDocs(noteref);
         return result;
-        
+
     };
-          //   GET MEDICTION DATA
-    const getMedByID = async(PatientID) => {
-        const medref = collection(db,"Patients", PatientID,"Medication")
+    //   GET MEDICTION DATA
+    const getMedByID = async (PatientID) => {
+        const medref = collection(db, "Patients", PatientID, "Medication")
         const result = await getDocs(medref);
         return result;
     }
-         //   GET REPORT DATA
-    const getReportById =async(PatientID) =>{
-        const repref = collection(db,"Patients", PatientID,"Reports")
+    //   GET REPORT DATA
+    const getReportById = async (PatientID) => {
+        const repref = collection(db, "Patients", PatientID, "Reports")
         const result = await getDocs(repref);
         return result;
     }
-    
+
 
 
     return (
@@ -178,8 +188,8 @@ export const FirebaseProvider = (props) => {
             signupUserWithEmailAndPassword, signinUserWithEmailAndPassword,
             uploadDataToFirestore, uploadFilesToFirestore,
             addMedToCollection, addNotesToCollection,
-            addReportToCollection, ListPatientData, getPatientProfilebyId,getNotesById,
-            getMedByID,getReportById,getpatdata
+            addReportToCollection, ListPatientData, getPatientProfilebyId, getNotesById,
+            getMedByID, getReportById, getpatdata, newRole
         }}>
             {props.children}
         </FirebaseContext.Provider>

@@ -181,7 +181,7 @@ export default function PatientProfile() {
                     </div>
 
                     <div className="row-md-4">
-                        <h4 className="fw-bold text-center">ASSIGNED ASSISTANTS</h4>
+                      
                     </div>
 
                     <div className="row">

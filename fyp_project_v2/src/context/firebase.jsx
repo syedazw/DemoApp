@@ -4,8 +4,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 // importing Firestore from firebase
 import { getFirestore, addDoc, doc, getDoc, collection, serverTimestamp, getDocs } from "firebase/firestore";
-import { getStorage, uploadBytes } from 'firebase/storage'
-import { getDatabase, set , ref } from "firebase/database";
+import { getStorage, uploadBytes,ref as ref_storage} from 'firebase/storage'
+import { getDatabase, set , ref as ref_database } from "firebase/database";
 
 
 
@@ -95,7 +95,7 @@ export const FirebaseProvider = (props) => {
     // Add sub collections(Report)
     const addReportToCollection = async (PatientId, testName, testFile) => {
 
-        const fileRef = ref(storage, `uploads/TestFiles/${Date.now()}-${testFile}`);
+        const fileRef = ref_storage(storage, `uploads/TestFiles/${Date.now()}-${testFile}`);
         const uploadResult = await uploadBytes(fileRef, testFile);
         const repref = collection(db, "Patients", PatientId, "Reports");
         const result = await addDoc(repref, {
@@ -116,7 +116,7 @@ export const FirebaseProvider = (props) => {
             //iterate over each file to collect the name
             console.log(docs[i].name)
             let fileName = docs[i].name
-            const imageRef = ref(storage, `uploads/document/${Date.now()}-${fileName}`)
+            const imageRef = ref_storage(storage, `uploads/document/${Date.now()}-${fileName}`)
             const uploadResult = await uploadBytes(imageRef, docs);
             return await addDoc(collection(db, "Doctor"), {
                 data,
@@ -130,12 +130,17 @@ export const FirebaseProvider = (props) => {
     //  ***************  FIREBASE REALTIME DATABASE **************
     
     const putData = (PatientID, data) => {
-        const dbRef = ref(database, `Patients/${PatientID}/${Date.now()}`);
+        const dbRef = ref_database(database, `Patients/${PatientID}`);
         set(dbRef, { 
-            data, 
-            timestamp: serverTimestamp() });
+            data,
+            
+            });
 
     }
+
+    // ***************** QUERY FIREBASE DATA **************************
+
+    
 
 
     // GETTING PATIENT DATA ON HOME SCREEN

@@ -50,13 +50,13 @@ export default function PatientProfile() {
     // 4. Report
     const [report, setReport] = useState([]);
 
-useEffect(() => {
-  firebase.getReportById(params.PatientID).then((Report) => {
-    const reportData = Report.docs.map((doc) => doc.data());
-    setReport(reportData);
-    console.log("report",reportData)
-  });
-}, []);
+    useEffect(() => {
+        firebase.getReportById(params.PatientID).then((Report) => {
+            const reportData = Report.docs.map((doc) => doc.data());
+            setReport(reportData);
+            console.log("report", reportData)
+        });
+    }, []);
     // const [patientData, setPatientData] = useState([]);
     // useEffect(() => {
     //     firebase.ListPatientData().then((patientData) => {
@@ -131,7 +131,9 @@ useEffect(() => {
                         ))}
                     </div>
                     <div className="col-sm-4 col-md-6">
-                        <Cardiogram />
+                        <Cardiogram
+                            patid={params.PatientID}
+                        />
                         <button type="button" className="btn btn-width bg-color text-light mx-5 mt-2">View Full Screen</button>
                     </div>
                 </div>
@@ -167,18 +169,50 @@ useEffect(() => {
                     </div>
                     <div className="col-md-4">
                         {report.map((item) => (
-                        <DisplayTestReport
-                        key = {item.id}
-                        id = {item.id}
-                        testName = {item.testName}
-                        testFile = {item.testFile}
-                        patid={params.PatientID} />
+                            <DisplayTestReport
+                                key={item.id}
+                                id={item.id}
+                                testName={item.testName}
+                                testFile={item.testFile}
+                                patid={params.PatientID} />
                         ))
                         }
 
                     </div>
+
+                    <div className="row-md-4">
+                        <h4 className="fw-bold text-center">ASSIGNED ASSISTANTS</h4>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-sm-12 col-md-4 mx-auto">
+                            <table className="table justify-content-center table-striped">
+                                <thead className="bg-color text-light">
+                                    <tr>
+                                        <th scope="col">Patient ID</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Assistant Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    <tr>
+                                        <th scope="row">1</th>
+                                        <td>aisha</td>
+                                        <td>maria</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
                 </div>
+
+
+
             </div>
+
 
         </>
     )

@@ -2,10 +2,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 //  A function that creates a user (SIGNUP)
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-import { getDatabase } from 'firebase/database'
 // importing Firestore from firebase
 import { getFirestore, addDoc, doc, getDoc, collection, serverTimestamp, getDocs } from "firebase/firestore";
-import { getStorage, ref, uploadBytes } from 'firebase/storage'
+import { getStorage, uploadBytes } from 'firebase/storage'
+import { getDatabase, set , ref } from "firebase/database";
 
 
 
@@ -37,30 +37,20 @@ export const usefirebase = () => useContext(FirebaseContext);
 export const FirebaseProvider = (props) => {
 
     const [user, setuser] = useState(null);
-    const [newRole, setNewRole] = useState(null)
     useEffect(() => {
         onAuthStateChanged(firebaseAuth, (user) => {
-            if (user) {
-                setuser(user);
-                setNewRole(user)
-            }
-            else
-                setuser(null);
-            console.log("user", user.metadata.creationTime);
+            if (user) setuser(user);
+            else setuser(null);
+            console.log("user", user);
 
         });
     }, []);
-    console.log("Current user is ", newRole)
-
-
     // creating a function for signup
     const signupUserWithEmailAndPassword = (username, password) => {
-        return createUserWithEmailAndPassword(firebaseAuth, username, password,{
-            role: 'admin'
-        })
-        };
-    
-        // function for signin user
+        return createUserWithEmailAndPassword(firebaseAuth, username, password);
+
+    };
+    // function for signin user
     const signinUserWithEmailAndPassword = (username, password) => {
         const result = signInWithEmailAndPassword(firebaseAuth, username, password);
         console.log("successful", result);
@@ -137,15 +127,23 @@ export const FirebaseProvider = (props) => {
 
 
     };
+    //  ***************  FIREBASE REALTIME DATABASE **************
+    
+    const putData = (PatientID, data) => {
+        const dbRef = ref(database, `Patients/${PatientID}/${Date.now()}`);
+        set(dbRef, { 
+            data, 
+            timestamp: serverTimestamp() });
+
+    }
+
+
     // GETTING PATIENT DATA ON HOME SCREEN
     const getpatdata = async () => {
         return getDocs(collection(db, "Patients", "2qJuGO3p9BjuRLo6Ftm2"))
 
 
     }
-
-
-
 
     // ******************************** RETRIEVING DATA ***********************************
     // getting patient Data
@@ -189,7 +187,7 @@ export const FirebaseProvider = (props) => {
             uploadDataToFirestore, uploadFilesToFirestore,
             addMedToCollection, addNotesToCollection,
             addReportToCollection, ListPatientData, getPatientProfilebyId, getNotesById,
-            getMedByID, getReportById, getpatdata, newRole
+            getMedByID, getReportById, getpatdata , putData
         }}>
             {props.children}
         </FirebaseContext.Provider>

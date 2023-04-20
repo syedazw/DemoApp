@@ -45,7 +45,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LoginUser />}></Route>
           <Route path="/admin/portal" element={<AdminPortal />}></Route>
-          <Route path="/admin/create/account" element={<Account />}></Route>
+          <Route path="/admin/create/account" element={<Account />}></Route>   {/* creating account with different user domain */}
 
           {/*declaring the route for dashboard pages */}
           <Route path="/dashboard" element={< Dashboard/>}></Route>

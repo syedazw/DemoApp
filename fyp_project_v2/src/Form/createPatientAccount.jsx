@@ -18,7 +18,8 @@ export default function PatientInfo() {
         weight: "",
         height: "",
         dob: "",
-        homeAddress: ""
+        homeAddress: "",
+        isCritical: false
     })
 
     const [isfill, setIsFill] = React.useState(true)
@@ -32,12 +33,12 @@ export default function PatientInfo() {
         event.preventDefault()
         // destructure event.target
         // console.log(event.target)
-        const { name, value } = event.target   // destructuring event.target
+        const { name, value, type, checked } = event.target   // destructuring event.target
         setpatientRegister((prevData) => {
             return {
                 ...prevData,
                 // if type of input is checkbox then store it in checked else in value
-                [name]: value
+                [name]: type === "checkbox" ? checked : value
             }
         })
     }
@@ -73,7 +74,7 @@ export default function PatientInfo() {
             height: patientRegister.height,
             dob: patientRegister.dob,
             homeAddress: patientRegister.homeAddress,
-
+            critical: patientRegister.isCritical
         }
         const result = firebase.uploadDataToFirestore(collectionName, data);
         console.log("suucessfully added patient data with generated id", result); // result shows id of collection
@@ -222,6 +223,18 @@ export default function PatientInfo() {
                                         <span className="input-group-addon">
                                             <span className="glyphicon glyphicon-calendar"></span>
                                         </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-12">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="checkbox" value="" id="invalidCheck" required name="isCritical" checked={setpatientRegister.isCritical} onChange={handleChange} />
+                                    <label className="form-check-label" htmlFor="invalidCheck">
+                                        Is Patient Condition Critical?
+                                    </label>
+                                    <div className="invalid-feedback">
+                                        You must agree before submitting.
                                     </div>
                                 </div>
                             </div>

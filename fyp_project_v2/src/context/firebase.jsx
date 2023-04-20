@@ -41,7 +41,7 @@ export const FirebaseProvider = (props) => {
         onAuthStateChanged(firebaseAuth, (user) => {
             if (user) setuser(user);
             else setuser(null);
-            console.log("user", user);
+            // console.log("user", user);
 
         });
     }, []);

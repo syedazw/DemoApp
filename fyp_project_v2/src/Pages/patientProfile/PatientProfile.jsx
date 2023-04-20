@@ -8,10 +8,6 @@ import DisplayNotesWithDate from "../../Components/displayNoteWithDate"; //third
 import DisplayMedication from "../../Components/displayMedicine"; //fourth component: show medicine with dosage
 import DisplayTestReport from "../../Components/displayReports"; //fifth component: show reports
 
-
-//instructions:
-// create a function which list down the medicine with dosage and pass it value as props in a DisplayMedication component
-
 export default function PatientProfile() {
     const navigate = useNavigate();
     let critical = true
@@ -39,6 +35,7 @@ export default function PatientProfile() {
         })
     }, [])
 
+    
     // 3. Medication
     const [med, setmed] = useState([]);
     useEffect(() => {
@@ -47,9 +44,11 @@ export default function PatientProfile() {
             setmed(med.docs[0].data().data)
         })
     }, [])
+
+
+
     // 4. Report
     const [report, setReport] = useState([]);
-
     useEffect(() => {
         firebase.getReportById(params.PatientID).then((Report) => {
             const reportData = Report.docs.map((doc) => doc.data());
@@ -57,15 +56,7 @@ export default function PatientProfile() {
             console.log("report", reportData)
         });
     }, []);
-    // const [patientData, setPatientData] = useState([]);
-    // useEffect(() => {
-    //     firebase.ListPatientData().then((patientData) => {
-    //         {setPatientData(patientData.docs[0].data().data)
-    //             console.log("patient data",patientData.data())
-    //         }
-    //             // console.log("Data required...", patientData.docs[0].data().data)
-    //     });
-    // }, []);
+    
 
 
 
@@ -142,71 +133,92 @@ export default function PatientProfile() {
             <div className="container-fluid mt-2">
                 <div className="row">
                     <div className="col-sm-12 col-md-4">
-                        {
-                            notes.map((item) => (
-                                <DisplayNotesWithDate
-                                    key={item.id}
-                                    id={item.id}
-                                    term={item.term}
-                                    description={item.description}
-                                    patid={params.PatientID}
-                                />
-                            ))
-                        }
+                        <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-sm-12 col-md-12">
+                                    <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
+                                        <div className="card-body">
+                                            <h5 className="card-title">Notes</h5>
+                                            <hr className="border-5" style={{ color: "white" }}></hr>
+                                            {
+                                                notes.map((item) => (
+                                                    <DisplayNotesWithDate
+                                                        key={item.id}
+                                                        id={item.id}
+                                                        term={item.term}
+                                                        description={item.description}
+                                                    // patid={params.PatientID}
+                                                    />
+                                                ))
+                                            }
+                                        </div>
+                                        <button className="nav-link btn btn-width align-self-center mb-3 p-1" type="submit" onClick={(e) => navigate(`/patientprofile/notes/${params.PatientID}`)} style={{ color: "white", backgroundColor: "#24a3ac" }}>Edit Notes </button>
+                                        <Outlet />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    {/* MEDICATIONS */}
                     <div className="col-md-4">
-                        {med.map((item) => (
-                            <DisplayMedication
-                                key={item.id}
-                                id={item.id}
-                                medicineName={item.medicineName}
-                                dosage={item.dosage}
-                                patid={params.PatientID}
-                            />
-                        ))
-                        }
-
+                        <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
+                                        <div className="card-body">
+                                            <h5 className="card-title">Medications</h5>
+                                            <hr className="border-5" style={{ color: "white" }}></hr>
+                                            {med.map((item) => (
+                                                <DisplayMedication
+                                                    key={item.id}
+                                                    id={item.id}
+                                                    medicineName={item.medicineName}
+                                                    dosage={item.dosage}
+                                                // patid={params.PatientID}
+                                                />
+                                            ))
+                                            }
+                                        </div>
+                                        <button className="nav-link btn btn-width align-self-center mb-3 p-1" type="submit" onClick={(e) => navigate(`/patientprofile/medication/${params.PatientID}`)} style={{ color: "white", backgroundColor: "#24a3ac" }}>Add Medicine</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    {/* REPORTS */}
                     <div className="col-md-4">
-                        {report.map((item) => (
-                            <DisplayTestReport
-                                key={item.id}
-                                id={item.id}
-                                testName={item.testName}
-                                testFile={item.testFile}
-                                patid={params.PatientID} />
-                        ))
-                        }
-
-                    </div>
-
-                    <div className="row-md-4">
-                      
-                    </div>
-
-                    <div className="row">
-                        <div className="col-sm-12 col-md-4 mx-auto">
-                            <table className="table justify-content-center table-striped">
-                                <thead className="bg-color text-light">
-                                    <tr>
-                                        <th scope="col">Patient ID</th>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Assistant Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="table-group-divider">
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>aisha</td>
-                                        <td>maria</td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-
+                        <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-sm-12 col-md-12">
+                                    <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
+                                        <div className="card-body">
+                                            <h5 className="card-title">Reports</h5>
+                                            <hr className="border-5" style={{ color: "white" }}></hr>
+                                            {report.map((item) => (
+                                                <DisplayTestReport
+                                                    key={item.id}
+                                                    id={item.id}
+                                                    testName={item.testName}
+                                                    testFile={item.testFile}
+                                                // patid={params.PatientID}
+                                                />
+                                            ))
+                                            }
+                                        </div>
+                                        <button className="nav-link btn btn-width align-self-center mb-3 p-1" type="submit" onClick={(e) => navigate(`/patientprofile/reports/${params.PatientID}`)} style={{ color: "white", backgroundColor: "#24a3ac" }}>Add Report</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
+
                     </div>
+
+
+
+
                 </div>
 
 

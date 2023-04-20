@@ -10,16 +10,38 @@ import { getDatabase, ref, set, push, child, serverTimestamp } from "firebase/da
 
 
 const Cardiogram = () => {
+  const buttonStyle = { color: "white", backgroundColor: "#041342", borderRadius: "6px", textDecoration: "none" }
   const firebase = usefirebase();
   console.log(firebase);
   const database = getDatabase();
 
   const params = useParams();
-    console.log("params is",params)
+  console.log("params is", params)
 
 
   const [data, updateData] = useState([1]);
   const [fetchingData, setFetching] = useState(false)
+
+
+  const [audioCtx, setAudioCtx] = useState(null);
+  const [alarm, setAlarm] = useState(false)
+
+  const PlayAlarm = () => {
+    const newAudioCtx = new AudioContext();
+    const oscillator = newAudioCtx.createOscillator();
+    oscillator.type = 'sawtooth'
+    oscillator.frequency.setValueAtTime(440, newAudioCtx.currentTime);
+    oscillator.connect(newAudioCtx.destination);
+    oscillator.start();
+    setAudioCtx(newAudioCtx);
+  };
+
+  const StopAlarm = () => {
+    if (audioCtx) {
+      audioCtx.close();
+      setAudioCtx(null);
+    }
+  };
 
 
 
@@ -49,6 +71,8 @@ const Cardiogram = () => {
 
         if (checkHeart.length > 0) {
           console.log("Heart attack")
+          // setAlarm(true)
+          // PlayAlarm
         } else {
           checkarray = []
         }
@@ -87,6 +111,11 @@ const Cardiogram = () => {
     firebase.putData(params.PatientID, data);
   };
 
+  const handleTrigger = () => {
+    PlayAlarm()
+    setAlarm(true)
+  }
+
 
   return (
     <div>
@@ -94,9 +123,13 @@ const Cardiogram = () => {
         <div className="row">
           <div className="col-md-6">
             <ApexChart data={data} title="Product Trends by Month" />
-            <button className="btn bg-color text-light mx-2" onClick={putDatanew} >Start</button>
-            <button className="btn bg-color text-light" onClick={() => setFetching(false)}>Stop</button>
-
+            <button className="text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
+            <button className="text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
+            <button className="btn btn-warning" onClick={handleTrigger}>Trigger Alarm</button>
+            {alarm ?
+              <div>
+                <button className="btn btn-danger" role="alert" onClick={StopAlarm}>Stop Alarm</button>
+              </div> : null}
           </div>
         </div>
       </div>

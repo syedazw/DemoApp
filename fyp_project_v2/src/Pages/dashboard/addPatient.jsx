@@ -62,7 +62,7 @@ export default function AddPatient() {
                 </div>
 
                 <div className="row">
-                    <div className="col-sm-12 col-md-8 mx-auto">
+                    <div className="col-sm-12 col-md-12 mx-auto">
                         <CreatePatientAccount/>
                     </div>
 

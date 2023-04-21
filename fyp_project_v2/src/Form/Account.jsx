@@ -49,11 +49,11 @@ export default function Account() {
                             <a className="mx-5" style={{ color: "#041342" }}>Already have an account?</a>
                             <div className="row">
                                 <div className="col-sm-5 col-md-12 mx-5">
-                                    <button type="submit" className="mt-4 me-4 p-2" style={{color: "white", backgroundColor: "#041342" }}>
+                                    {/* <button type="submit" className="mt-4 me-4 p-2" style={{color: "white", backgroundColor: "#041342" }}>
                                         <Link to="/loginpage" className="nav-link" style={{color: "white", backgroundColor: "#041342" }}>LOGIN</Link>
-                                    </button>
-                                    <button type="submit" className="mt-4 mx-4 p-2" style={buttonStyle} onClick={()=> firebase.signupUserWithEmailAndPassword(userRegistration.username, userRegistration.password)}>
-                                        <Link to="/account" className="nav-link" >SIGNUP</Link>
+                                    </button> */}
+                                    <button type="submit" className="mt-4 p-2" style={buttonStyle} onClick={()=> firebase.signupUserWithEmailAndPassword(userRegistration.username, userRegistration.password)}>
+                                        SIGNUP
                                     </button>
                                     <Outlet />
                                 </div>

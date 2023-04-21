@@ -57,7 +57,6 @@ export default function PatientInfo() {
 
     const addPatientData = (event) => {
         event.preventDefault();
-
         // Add data to firestore
         const collectionName = "Patients";
         const data = {
@@ -76,8 +75,11 @@ export default function PatientInfo() {
             homeAddress: patientRegister.homeAddress,
             critical: patientRegister.isCritical
         }
+        let password = 123456789
         const result = firebase.uploadDataToFirestore(collectionName, data);
         console.log("suucessfully added patient data with generated id", result); // result shows id of collection
+        const newAccount = firebase.signupUserWithEmailAndPassword(patientRegister.email, password)
+        console.log("Patient Account successfully created", newAccount)
     }
 
 

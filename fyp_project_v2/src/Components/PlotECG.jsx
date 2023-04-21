@@ -37,9 +37,11 @@ const Cardiogram = () => {
   };
 
   const StopAlarm = () => {
+    console.log("value of boolean is ",audioCtx)
     if (audioCtx) {
       audioCtx.close();
       setAudioCtx(null);
+      // setAlarm(false)
     }
   };
 
@@ -66,13 +68,17 @@ const Cardiogram = () => {
 
       if (checkarray.length > 15) {
         console.log("checkarray", checkarray)
-        let checkHeart = checkarray.filter(e => e > 800 || e < 400)
+
+        // orignal - store the value which are greater than 800 or less than 400
+        // normal - between 401 and 799
+        // abnormal - less than 400, greater than 800
+        let checkHeart = checkarray.filter(e => e > 500 || e < 800)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {
           console.log("Heart attack")
-          // setAlarm(true)
-          // PlayAlarm
+          setAlarm(true)
+          PlayAlarm()
         } else {
           checkarray = []
         }
@@ -88,6 +94,10 @@ const Cardiogram = () => {
     }).catch(err => console.log(err))
 
   }, [data])
+  // if (checkarray.length > 0) {
+  //   setAlarm(true)
+  //   PlayAlarm()
+  // }
 
   console.log("length of data", data.length);
 
@@ -111,10 +121,8 @@ const Cardiogram = () => {
     firebase.putData(params.PatientID, data);
   };
 
-  const handleTrigger = () => {
-    PlayAlarm()
-    setAlarm(true)
-  }
+
+
 
 
   return (
@@ -125,15 +133,13 @@ const Cardiogram = () => {
             <ApexChart data={data} title="Product Trends by Month" />
             <button className="text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
             <button className="text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
-            <button className="btn btn-warning" onClick={handleTrigger}>Trigger Alarm</button>
             {alarm ?
               <div>
-                <button className="btn btn-danger" role="alert" onClick={StopAlarm}>Stop Alarm</button>
+                <button className="btn btn-danger m-1" role="alert" onClick={StopAlarm}><i className="bi bi-exclamation-triangle-fill m-2"></i>Stop Alarm</button>
               </div> : null}
           </div>
         </div>
       </div>
-
     </div>
   );
 }

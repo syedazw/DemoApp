@@ -1,13 +1,13 @@
 import React from "react"
 import { Outlet, Link } from "react-router-dom"
 // import hook which we have make in firebase,jsx
-import {usefirebase} from '../context/firebase'
+import { usefirebase } from '../context/firebase'
 
 export default function Account() {
     const firebase = usefirebase();
     console.log('firebase', firebase);
 
-    const buttonStyle = {color: "white", backgroundColor: "#041342", borderRadius:"6px"}
+    const buttonStyle = { color: "white", backgroundColor: "#041342", borderRadius: "6px" }
     const [userRegistration, setUpdateUserRegistration] = React.useState(
         { username: "", password: "", confirmPassword: "" }
     )
@@ -23,6 +23,13 @@ export default function Account() {
         })
     }
 
+    function createAccountbyAdmin(event) {
+        event.preventDefault()
+        event.stopPropagation()
+        let result = firebase.signupUserWithEmailAndPassword(userRegistration.username, userRegistration.password)
+        console.log("Account created by Admin Successfully", result)
+    }
+
     return (
         <>
             <div className="container-fluid">
@@ -33,7 +40,7 @@ export default function Account() {
 
                             <div className="mt-2 mb-2 mx-5">
                                 <label htmlFor="exampleInputText" className="form-label fw-bold mb-0" style={{ color: "#041342" }}>Username:</label>
-                                <input type="text" className="form-control" id="exampleInputText" aria-describedby="textHelp" name="username" value={userRegistration.username} onChange={handleChange}/>
+                                <input type="text" className="form-control" id="exampleInputText" aria-describedby="textHelp" name="username" value={userRegistration.username} onChange={handleChange} />
                             </div>
 
                             <div className="mb-2 mx-5">
@@ -52,7 +59,7 @@ export default function Account() {
                                     {/* <button type="submit" className="mt-4 me-4 p-2" style={{color: "white", backgroundColor: "#041342" }}>
                                         <Link to="/loginpage" className="nav-link" style={{color: "white", backgroundColor: "#041342" }}>LOGIN</Link>
                                     </button> */}
-                                    <button type="submit" className="mt-4 p-2" style={buttonStyle} onClick={()=> firebase.signupUserWithEmailAndPassword(userRegistration.username, userRegistration.password)}>
+                                    <button type="submit" className="mt-4 p-2" style={buttonStyle} onClick={createAccountbyAdmin}>
                                         SIGNUP
                                     </button>
                                     <Outlet />

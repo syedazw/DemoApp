@@ -1,8 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"
+
 
 export default function DisplayTestReport(props) {
-    const navigate = useNavigate();
+
     return (
         <>
             <ul className="list-unstyled">

@@ -1,28 +1,30 @@
 import React from "react";
 import { Outlet, Link } from "react-router-dom"
+import { usefirebase } from "../context/firebase";
 
 export default function AssignedAssistant() {
+    const firebase = usefirebase();
+    
+    // const AssistantBD =
+    //     {
+    //         id: 1,
+    //         patientName: "Ali",
+    //         assistantName: "Akbar"
+    //     },
+    //     {
+    //         id: 2,
+    //         patientName: "Ajmal",
+    //         assistantName: "Aslam"
+    //     },
+    //     {
+    //         id: 3,
+    //         patientName: "Ajmal",
+    //         assistantName: "Aslam"
+    //     },
+    // ]
 
-    const AssistantBD = [
-        {
-            id: 1,
-            patientName: "Ali",
-            assistantName: "Akbar"
-        },
-        {
-            id: 2,
-            patientName: "Ajmal",
-            assistantName: "Aslam"
-        },
-        {
-            id: 3,
-            patientName: "Ajmal",
-            assistantName: "Aslam"
-        },
-    ]
-
-    const tableCard = AssistantBD.map(item => {
-        console.log(item)
+    // const tableCard = AssistantBD.map(item => {
+    //     console.log(item)
         return (
             <>
                 {/* <table class="table"> */}
@@ -38,7 +40,7 @@ export default function AssignedAssistant() {
                 {/* </table> */}
             </>
         )
-    })
+    // })
     return (
         <>
             <div className="container-fluid">
@@ -99,6 +101,7 @@ export default function AssignedAssistant() {
                             <thead className="bg-color text-light">
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col">Patient ID</th>
                                     <th scope="col">Patient Name</th>
                                     <th scope="col">Assistant Name</th>
                                 </tr>

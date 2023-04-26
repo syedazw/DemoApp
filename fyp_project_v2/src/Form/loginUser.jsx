@@ -13,7 +13,10 @@ export default function LoginUser() {
 
   const [userInfo, setuserInfo] = React.useState({ username: "", password: "" });
   const [error, setError] = React.useState(""); //set error to handle exception
-  const [user, setuser] = useState(null); //set user detail to a variable 
+  const [user, setuser] = useState(null); //set user detail to a variable
+  const [checkCredential, setCheckCredential] = useState(false)
+  const [checkDomain, setDomain] = useState(false)
+
   // const [storeEmail, setStoreEmail] = useState(null)
   // const [userID, setUserID] = useState(null)
 
@@ -63,6 +66,16 @@ export default function LoginUser() {
   // 5. Now, extract email from user useState
 
   async function handleSubmit(event) {
+    if (userInfo.username === '' || userInfo.password === '') {
+      console.log("Invalid Input")
+      setCheckCredential(true)
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
+      //reload the page on invalid username or password
+    } else {
+      console.log("valid data enter")
+    }
 
     setTimeout(() => {
       onAuthStateChanged(firebaseAuth, (user) => {
@@ -73,7 +86,7 @@ export default function LoginUser() {
           // setUserID(prevValue => user.uid)
           // setStoreEmail(value => user.email)
 
-          
+
 
           // check for admin domain
           let userEmail = user.email
@@ -94,7 +107,8 @@ export default function LoginUser() {
             navigate('/patientprofile')
           }
           else {
-            navigate('/')
+            setDomain(true)
+
           }
         } else {
           console.log("Fail to get user")
@@ -151,6 +165,9 @@ export default function LoginUser() {
                 <div className="col-sm-5 col-md-12 ms-4">
                   {/* <Link type="submit" className="mt-4 mx-4 p-2" onClick={handleSubmit} to={useNavigate('/loginpage')} style={buttonStyle}>Login</Link> */}
                   <button type="submit" className="mt-4 mx-4 p-2" onClick={handleSubmit} style={buttonStyle}>Login</button>
+                  <br></br>
+                  {checkCredential ? <button className="btn btn-danger mx-4">Invalid Username or Password</button>: null}
+                  {checkDomain && <button className="btn btn-warning">Invalid Domain</button>}
                   <Outlet />
                 </div>
               </div>

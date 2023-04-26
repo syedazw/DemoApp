@@ -118,7 +118,7 @@ const Cardiogram = () => {
   // };
 
   const putDatanew = () => {
-    firebase.putData(params.PatientID, data);
+    firebase.putdatafire(params.PatientID, data);
   };
 
 

@@ -138,6 +138,16 @@ export const FirebaseProvider = (props) => {
 
     }
 
+    const putdatafire = async(PatientID,data) =>{
+        const ref = collection(db,"Patients",PatientID,"ECGData")
+        const result = await addDoc(ref, {
+            data,
+            AddedAt: serverTimestamp()
+        });
+        return result;
+
+    }
+
     // ***************** QUERY FIREBASE DATA **************************
 
     
@@ -192,7 +202,7 @@ export const FirebaseProvider = (props) => {
             uploadDataToFirestore, uploadFilesToFirestore,
             addMedToCollection, addNotesToCollection,
             addReportToCollection, ListPatientData, getPatientProfilebyId, getNotesById,
-            getMedByID, getReportById, getpatdata , putData
+            getMedByID, getReportById, getpatdata , putData, putdatafire
         }}>
             {props.children}
         </FirebaseContext.Provider>

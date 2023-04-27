@@ -1,46 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react"
 import { Outlet, Link } from "react-router-dom"
 import { usefirebase } from "../../context/firebase";
+
 
 export default function AssignedAssistant() {
     const firebase = usefirebase();
 
-    const AssistantBD = [
-    {
-        id: 1,
-        patientName: "Ali",
-        assistantName: "Akbar"
-    },
-        {
-            id: 2,
-            patientName: "Ajmal",
-            assistantName: "Aslam"
-        },
-        {
-            id: 3,
-            patientName: "Ajmal",
-            assistantName: "Aslam"
-        },
-    ]
+    const [patientData, setPatientData] = useState([]);
+    // const [checkArray, setCheckArray] = useState(false)
+    useEffect(() => {
+        firebase.ListPatientData()
+            .then((querySnapshot) => {
+                {
+                    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    setPatientData(data);
+                    console.log("data",)
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                setError("Error retrieving patient data.");
+            });
+    }, []);
 
-    const tableCard = AssistantBD.map(item => {
-        console.log(item)
-        return (
-            <>
-                {/* <table class="table"> */}
-                    {/* <tbody> */}
+    const patdata = [patientData]
+    console.log("patiendata",patdata);
 
-                    <tr>
-                        <th scope="row">{item.id}</th>
-                        <td>{item.patientName}</td>
-                        <td>{item.assistantName}</td>
-                    </tr>
-
-                {/* </tbody> */}
-            {/* </table > */}
-            </>
-        )
-})
+    
 return (
     <>
         <div className="container-fluid">
@@ -100,13 +86,21 @@ return (
                     <table className="table justify-content-center table-striped">
                         <thead className="bg-color text-light">
                             <tr>
+                                <th scope="col">S.NO</th>
                                 <th scope="col">Patient ID</th>
                                 <th scope="col">Patient Name</th>
-                                <th scope="col">Assistant Name</th>
+                                <th scope="col">Assistant</th>
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
-                            {tableCard}
+                        {patientData.map((item, index) =>(  
+                                    <tr key={item.id}>
+                                    <th scope="row">{index + 1}</th>
+                                    <td>{item.id}</td>
+                                    <td>{item.data.fullname}</td>
+                                    <td>{item.data.assistant}</td>
+                                </tr>
+                                ))}
                         </tbody>
                     </table>
 

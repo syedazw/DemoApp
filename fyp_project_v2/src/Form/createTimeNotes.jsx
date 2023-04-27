@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { usefirebase } from '../context/firebase'
 import { useParams} from 'react-router-dom'
+import Popup from "../message/ShowMessage";
+
 
 
 export default function CreateTimeNotes() {
@@ -17,9 +19,11 @@ export default function CreateTimeNotes() {
     // console.log("patientData",patientData);
 
     const [medicalReport, setMedicalReport] = React.useState([{ term: "", description: "" }])
+    const [showPopup, setShowPopup] = useState(false);
 
     const AddItem = () => {
         const data = [...medicalReport, { term: "", description: "" }]
+       
         setMedicalReport(data)
     }
 
@@ -36,9 +40,9 @@ export default function CreateTimeNotes() {
         setMedicalReport(deleteData)
     }
 
-    function handleClick() {
-        console.log("Storing data:", medicalReport)
-    }
+    // function handleClick() {
+    //     console.log("Storing data:", medicalReport)
+    // }
     console.log("report",medicalReport)
 
                             //    ADD DATA TO FIRESTORE
@@ -47,6 +51,13 @@ export default function CreateTimeNotes() {
         const result = await firebase.addNotesToCollection(params.PatientID,data);
         console.log("Notes Added",result);
        
+    }
+    const handleClick = () => {
+        setShowPopup(true);
+      }
+
+    const handleClose = () =>{
+        setShowPopup(false);
     }
 
     console.log(medicalReport)
@@ -70,7 +81,8 @@ export default function CreateTimeNotes() {
                             )
                         })}
                         <div className="col-12">
-                            <button className="btn mt-5" type="submit" onClick={addNotesToCollection} style={{ color: "white", backgroundColor: "#041342" }}>SAVE CHANGES</button>
+                            <button className="btn mt-5" type="submit" onClick={()=>{addNotesToCollection() ; handleClick()}} style={{ color: "white", backgroundColor: "#041342" }}>SAVE CHANGES</button>
+                             <Popup show={showPopup} onClose={handleClose} message="Successfully Saved Data" />
                         </div>
                     </div>
                 </div>

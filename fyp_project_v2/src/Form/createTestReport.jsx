@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { usefirebase} from '../context/firebase'
 import { useParams } from "react-router-dom";
+import Popup from "../message/ShowMessage";
 
 
 export default function CreateTestReport() {
@@ -8,6 +9,7 @@ export default function CreateTestReport() {
     const params = useParams();
     console.log("firebase",firebase);
     const [testReport, setTestReport] = React.useState([{testName:"", testFile:""}])
+    const [showPopup, setShowPopup] = useState(false);
     
     const AddItem = () => {
         const data = [...testReport, {testName:"", testFile:""}]
@@ -35,14 +37,22 @@ export default function CreateTestReport() {
         setTestReport(deleteData)
     }
 
-    function handleClick() {
-        console.log("I am clicked")
-        console.log(testReport)
+    // function handleClick() {
+    //     console.log("I am clicked")
+    //     console.log(testReport)
+    // }
+
+    const handleClick = () => {
+        setShowPopup(true);
+      }
+
+    const handleClose = () =>{
+        setShowPopup(false);
     }
 //    ADD Test Report DATA TO FIRESTORE
-    const addReportToCollection = async(event)=>{
+    const addReportToCollection = async()=>{
         // console.log(testReport)
-        event.preventDefault();
+        // event.preventDefault();
         const testName= testReport[0].testName;
         const testFile = testReport[0].testFile.name;
         console.log("passing these values", testName, testFile)
@@ -67,7 +77,8 @@ export default function CreateTestReport() {
                             )
                         })}
                         <div className="col-12">
-                            <button className="btn mt-5" type="submit" onClick={addReportToCollection} style={{ color: "white", backgroundColor: "#041342" }}>SAVE CHANGES</button>
+                            <button className="btn mt-5" type="submit" onClick={()=>{addReportToCollection() ; handleClick()}} style={{ color: "white", backgroundColor: "#041342" }}>SAVE CHANGES</button>
+                            <Popup show={showPopup} onClose={handleClose} message="Successfully Store Data" />
                         </div>
                     </div>
                 </div>

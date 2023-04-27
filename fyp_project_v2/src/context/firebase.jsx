@@ -4,8 +4,11 @@ import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 // importing Firestore from firebase
 import { getFirestore, addDoc, doc, getDoc, collection, serverTimestamp, getDocs } from "firebase/firestore";
-import { getStorage, uploadBytes,ref as ref_storage} from 'firebase/storage'
-import { getDatabase, set , ref as ref_database } from "firebase/database";
+import { getStorage, uploadBytes, ref as ref_storage } from 'firebase/storage'
+import { getDatabase, set, ref as ref_database } from "firebase/database";
+
+
+// export const [restrictAccess, setRestrictAccess] = useState(false)
 
 
 
@@ -50,11 +53,29 @@ export const FirebaseProvider = (props) => {
         return createUserWithEmailAndPassword(firebaseAuth, username, password);
 
     };
+
+
+
+
     // function for signin user
+    const [loginError, setLoginError] = useState("")
+    const [restrictAccess, setRestrictAccess] = useState(false) // allow access as default
     const signinUserWithEmailAndPassword = (username, password) => {
-        const result = signInWithEmailAndPassword(firebaseAuth, username, password);
+        let result = signInWithEmailAndPassword(firebaseAuth, username, password).then((userDetail) => {
+            console.log(userDetail)
+
+            // if user is valid, then allow its access
+            setRestrictAccess(false)
+        }).catch(error => {
+
+            // if user is invalid, then restrict its access
+            setRestrictAccess(true)
+            setLoginError(error.code)
+        })
         console.log("successful", result);
     };
+
+
     // Add patients data to Firestore
     const uploadDataToFirestore = async (collectionName, data) => {
         // const currentUser = firebaseAuth.currentUser;
@@ -128,18 +149,18 @@ export const FirebaseProvider = (props) => {
 
     };
     //  ***************  FIREBASE REALTIME DATABASE **************
-    
+
     const putData = (PatientID, data) => {
         const dbRef = ref_database(database, `Patients/${PatientID}`);
-        set(dbRef, { 
+        set(dbRef, {
             data,
-            
-            });
+
+        });
 
     }
 
-    const putdatafire = async(PatientID,data) =>{
-        const ref = collection(db,"Patients",PatientID,"ECGData")
+    const putdatafire = async (PatientID, data) => {
+        const ref = collection(db, "Patients", PatientID, "ECGData")
         const result = await addDoc(ref, {
             data,
             AddedAt: serverTimestamp()
@@ -150,7 +171,7 @@ export const FirebaseProvider = (props) => {
 
     // ***************** QUERY FIREBASE DATA **************************
 
-    
+
 
 
     // GETTING PATIENT DATA ON HOME SCREEN
@@ -202,7 +223,7 @@ export const FirebaseProvider = (props) => {
             uploadDataToFirestore, uploadFilesToFirestore,
             addMedToCollection, addNotesToCollection,
             addReportToCollection, ListPatientData, getPatientProfilebyId, getNotesById,
-            getMedByID, getReportById, getpatdata , putData, putdatafire
+            getMedByID, getReportById, getpatdata, putData, putdatafire, loginError, restrictAccess
         }}>
             {props.children}
         </FirebaseContext.Provider>

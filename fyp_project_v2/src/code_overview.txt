@@ -1,7 +1,5 @@
 //webpage load --> 3 different option are shown for different user (***Code file: MainPage.jsx***)
-1. admin portal
-2. doctor portal
-3. patient portal
+login page display
 
 ---------------------------------------------------------------------------------------
 1. admin portal ---> will complete at the end

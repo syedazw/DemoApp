@@ -4,6 +4,8 @@ import ApexChart from "./ChartView";
 import { usefirebase } from "../context/firebase";
 import { Timestamp } from 'firebase/firestore';
 import { useParams } from "react-router-dom";
+import sound from "../audio/testaudio.mp3"
+
 
 
 import { getDatabase, ref, set, push, child, serverTimestamp } from "firebase/database";
@@ -22,29 +24,58 @@ const Cardiogram = () => {
   const [data, updateData] = useState([1]);
   const [fetchingData, setFetching] = useState(false)
 
+  const audioRef = React.useRef(null);
+
+  const [allowSound, setAllowSound] = useState(true)
 
   const [audioCtx, setAudioCtx] = useState(null);
-  const [alarm, setAlarm] = useState(false)
 
-  const PlayAlarm = () => {
-    const newAudioCtx = new AudioContext();
-    const oscillator = newAudioCtx.createOscillator();
-    oscillator.type = 'sawtooth'
-    oscillator.frequency.setValueAtTime(440, newAudioCtx.currentTime);
-    oscillator.connect(newAudioCtx.destination);
-    oscillator.start();
-    setAudioCtx(newAudioCtx);
-  };
 
-  const StopAlarm = () => {
-    console.log("value of boolean is ",audioCtx)
-    if (audioCtx) {
-      audioCtx.close();
-      setAudioCtx(null);
-      // setAlarm(false)
-    }
-  };
+  // useEffect(() => {
+  // let audioContext;
 
+  // // Function to play audio using Audio Context
+  // const playAudio = () => {
+  //   audioContext = new AudioContext();
+  //   const source = audioContext.createMediaElementSource(audioRef.current);
+  //   source.connect(audioContext.destination);
+  //   audioRef.current.play();
+  // }
+
+  //   // Play audio if certain condition is met
+  //   if (allowSound) {
+  //     playAudio();
+  //   }
+
+  //   // Close Audio Context and stop audio after 2 minutes
+  //   const timeoutId = setTimeout(() => {
+  //     if (audioContext) {
+  //       audioContext.close();
+  //     }
+  //     audioRef.current.pause();
+  //     audioRef.current.currentTime = 0;
+  //   }, 120000); // 2 minutes in milliseconds
+
+  //   // Clean up function to close Audio Context when component unmounts
+  //   return () => {
+  //     if (audioContext) {
+  //       audioContext.close();
+  //     }
+  //     clearTimeout(timeoutId);
+  //   };
+  // }, []);
+
+
+
+  // function playAlarm() {
+  //   const newAudioCtx = new AudioContext();
+  //   const oscillator = newAudioCtx.createOscillator();
+  //   oscillator.type = 'sine'
+  //   oscillator.frequency.setValueAtTime(440, newAudioCtx.currentTime);
+  //   oscillator.connect(newAudioCtx.destination);
+  //   oscillator.start();
+  //   setAudioCtx(newAudioCtx);
+  // }
 
 
   let checkarray = ''
@@ -66,19 +97,38 @@ const Cardiogram = () => {
       updateData(array.slice(-16));
       console.log("checkarray", checkarray)
 
+      let audioContext;
+
+      // // Function to play audio using Audio Context
+      // const playAudio = () => {
+      //   const newAudioCtx = new AudioContext();
+      //   const oscillator = newAudioCtx.createOscillator();
+      //   oscillator.type = 'triangle'
+      //   oscillator.frequency.setValueAtTime(440, newAudioCtx.currentTime);
+      //   oscillator.connect(newAudioCtx.destination);
+      //   oscillator.start();
+      //   setAudioCtx(newAudioCtx);
+      // }
+
       if (checkarray.length > 15) {
         console.log("checkarray", checkarray)
 
         // orignal - store the value which are greater than 800 or less than 400
         // normal - between 401 and 799
         // abnormal - less than 400, greater than 800
-        let checkHeart = checkarray.filter(e => e > 500 || e < 800)
+        let checkHeart = checkarray.filter(e => e > 100 || e < 1100)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {
           console.log("Heart attack")
-          setAlarm(true)
-          PlayAlarm()
+          const newAudioCtx = new AudioContext();
+          const oscillator = newAudioCtx.createOscillator();
+          oscillator.type = 'triangle'
+          oscillator.frequency.setValueAtTime(440, newAudioCtx.currentTime);
+          oscillator.connect(newAudioCtx.destination);
+          oscillator.start();
+          setAudioCtx(newAudioCtx);
+
         } else {
           checkarray = []
         }
@@ -94,10 +144,7 @@ const Cardiogram = () => {
     }).catch(err => console.log(err))
 
   }, [data])
-  // if (checkarray.length > 0) {
-  //   setAlarm(true)
-  //   PlayAlarm()
-  // }
+
 
   console.log("length of data", data.length);
 
@@ -133,10 +180,8 @@ const Cardiogram = () => {
             <ApexChart data={data} title="Product Trends by Month" />
             <button className="text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
             <button className="text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
-            {alarm ?
-              <div>
-                <button className="btn btn-danger m-1" role="alert" onClick={StopAlarm}><i className="bi bi-exclamation-triangle-fill m-2"></i>Stop Alarm</button>
-              </div> : null}
+            <audio ref={audioRef} />
+            <source src={sound} />
           </div>
         </div>
       </div>

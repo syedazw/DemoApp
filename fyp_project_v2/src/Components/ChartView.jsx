@@ -42,7 +42,7 @@ export default function ApexChart(props) {
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-12 col-md-6">
-          <Chart options={options} series={series} type="line" height={200} width={320} />
+          <Chart options={options} series={series} type="line" height={200} width={325} />
           </div>
         </div>
       </div>

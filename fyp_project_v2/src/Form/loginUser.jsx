@@ -10,9 +10,9 @@ import { getAuth } from "firebase/auth"
 
 export default function LoginUser() {
   const firebase = usefirebase();
-  console.log('firebase', firebase);
-  console.log("Login Error ---", firebase.loginError)
-  console.log(firebase.restrictAccess)
+  // console.log('firebase', firebase);
+  // console.log("Login Error ---", firebase.loginError)
+  // console.log(firebase.restrictAccess)
 
   let allow = firebase.restrictAccess
   let displayError = firebase.loginError
@@ -28,8 +28,8 @@ export default function LoginUser() {
   // const [storeEmail, setStoreEmail] = useState(null)
   // const [userID, setUserID] = useState(null)
 
-  console.log("Default value of 'user' state is ", user)
-  console.log("user details:", userInfo)
+  // console.log("Default value of 'user' state is ", user)
+  // console.log("user details:", userInfo)
 
   // create instance for navigation
   // const navigate = useNavigate()
@@ -48,23 +48,54 @@ export default function LoginUser() {
 
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    firebase.signinUserWithEmailAndPassword(userInfo.username, userInfo.password)
+    event.preventDefault() // stop reload the page
+    let result = true
 
-    console.log("allow -", allow)
-    if (allow) {
-      console.log("--Permission Granted--")
-    } else {
-      console.log("--Permision Deny --")
-      if (displayError === 'auth/user-not-found') {
-        console.log("simple user not found error")
-      } else if (displayError === 'auth/invalid-email') {
-        console.log('simple invalid email error')
+    // This function will execute after 4 seconds
+    setTimeout(()=>{
+      result = firebase.signinUserWithEmailAndPassword(userInfo.username, userInfo.password)
+      if (result === true) {
+        console.log("Permission deny")
+      } else if (result === false) {
+        console.log("Permission granted")
       } else {
-        console.log('fortunately no error found')
+        console.log("processing....")
       }
+    },5000)
 
-    }
+    
+
+
+    // console.log("result", result)
+    // console.log("Initial value is allow -", allow)
+
+    // setTimeout(()=>{
+    //   // if allow is true then restrict the user access, else false then provide the access
+    //   console.log("allow -", allow)
+    //   console.log("8 seconds")
+    //   if (allow) {
+    //     console.log("--Permission Granted--")
+    //     // firebaseAuth, (user)=>{
+    //     //   if (user) {
+    //     //     console.log("user recently logged in with id",user.uid,"and email", user.email)
+    //     //   }
+    //     // }
+    //   } 
+      
+    //   else {  //invalid user
+    //     console.log("--Permision Deny --")
+    //     if (displayError === 'auth/user-not-found') {
+    //       console.log("simple user not found error")
+    //     } else if (displayError === 'auth/invalid-email') {
+    //       console.log('simple invalid email error')
+    //     } else {
+    //       console.log('')
+    //     }
+  
+    //   }
+    // },2000)
+    // valid user
+    
 
 
 

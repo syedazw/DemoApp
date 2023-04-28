@@ -59,20 +59,27 @@ export const FirebaseProvider = (props) => {
 
     // function for signin user
     const [loginError, setLoginError] = useState("")
-    const [restrictAccess, setRestrictAccess] = useState(false) // allow access as default
+    const [restrictAccess, setRestrictAccess] = useState(true) // restrict the user by default
     const signinUserWithEmailAndPassword = (username, password) => {
-        let result = signInWithEmailAndPassword(firebaseAuth, username, password).then((userDetail) => {
-            console.log(userDetail)
+        setTimeout(()=>{
+            signInWithEmailAndPassword(firebaseAuth, username, password).
+            then(
+                (userDetail) => {
+                    console.log(userDetail)
+                    console.log("Valid user!!!!")
 
-            // if user is valid, then allow its access
-            setRestrictAccess(false)
-        }).catch(error => {
+                    setRestrictAccess(false)  // if user is valid, then allow its access
+                }).catch(error => {
+                    console.log("Invalid user!!!")
+                    setRestrictAccess(true) // if user is invalid, then restrict its access
+                    setLoginError(error.code)
+                })
+        },2000)
+        
 
-            // if user is invalid, then restrict its access
-            setRestrictAccess(true)
-            setLoginError(error.code)
-        })
-        console.log("successful", result);
+        const output = restrictAccess
+        // console.log("successful", result);
+        return output
     };
 
 

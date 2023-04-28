@@ -60,7 +60,7 @@ const Cardiogram = () => {
         // orignal - store the value which are greater than 800 or less than 400
         // normal - between 401 and 799
         // abnormal - less than 400, greater than 800
-        let checkHeart = checkarray.filter(e => e > 100 || e < 1100)
+        let checkHeart = checkarray.filter(e => e > 800 || e < 400)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {

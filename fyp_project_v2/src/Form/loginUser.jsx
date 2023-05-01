@@ -14,8 +14,8 @@ export default function LoginUser() {
   // console.log("Login Error ---", firebase.loginError)
   // console.log(firebase.restrictAccess)
 
-  let allow = firebase.restrictAccess
-  let displayError = firebase.loginError
+  // let allow = firebase.restrictAccess
+  // let displayError = firebase.loginError
   const buttonStyle = { color: "white", backgroundColor: "#041342", borderRadius: "6px", textDecoration: "none" }
 
   const [userInfo, setuserInfo] = React.useState({ username: "", password: "" });
@@ -32,7 +32,7 @@ export default function LoginUser() {
   // console.log("user details:", userInfo)
 
   // create instance for navigation
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   function handleChange(event) {
     event.preventDefault();
@@ -48,152 +48,58 @@ export default function LoginUser() {
 
 
   const handleSubmit = async (event) => {
-    event.preventDefault() // stop reload the page
-    let result = true
+    try {
+      await firebase.signinUserWithEmailAndPassword(userInfo.username, userInfo.password);
+    } catch (error) {
+      await firebase.signinUserWithEmailAndPassword(userInfo.username, userInfo.password)
+    }
 
-    // This function will execute after 4 seconds
-    setTimeout(()=>{
-      result = firebase.signinUserWithEmailAndPassword(userInfo.username, userInfo.password)
-      if (result === true) {
-        console.log("Permission deny")
-      } else if (result === false) {
-        console.log("Permission granted")
-      } else {
-        console.log("processing....")
+    setTimeout(() => {
+      onAuthStateChanged(firebaseAuth, (user) => {
+        if (user) {
+          setuser(user)
+          console.log("Yes user successfully login", user)
+
+          // setUserID(prevValue => user.uid)
+          // setStoreEmail(value => user.email)
+
+
+
+          // check for admin domain
+          let userEmail = user.email
+          let userID = user.uid
+          console.log("user id", userID)
+          console.log("get user email", userEmail)
+          console.log("printing domain name", userEmail)
+          if (userEmail.slice(-10) === '@admin.com') {
+            console.log("Login as admin")
+            navigate('/admin/portal')
+
+          } else if (userEmail.slice(-11) === '@doctor.com') {
+            console.log("Login as doctor")
+            navigate('/dashboard')
+
+          } else if (userEmail.slice(-12) === '@patient.com') {
+            console.log("Login as patient")
+            navigate('/home')
+          }
+          else {
+            navigate('/')
+          }
+        } else {
+          console.log("Fail to get user")
+        }
       }
-    },5000)
-
+      )
+    }, 3000)
+    
+    
     
 
-
-    // console.log("result", result)
-    // console.log("Initial value is allow -", allow)
-
-    // setTimeout(()=>{
-    //   // if allow is true then restrict the user access, else false then provide the access
-    //   console.log("allow -", allow)
-    //   console.log("8 seconds")
-    //   if (allow) {
-    //     console.log("--Permission Granted--")
-    //     // firebaseAuth, (user)=>{
-    //     //   if (user) {
-    //     //     console.log("user recently logged in with id",user.uid,"and email", user.email)
-    //     //   }
-    //     // }
-    //   } 
-      
-    //   else {  //invalid user
-    //     console.log("--Permision Deny --")
-    //     if (displayError === 'auth/user-not-found') {
-    //       console.log("simple user not found error")
-    //     } else if (displayError === 'auth/invalid-email') {
-    //       console.log('simple invalid email error')
-    //     } else {
-    //       console.log('')
-    //     }
-  
-    //   }
-    // },2000)
-    // valid user
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // setuser(user)
-    // console.log("receiving user details", user)
-    // if (userInfo.username === '' || userInfo.password === '') {
-    //   console.log("Invalid Input")
-    //   setCheckCredential(true)
-    //   setTimeout(() => {
-    //     window.location.reload()  //reload the page on invalid username or password
-    //   }, 1000)
-    // }
-    // else {
-    //   setTimeout(() => {
-    //     onAuthStateChanged(firebaseAuth, (user) => {
-    //       if (user) {
-    //         setuser(user)
-    //         console.log("Yes user successfully login", user)
-    //         let userEmail = user.email
-    //         let userID = user.uid
-    //         console.log("user id", userID)
-    //         console.log("get user email", userEmail)
-    //         console.log("printing domain name", userEmail)
-
-    //         if (userEmail.slice(-10) === '@admin.com') {
-    //           console.log("Login as admin")
-    //           navigate('/admin/portal')
-
-    //         } else if (userEmail.slice(-11) === '@doctor.com') {
-    //           console.log("Login as doctor")
-    //           navigate(`/dashboard/${userID}`)
-
-    //         } else if (userEmail.slice(-12) === '@patient.com') {
-    //           console.log("Login as patient")
-    //           navigate('/patientprofile')
-    //         }
-    //         else {
-    //           setDomain(true)
-
-    //         }
-    //       } else {
-    //         console.log("Fail to get user")
-    //       }
-    //     }
-    //     )
-    //   }, 3000)
-    // }
-
-
-
-
-
-    //   event.stopPropagation()
-    //   event.preventDefault();
-    //   try {
-    //     await firebase.signinUserWithEmailAndPassword(userInfo.username, userInfo.password)
-    //     // console.log("EMAIL----------", storeEmail)
-
-
-
-    //   }
-    //   catch (error) {
-    //     setError("Invalid username or password");
-    //     // console.log("Invalid username or password")
-    //     // console.log(error)
-    //     navigate('/deny')
-    //   }
-    //   console.log("Login...")
-    //   // console.log("user email", storeEmail)
-    // }
+    // possible worst case:
+    // auth/user-not-found
+    // auth/invalid-email
+    // auth/email-not-found
   }
 
   return (
@@ -221,7 +127,7 @@ export default function LoginUser() {
               <a className="mx-5" style={{ color: "#041342" }}>Forget Password?</a>
               <div className="row">
                 <div className="col-sm-5 col-md-12 ms-4">
-                  <button type="submit" className="mt-4 mx-4 p-2" style={buttonStyle}>Login</button>
+                  <Link type="submit" className="mt-4 mx-4 p-2" style={buttonStyle} to={navigate} onClick={handleSubmit}>Login</Link>
                   <br></br>
                   {/* {checkCredential ? <button className="btn btn-danger mx-4">Invalid Username or Password</button> : null} */}
                   {/* {checkDomain && <button className="btn btn-warning">Invalid Domain</button>} */}

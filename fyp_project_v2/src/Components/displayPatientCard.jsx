@@ -1,13 +1,26 @@
 import React from "react";
-import profile from "../images/profile.jpeg"
 import {useNavigate} from 'react-router-dom'
+import malePicture from "../images/maleProfile.jpg"
+import femalePicture from "../images/femaleProfile.png"
 
 export default function DisplayPatientCard(props) {
     console.log("props",props);
 
     // -----------------  Object Of navigate ------------------
     const navigate = useNavigate();
-    let critical = false
+    // let critical = false
+    let profile 
+    if (props.gender === 'Male') {
+        profile = malePicture
+    } else if (props.gender === 'Female') {
+        profile = femalePicture
+    }
+    else {
+        profile = "https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+
+    }
+
+
     return (
         <>
             <div className="row">
@@ -15,7 +28,7 @@ export default function DisplayPatientCard(props) {
                     <div className="card mb-3" style={{ color: "white", backgroundColor: "#041342" }}>
                         <div className="row g-0">
                             <div className="d-flex justify-content-center">
-                                <img src={profile} className="rounded-circle px-3 pt-3 mx-auto" alt="..." style={{ height: "192px", width: "200px" }} />
+                                <img src={profile} className="rounded-circle px-3 pt-3 mx-auto" alt="..." style={{ height: "185px", width: "205px" }} />
                             </div>
                             <div className="d-flex justify-content-center">
                                 <p className="fw-bold">{props.fullname}</p>
@@ -23,7 +36,7 @@ export default function DisplayPatientCard(props) {
                             <div className="d-flex justify-content-center">
                                 <div className="btn btn-group">
                                     <button className="btn text-dark bg-light">Status</button>
-                                    <button className={critical ? "btn btn-danger" : "btn btn-success"}>{critical ? "Critical" : "Normal"}</button>
+                                    <button className={props.critical ? "btn btn-danger" : "btn btn-success"}>{props.critical ? "Critical" : "Normal"}</button>
                                 </div>
                             </div>
                             <div className="row">

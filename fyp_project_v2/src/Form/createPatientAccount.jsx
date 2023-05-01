@@ -19,11 +19,12 @@ export default function PatientInfo() {
         height: "",
         dob: "",
         homeAddress: "",
-        isCritical: false
+        isCritical: false,
+        gender: ""
     })
 
     const [isfill, setIsFill] = React.useState(true)
-    const [image, setImage] = React.useState("https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80")
+    // const [image, setImage] = React.useState("https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80")
     console.log(patientRegister)
 
 
@@ -73,12 +74,10 @@ export default function PatientInfo() {
             height: patientRegister.height,
             dob: patientRegister.dob,
             homeAddress: patientRegister.homeAddress,
-            critical: patientRegister.isCritical
+            critical: patientRegister.isCritical,
+            gender: patientRegister.gender
         }
         let password = 123456789
-        if (data === '') {
-            console.log("Invalid data")
-        }
         const result = firebase.uploadDataToFirestore(collectionName, data);
         console.log("suucessfully added patient data with generated id", result); // result shows id of collection
         const newAccount = firebase.signupUserWithEmailAndPassword(patientRegister.email, password)
@@ -98,7 +97,7 @@ export default function PatientInfo() {
 
                             <div className="col-sm-12 col-md-12">
 
-                                <div className="d-flex justify-content-center mb-4">
+                                {/* <div className="d-flex justify-content-center mb-4">
                                     <img src={image} className="rounded-circle" alt="example placeholder" style={{ width: "200px", height: "200px" }} name="image" value={setImage.image} onChange={handleImage} />
                                 </div>
 
@@ -107,7 +106,7 @@ export default function PatientInfo() {
                                         <label className="form-label text-white m-1" for="customFile2" >Upload Image</label>
                                         <input type="file" className="form-control d-none" id="customFile2" name="image" onChange={handleImage} />
                                     </div>
-                                </div>
+                                </div> */}
                                 
                             </div>
                             
@@ -236,7 +235,18 @@ export default function PatientInfo() {
                                 </div>
                             </div>
 
-                            <div className="col-12">
+
+                            <div className="col-md-4">
+                                <label htmlFor="validationCustom10" className="form-label mb-0 fw-bold">Gender:</label>
+                                <select className="form-select" id="validationCustom10" required name="gender" value={setpatientRegister.gender} onChange={handleChange}>
+                                    <option defaultValue disabled selected>Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <div className="invalid-feedback">Please select a valid gender.</div>
+                            </div>
+
+                            <div className="col-md-8 pt-4">
                                 <div className="form-check">
                                     <input className="form-check-input" type="checkbox" value="" id="invalidCheck" required name="isCritical" checked={setpatientRegister.isCritical} onChange={handleChange} />
                                     <label className="form-check-label" htmlFor="invalidCheck">
@@ -249,7 +259,7 @@ export default function PatientInfo() {
                             </div>
 
                             <div className="col-12">
-                                <button className="btn" type="submit" onClick={addPatientData} style={{ color: "white", backgroundColor: "#041342" }}>SAVE CHANGES</button>
+                                <button className="btn" type="submit" onClick={addPatientData} style={{ color: "white", backgroundColor: "#041342" }}>CREATE ACCOUNT</button>
                             </div>
                         </form>
                     </div>

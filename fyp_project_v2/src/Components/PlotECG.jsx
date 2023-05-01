@@ -4,7 +4,7 @@ import ApexChart from "./ChartView";
 import { usefirebase } from "../context/firebase";
 import { Timestamp } from 'firebase/firestore';
 import { useParams } from "react-router-dom";
-// import sound from "../audio/testaudio.mp3"
+import audioFile from "./testaudio.mp3"; //importing the audio file
 
 
 
@@ -24,17 +24,24 @@ const Cardiogram = () => {
   const [data, updateData] = useState([1]);
   const [fetchingData, setFetching] = useState(false)
 
-  const audioRef = React.useRef(null);
-
-  const [allowSound, setAllowSound] = useState(true)
-
-  const [audioCtx, setAudioCtx] = useState(null);
+  // Create a state variable to store the audio element and its playback status
+  const [audio, setAudio] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
 
+  // Define a function to initialize the audio element and set its playback settings:
+  const initializeAudio = () => {
+    const audioElement = new Audio(audioFile);
+    audioElement.currentTime = 0;
+    audioElement.volume = 1.0;
+    audioElement.onended = () => setIsPlaying(false);
+    setAudio(audioElement);
+  };
 
 
 
-  let checkarray = ''
+
+  let checkarray = []
 
   useEffect(() => {
 
@@ -53,7 +60,7 @@ const Cardiogram = () => {
       updateData(array.slice(-16));
       console.log("checkarray", checkarray)
 
-      let audioContext;
+
       if (checkarray.length > 15) {
         console.log("checkarray", checkarray)
 
@@ -63,14 +70,44 @@ const Cardiogram = () => {
         let checkHeart = checkarray.filter(e => e > 800 || e < 400)
         console.log("heart", checkHeart)
 
+
+        // const playAudio = () => {
+        //   if (checkHeart.length >= 0) {
+        //     if (!isPlaying) {
+        //       setIsPlaying(true);
+        //       audio.play();
+        //       setTimeout(() => {
+        //         setIsPlaying(false);
+        //         audio.pause();
+        //         audio.currentTime = 0;
+        //       }, 5000); // Set the duration of audio playback to 5 seconds.
+        //     }
+        //   }
+        // };
+
         if (checkHeart.length > 0) {
           console.log("Heart attack")
           PlayAlarm()
-
         } else {
           checkarray = []
         }
       }
+
+      
+
+      // useEffect(() => {
+      //   playAudio();
+      // }, [checkarray]);
+
+      // useEffect(() => {
+      //   initializeAudio();
+      // }, []);
+
+      // useEffect(() => {
+      //   playAudio();
+      // }, [checkarray]);
+
+
       if (data.length > 15) {
         let newdata = data
 
@@ -82,6 +119,9 @@ const Cardiogram = () => {
     }).catch(err => console.log(err))
 
   }, [data])
+
+
+
 
 
   console.log("length of data", data.length);
@@ -116,8 +156,10 @@ const Cardiogram = () => {
     firebase.putdatafire(params.PatientID, data);
   };
 
-
-
+  // function playSound() {
+  //   const audio = new Audio("./testaudio.mp3")
+  //   audio.play()
+  // }
 
 
   return (

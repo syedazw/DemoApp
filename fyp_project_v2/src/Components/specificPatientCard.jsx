@@ -1,8 +1,19 @@
 import React from "react";
-import profile from "../images/profile.jpeg"
+import malePicture from "../images/maleProfile.jpg"
+import femalePicture from "../images/femaleProfile.png"
 
 export default function SpecificPatientInfo(props) {
     console.log("props",props);
+    let profile 
+    if (props.gender === 'Male') {
+        profile = malePicture
+    } else if (props.gender === 'Female') {
+        profile = femalePicture
+    }
+    else {
+        profile = "https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+
+    }
 
     // -----------------  Object Of navigate ------------------
     let critical = false

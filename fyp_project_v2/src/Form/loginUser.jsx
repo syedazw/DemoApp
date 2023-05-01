@@ -81,7 +81,7 @@ export default function LoginUser() {
 
           } else if (userEmail.slice(-12) === '@patient.com') {
             console.log("Login as patient")
-            navigate('/home')
+            navigate('/page')
           }
           else {
             navigate('/')

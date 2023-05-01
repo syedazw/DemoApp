@@ -28,6 +28,11 @@ export default function Account() {
         event.stopPropagation()
         let result = firebase.signupUserWithEmailAndPassword(userRegistration.username, userRegistration.password)
         console.log("Account created by Admin Successfully", result)
+        setTimeout(()=>{
+            window.location.reload()
+        },
+        2000)
+        
     }
 
     return (
@@ -48,12 +53,12 @@ export default function Account() {
                                 <input type="password" className="form-control" id="exampleInputPassword1" name="password" value={userRegistration.password} onChange={handleChange} />
                             </div>
 
-                            <div className="mb-2 mx-5">
+                            {/* <div className="mb-2 mx-5">
                                 <label htmlFor="exampleInputPassword2" className="form-label fw-bold mb-0" style={{ color: "#041342" }}>Confirm Password: </label>
                                 <input type="password" className="form-control mb-4" id="exampleInputPassword2" name="confirmPassword" value={userRegistration.confirmPassword} onChange={handleChange} />
-                            </div>
+                            </div> */}
 
-                            <a className="mx-5" style={{ color: "#041342" }}>Already have an account?</a>
+                            {/* <a className="mx-5" style={{ color: "#041342" }}>Already have an account?</a> */}
                             <div className="row">
                                 <div className="col-sm-5 col-md-12 mx-5">
                                     {/* <button type="submit" className="mt-4 me-4 p-2" style={{color: "white", backgroundColor: "#041342" }}>
@@ -62,7 +67,7 @@ export default function Account() {
                                     <button type="submit" className="mt-4 p-2" style={buttonStyle} onClick={createAccountbyAdmin}>
                                         SIGNUP
                                     </button>
-                                    <Outlet />
+                                    {/* <Outlet /> */}
                                 </div>
 
                             </div>

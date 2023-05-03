@@ -21,33 +21,36 @@ const Cardiogram = () => {
 
   const [data, updateData] = useState([1]);
   const [fetchingData, setFetching] = useState(false)
+  const [audioContext, setAudioContext] = useState(null);
+  const [oscillator, setOscillator] = useState(null);
+  const [gainNode, setGainNode] = useState(null);
+  const [isSounding, setIsSounding] = useState(false);
 
-  // const [audioCtx, setAudioCtx] = useState(null);
 
-  // Create a state variable to store the audio element and its playback status
-  // const [audio, setAudio] = useState(null);
-  // const [isPlaying, setIsPlaying] = useState(false);
+  useEffect(() => {
+    const context = new AudioContext();
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(context.destination);
+    oscillator.type = 'triangle'; // set oscillator type to sine wave
+    oscillator.frequency.setValueAtTime(440, context.currentTime); // set frequency to 440 Hz
+    gainNode.gain.setValueAtTime(0, context.currentTime); // set initial volume to 0
+    oscillator.start(0);
+    setAudioContext(context);
+    setOscillator(oscillator);
+    setGainNode(gainNode);
+
+    return () => {
+      oscillator.stop();
+      oscillator.disconnect();
+      gainNode.disconnect();
+      context.close();
+    };
+  }, []);
 
   const [alarm, setAlarm] = useState(false)
 
-
-  const audioCtx = new AudioContext();
-  const oscillator = audioCtx.createOscillator();
-  oscillator.type = 'square'
-  oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
-  oscillator.connect(audioCtx.destination);
-
-
-  function PlayAlarm() {
-    setAlarm(true)
-    oscillator.start(0)
-    setTimeout(() => { oscillator.stop(0) }, 2500)
-  }
-
-  function StopAlarm() {
-    oscillator.stop()
-    setAlarm(false)
-  }
 
   let checkarray = []
 
@@ -65,7 +68,7 @@ const Cardiogram = () => {
       let array = [...data, response.data];
       checkarray = [...data, response.data];
       console.log("array", array);
-      updateData(array.slice(-16));
+      updateData(array);
       console.log("checkarray", checkarray)
 
       if (checkarray.length > 15) {
@@ -74,15 +77,19 @@ const Cardiogram = () => {
         // orignal - store the value which are greater than 800 or less than 400
         // normal - between 401 and 799
         // abnormal - less than 400, greater than 800
-        let checkHeart = checkarray.filter(e => e > 400 || e < 700)
+        let checkHeart = checkarray.filter(e => e > 550 || e < 650)
         console.log("heart", checkHeart)
 
-        if (checkarray.length > 0) {
+        if (checkHeart.length > 0) {
           console.log("Heart Attack")
-          PlayAlarm()
+          setAlarm(true)
+          gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
+          setIsSounding(true)
 
         } else {
           checkarray = []
+          gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
+          setIsSounding(false);
         }
       }
 
@@ -99,22 +106,16 @@ const Cardiogram = () => {
 
   }, [data])
 
+  const stopAlarm = () => {
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
+    setIsSounding(false);
+  };
+
 
 
 
 
   console.log("length of data", data.length);
-
-  // function PlayAlarm() {
-  //   const newAudioCtx = new AudioContext();
-  //   const oscillator = newAudioCtx.createOscillator();
-  //   oscillator.type = 'triangle'
-  //   oscillator.frequency.setValueAtTime(440, newAudioCtx.currentTime);
-  //   oscillator.connect(newAudioCtx.destination);
-  //   oscillator.start();
-  //   // setAudioCtx(newAudioCtx);
-  //   setTimeout(() => { oscillator.stop() }, 2000)
-  // }
 
   // console.log("passifng data to firebase", checkarray)
   // console.log('array length', data.length)
@@ -136,19 +137,6 @@ const Cardiogram = () => {
     firebase.putdatafire(params.PatientID, data);
   };
 
-  // function playSound() {
-  //   const audio = new Audio("./testaudio.mp3")
-  //   audio.play()
-  // }
-
-  // function stopAlarm() {
-  //   if (audioCtx) {
-  //     audioCtx.close();
-  //     setAudioCtx(null);
-  //   }
-  // };
-
-
   return (
     <div>
       <div className="container-fluid">
@@ -157,16 +145,16 @@ const Cardiogram = () => {
             <ApexChart data={data} title="Product Trends by Month" />
             <button className="text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
             <button className="text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
-            {/* <button className="btn btn-danger" onClick={PlayAlarm}>Trigger Alarm</button> */}
 
             {alarm ?
               <button className="btn btn-danger">Abnormal Condition</button> :
               <button className="btn btn-success">Normal Condition</button>
             }
 
-            {/* <button onClick={PlayAlarm}>Play Alarm Test</button>
-            <button onClick={StopAlarm}>Stop Alarm Test</button> */}
+            {/* <button onClick={startPlay}>Start test</button> */}
+            {/* <button onClick={endPlay}>End test</button> */}
 
+            {isSounding ? <button onClick={stopAlarm} className="btn btn-danger">Stop Alarm</button>:null}
           </div>
         </div>
       </div>

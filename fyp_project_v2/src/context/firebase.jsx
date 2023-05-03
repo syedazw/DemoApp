@@ -58,25 +58,28 @@ export const FirebaseProvider = (props) => {
 
 
     // function for signin user
-    const [loginError, setLoginError] = useState("")
-    const [restrictAccess, setRestrictAccess] = useState(false) // not restrict the user by default
+    // const [loginError, setLoginError] = useState("")
+    // const [restrictAccess, setRestrictAccess] = useState(false) // not restrict the user by default
+    // const signinUserWithEmailAndPassword = (username, password) => {
+    //     signInWithEmailAndPassword(firebaseAuth, username, password).
+    //         then(
+    //             (userDetail) => {
+    //                 console.log(userDetail)
+    //                 console.log("Valid user!!!!")
+    //                 setRestrictAccess(false)  // if user is valid, then allow its access
+
+    //             }).catch(error => {
+    //                 console.log("Invalid user!!!")
+    //                 setRestrictAccess(true) // if user is invalid, then restrict its access
+    //                 setLoginError(error.code)
+
+    //             }
+    //             )
+    // };
+
+
     const signinUserWithEmailAndPassword = (username, password) => {
-        signInWithEmailAndPassword(firebaseAuth, username, password).
-            then(
-                (userDetail) => {
-                    console.log(userDetail)
-                    console.log("Valid user!!!!")
-                    setRestrictAccess(false)  // if user is valid, then allow its access
-
-                }).catch(error => {
-                    console.log("Invalid user!!!")
-                    setRestrictAccess(true) // if user is invalid, then restrict its access
-                    setLoginError(error.code)
-
-                }
-                )
-    };
-
+        signInWithEmailAndPassword(firebaseAuth, username, password)}
 
     // Add patients data to Firestore
     const uploadDataToFirestore = async (collectionName, data) => {
@@ -225,7 +228,7 @@ export const FirebaseProvider = (props) => {
             uploadDataToFirestore, uploadFilesToFirestore,
             addMedToCollection, addNotesToCollection,
             addReportToCollection, ListPatientData, getPatientProfilebyId, getNotesById,
-            getMedByID, getReportById, getpatdata, putData, putdatafire, loginError, restrictAccess
+            getMedByID, getReportById, getpatdata, putData, putdatafire
         }}>
             {props.children}
         </FirebaseContext.Provider>

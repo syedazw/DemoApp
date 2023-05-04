@@ -1,0 +1,3 @@
+# IFAFHA
+#
+npm install vite

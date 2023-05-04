@@ -145,15 +145,12 @@ const Cardiogram = () => {
             <ApexChart data={data} title="Product Trends by Month" />
             <button className="text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
             <button className="text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
-
             {alarm ?
-              <button className="btn btn-danger">Abnormal Condition</button> :
-              <button className="btn btn-success">Normal Condition</button>
+              <button className="btn btn-danger align-self-center">Abnormal Condition</button> :
+              <button className="btn btn-success align-self-center">Normal Condition</button>
             }
-
             {/* <button onClick={startPlay}>Start test</button> */}
             {/* <button onClick={endPlay}>End test</button> */}
-
             {isSounding ? <button onClick={stopAlarm} className="btn btn-danger">Stop Alarm</button>:null}
           </div>
         </div>

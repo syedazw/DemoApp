@@ -184,22 +184,7 @@ export const FirebaseProvider = (props) => {
 //         return patdata;
 //       };
 
-    // const getpatdata = async () => {
-    //     const currentUser = firebaseAuth.currentUser;
-    //     const q = query(collection(db, "Patients"), where("createdAt", "==",  true));
-    //     const querySnapshot = await getDocs(q);
-    //     return querySnapshot.empty ? [] : querySnapshot.docs;
-    //   }
-      
-
-
-
-    // const getpatmed = async () => {
-    //     const getRef = doc(db,"Patients", "OWLhjZprpebdansmyOsq")
-    //     const result = await getDoc(getRef)
-    //     return result
-    // };
-
+    
 
 
     // ******************************** RETRIEVING DATA ***********************************

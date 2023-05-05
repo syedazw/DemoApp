@@ -28,7 +28,7 @@ export default function DisplayPatientCard(props) {
                     <div className="card mb-3" style={{ color: "white", backgroundColor: "#041342" }}>
                         <div className="row g-0">
                             <div className="d-flex justify-content-center">
-                                <img src={profile} className="rounded-circle px-3 pt-3 mx-auto" alt="..." style={{ height: "185px", width: "205px" }} />
+                                <img src={profile} className="rounded-circle px-3 pt-3 mx-auto" alt="..." style={{ height: "189px", width: "205px" }} />
                             </div>
                             <div className="d-flex justify-content-center">
                                 <p className="fw-bold">{props.fullname}</p>

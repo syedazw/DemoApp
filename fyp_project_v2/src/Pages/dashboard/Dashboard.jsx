@@ -4,7 +4,7 @@ import { Outlet, Link } from "react-router-dom"
 import { useParams } from "react-router-dom";
 export default function Dashboard() {
     const params = useParams();
-    console.log("params is",params)
+    console.log("params is", params)
 
     return (
         <>
@@ -61,14 +61,10 @@ export default function Dashboard() {
                 </div>
 
                 <div className="row">
-                    <div className="col-sm-12 col-md-4">
-                        <div className="card">
-                            <Cardiogram 
-                            patid={params.PatientID}/>
-                            <button type="button" className="btn btn-width bg-color text-light align-self-center">View Cardiogram</button>
-                        </div>
+                    <div className="col-sm-12 col-md-5">
+                        <Cardiogram
+                            patid={params.PatientID} />
                     </div>
-
                 </div>
             </div>
 

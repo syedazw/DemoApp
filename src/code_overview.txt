@@ -1,0 +1,35 @@
+//webpage load --> 3 different option are shown for different user (***Code file: MainPage.jsx***)
+login page display
+
+---------------------------------------------------------------------------------------
+1. admin portal ---> will complete at the end
+    1.1 admin login
+        1.1.1 View database and can take actions (edit, delete, reset password)
+        1.1.2 Create account for doctor
+
+---------------------------------------------------------------------------------------
+2. doctor portal
+    2.1 login page (note: no signup page) ---> work on login page later
+    2.2 dashboard (code file: Dashboard.jsx)
+        2.2.1 rendering a cardiogram (code file: PlotECG.jsx)
+    2.3 all patient (code file: AllPatient.jsx)
+        2.3.1 rendering a patient info in the form of card (displayPatientCard.jsx)
+            2.3.1.1 patient profile which render five components {patient card, cardiogram, notes, medications, reports} (PatientProfile.jsx)
+                    - patient card (specificPatientCard.jsx)
+                    - cardiogram (PlotECG.jsx)
+                    - notes (displayNoteWithDate.jsx)
+                    - medications (displayMedicine.jsx)
+                    - reports (displayReports.jsx)
+                    we can add new notes, medications and reports by using dynamic input form.
+                    - notes ---> page (code file: patientNotes.jsx ---> inside rendering form (code file: createTimeNotes.jsx))
+                    - medications ---> page (code file: patientMedication.jsx ---> inside rendering form (code file: addMedicine.jsx))
+                    - reports ---> page (code file: patientReport.jsx ---> inside rendering form (code file: createTestReport.jsx))
+                
+---------------------------------------------------------------------------------------
+3. Patient portal
+3.1 Login page (note: no signup page)
+3.2 home (homePage.jsx)
+    this page contain 3 cards {medications, recommendations, updates} (not components)
+    3.2.1 Medication page (homeMedication.jsx)
+    3.2.2 recommendation oage (homeRecommendation.jsx)
+    3.2.3 update page (homeUpdate.jsx)

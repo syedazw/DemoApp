@@ -4,8 +4,6 @@ import ApexChart from "./ChartView";
 import { usefirebase } from "../context/firebase";
 import { Timestamp } from 'firebase/firestore';
 import { useParams } from "react-router-dom";
-import audioFile from "./testaudio.mp3"; //importing the audio file
-
 
 
 import { getDatabase, ref, set, push, child, serverTimestamp } from "firebase/database";
@@ -23,22 +21,35 @@ const Cardiogram = () => {
 
   const [data, updateData] = useState([1]);
   const [fetchingData, setFetching] = useState(false)
-
-  // Create a state variable to store the audio element and its playback status
-  const [audio, setAudio] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-
-  // Define a function to initialize the audio element and set its playback settings:
-  const initializeAudio = () => {
-    const audioElement = new Audio(audioFile);
-    audioElement.currentTime = 0;
-    audioElement.volume = 1.0;
-    audioElement.onended = () => setIsPlaying(false);
-    setAudio(audioElement);
-  };
+  const [audioContext, setAudioContext] = useState(null);
+  const [oscillator, setOscillator] = useState(null);
+  const [gainNode, setGainNode] = useState(null);
+  const [isSounding, setIsSounding] = useState(false);
 
 
+  useEffect(() => {
+    const context = new AudioContext();
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(context.destination);
+    oscillator.type = 'triangle'; // set oscillator type to sine wave
+    oscillator.frequency.setValueAtTime(440, context.currentTime); // set frequency to 440 Hz
+    gainNode.gain.setValueAtTime(0, context.currentTime); // set initial volume to 0
+    oscillator.start(0);
+    setAudioContext(context);
+    setOscillator(oscillator);
+    setGainNode(gainNode);
+
+    return () => {
+      oscillator.stop();
+      oscillator.disconnect();
+      gainNode.disconnect();
+      context.close();
+    };
+  }, []);
+
+  const [alarm, setAlarm] = useState(false)
 
 
   let checkarray = []
@@ -57,9 +68,8 @@ const Cardiogram = () => {
       let array = [...data, response.data];
       checkarray = [...data, response.data];
       console.log("array", array);
-      updateData(array.slice(-16));
+      updateData(array);
       console.log("checkarray", checkarray)
-
 
       if (checkarray.length > 15) {
         console.log("checkarray", checkarray)
@@ -67,45 +77,21 @@ const Cardiogram = () => {
         // orignal - store the value which are greater than 800 or less than 400
         // normal - between 401 and 799
         // abnormal - less than 400, greater than 800
-        let checkHeart = checkarray.filter(e => e > 800 || e < 400)
+        let checkHeart = checkarray.filter(e => e > 550 || e < 650)
         console.log("heart", checkHeart)
 
-
-        // const playAudio = () => {
-        //   if (checkHeart.length >= 0) {
-        //     if (!isPlaying) {
-        //       setIsPlaying(true);
-        //       audio.play();
-        //       setTimeout(() => {
-        //         setIsPlaying(false);
-        //         audio.pause();
-        //         audio.currentTime = 0;
-        //       }, 5000); // Set the duration of audio playback to 5 seconds.
-        //     }
-        //   }
-        // };
-
         if (checkHeart.length > 0) {
-          console.log("Heart attack")
-          PlayAlarm()
+          console.log("Heart Attack")
+          setAlarm(true)
+          gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
+          setIsSounding(true)
+
         } else {
           checkarray = []
+          gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
+          setIsSounding(false);
         }
       }
-
-      
-
-      // useEffect(() => {
-      //   playAudio();
-      // }, [checkarray]);
-
-      // useEffect(() => {
-      //   initializeAudio();
-      // }, []);
-
-      // useEffect(() => {
-      //   playAudio();
-      // }, [checkarray]);
 
 
       if (data.length > 15) {
@@ -120,21 +106,16 @@ const Cardiogram = () => {
 
   }, [data])
 
+  const stopAlarm = () => {
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
+    setIsSounding(false);
+  };
+
 
 
 
 
   console.log("length of data", data.length);
-
-  function PlayAlarm() {
-    const audioCtx = new AudioContext();
-    const oscillator = audioCtx.createOscillator();
-    oscillator.type = 'sawtooth'
-    oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
-    oscillator.connect(audioCtx.destination);
-    oscillator.start();
-    setTimeout(() => oscillator.stop(), 10000);
-  }
 
   // console.log("passifng data to firebase", checkarray)
   // console.log('array length', data.length)
@@ -156,25 +137,37 @@ const Cardiogram = () => {
     firebase.putdatafire(params.PatientID, data);
   };
 
-  // function playSound() {
-  //   const audio = new Audio("./testaudio.mp3")
-  //   audio.play()
-  // }
-
-
   return (
-    <div>
+    <>
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-12 col-md-6">
             <ApexChart data={data} title="Product Trends by Month" />
-            <button className="text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
-            <button className="text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
-            <button className="btn btn-danger" onClick={PlayAlarm}>Trigger Alarm</button>
+            <button className="btn text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
+            <button className="btn text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-sm-12 col-md-6 d-flex justify-content-center">
+            <button type="button" className="btn mb-2" style={buttonStyle}>View Cardiogram</button>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-sm-12 col-md-6 d-flex justify-content-center">
+            {/* {alarm ?
+                <button className="btn btn-danger btn-block">Abnormal Condition</button> :
+                <button className="btn btn-success btn-block">Normal Condition</button>
+              } */}
+            {isSounding ? <button onClick={stopAlarm} className="btn btn-danger btn-block">Stop Alarm</button> : null}
           </div>
         </div>
       </div>
-    </div>
+
+    </>
+
+
   );
 }
 

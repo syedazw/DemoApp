@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Chart from "react-apexcharts";
 
 export default function ApexChart(props) {
+  console.log("receiving props as", props.data)
   const series = [
     {
       name: "xx",
@@ -39,7 +40,7 @@ export default function ApexChart(props) {
   };
   return (
     <>
-      <Chart options={options} series={series} type="line" height={200} width={350} />
+      <Chart options={options} series={series} type="line" height={200} width={400} />
     </>
   );
 }

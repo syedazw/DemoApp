@@ -40,7 +40,7 @@ export default function ApexChart(props) {
   };
   return (
     <>
-      <Chart options={options} series={series} type="line" height={200} width={400} />
+      <Chart options={options} series={series} type="line" height={200} width={350} />
     </>
   );
 }

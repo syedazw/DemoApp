@@ -61,7 +61,8 @@ const Cardiogram = () => {
 
     axios.get("https://backend.thinger.io/v3/users/ismail_/devices/Nodemcu1/resources/ECG", {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM0ODIzNTEsImlhdCI6MTY4MzQ3NTE1MSwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.DBjLtdAm_hS9eOd3-0usSfKZLBLHgoSAYtoW0TtnRK4'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM0OTI1ODMsImlhdCI6MTY4MzQ4NTM4Mywicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.hMhk8fnG_uS_tEtd_91egWcWDYLM_Boj6GpDZm72LO8'
+        
       }
     }).then(response => {
       // convert the array into string

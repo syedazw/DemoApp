@@ -34,18 +34,20 @@ import HomeUpdate from './Pages/home/homeUpdate'
 //importing all the form
 import Account from './Form/Account'
 import LoginUser from './Form/loginUser'
-import DoctorInfo from './Form/doctorInfo'
+import AddDoctor from './Form/AddDoctor'
+// import DoctorInfo from './Form/DoctorInfo'
 import PatientInfo from './Form/patientInfo'
 import CreateAccount from './Form/CreateAccount' //import page for creating doctor account
 
 function App() {
+
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginUser />}></Route>
           <Route path="/admin/portal" element={<AdminPortal />}></Route>
-          <Route path="/admin/create/account" element={<Account />}></Route>   {/* creating account with different user domain */}
+          <Route path="/admin/create/account" element={<AddDoctor />}></Route>   {/* creating account with different user domain */}
 
           {/*declaring the route for dashboard pages */}
           <Route path="/dashboard" element={< Dashboard/>}></Route>
@@ -74,7 +76,7 @@ function App() {
   
           <Route path="/account" element={<Account />}></Route>
           <Route path="/loginpage" element={<LoginUser />}></Route>          
-          <Route path='/doctor/personal/information' element={<DoctorInfo />}></Route>
+          {/* <Route path='/doctor/personal/information' element={<DoctorInfo />}></Route> */}
           <Route path='/patient/personal/information' element={<PatientInfo />}></Route>
 
           <Route path='*' element={<>Invalid url</>}></Route>

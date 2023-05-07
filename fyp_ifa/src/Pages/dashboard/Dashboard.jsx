@@ -1,17 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Cardiogram from "../../Components/PlotECG";
 import { Outlet, Link } from "react-router-dom"
 import { useParams } from "react-router-dom";
+import { usefirebase } from "../../context/firebase";
+import { getAuth } from "firebase/auth";
+import { getFirestore, collection, where, query, getDocs } from "firebase/firestore";
+
+
 export default function Dashboard() {
+
+    const firebase = usefirebase();
+    const auth = getAuth();
+    const firestore = getFirestore();
     const params = useParams();
     console.log("params is", params)
+
+    const [docdata, setdocdata] = useState([]);
+    useEffect(() => {
+        async function getdocdata() {
+            const currentUser = auth.currentUser;
+            const userEmail = currentUser.email;
+            const q = query(collection(firestore, "Doctor"));
+            const querySnapshot = await getDocs(q);
+            console.log("querysnapshot", querySnapshot)
+
+            if (querySnapshot.empty) {
+                console.log("No matching documents..");
+                return;
+            }
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                console.log("data", data.data.email)
+
+                if (data.data.email == userEmail) {
+                    console.log("Found a match:", data);
+                    setdocdata((prevData) => [...prevData, data]);
+                }
+
+            });
+        }
+        getdocdata();
+    },[])
 
     return (
         <>
             <div className="container-fluid">
                 <div className="row bg-color text-light pt-4">
                     <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
-                    <div className="col-sm-12 col-md-2"><p className="text-center">Welcome Dr. Authur</p></div>
+
+                    {docdata.length > 0 && <div className="col-sm-12 col-md-2"><h6 className="text-center">Welcome Dr. {docdata[0].data.fullname}</h6></div>}
+
+                    {/* <div className="col-sm-12 col-md-2"><p className="text-center">Welcome Dr. Authur</p></div> */}
                     <div className="col-sm-12 col-md-6 d-flex justify-content-start">
                         <form className="d-flex-inline mx-4" role="search">
                             <input className="form-control col-sm-5" type="search" placeholder="Search" aria-label="Search"></input>

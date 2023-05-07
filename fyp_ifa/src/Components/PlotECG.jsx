@@ -74,7 +74,7 @@ const Cardiogram = () => {
       let array = [...data, response.data];
       checkarray = [...data, response.data];
       console.log("array", array);
-      updateData(array);
+      updateData(prevData => [...prevData, response.data]);
       console.log("checkarray", checkarray)
 
     

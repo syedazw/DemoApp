@@ -19,13 +19,16 @@ const Cardiogram = () => {
   console.log("params is", params)
 
 
-  const [data, updateData] = useState([1]);
+  const [data, updateData] = useState([]);
   const [fetchingData, setFetching] = useState(false)
   const [audioContext, setAudioContext] = useState(null);
   const [oscillator, setOscillator] = useState(null);
   const [gainNode, setGainNode] = useState(null);
   const [isSounding, setIsSounding] = useState(false);
 
+
+  // initialize an empty array which later store data fetch from API
+  const [testArray, setTestArray] = useState([])
 
   useEffect(() => {
     const context = new AudioContext();
@@ -58,26 +61,37 @@ const Cardiogram = () => {
 
     axios.get("https://backend.thinger.io/v3/users/ismail_/devices/Nodemcu1/resources/ECG", {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJEYXNoYm9hcmRfZDEiLCJzdnIiOiJldS1jZW50cmFsLmF3cy50aGluZ2VyLmlvIiwidXNyIjoiaXNtYWlsXyJ9.4zRBh0iA_vyFXDELsJ-ePqD8CNUaYDoVQc5PJzasctk'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM0OTI1ODMsImlhdCI6MTY4MzQ4NTM4Mywicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.hMhk8fnG_uS_tEtd_91egWcWDYLM_Boj6GpDZm72LO8'
+        
       }
     }).then(response => {
       // convert the array into string
-      console.log(JSON.stringify(response.data));
+      console.log(JSON.stringify(response.data));  // console log out individual values
+      console.log(response.data)
+
       // const val = Math.floor(Math.random() * (100 - 30 + 1)) + 300/10;
       console.log("data", data)
       let array = [...data, response.data];
       checkarray = [...data, response.data];
       console.log("array", array);
-      updateData(array);
+      updateData(prevData => [...prevData, response.data]);
       console.log("checkarray", checkarray)
 
+    
+
+
+      // if (array.length>15) {
+      //   let newdata = array.slice(array.length-15)
+      //   updateData(newdata)
+      // }
+
       if (checkarray.length > 15) {
-        console.log("checkarray", checkarray)
+        console.log("checkarray for length greater than 15", checkarray)
 
         // orignal - store the value which are greater than 800 or less than 400
         // normal - between 401 and 799
         // abnormal - less than 400, greater than 800
-        let checkHeart = checkarray.filter(e => e > 550 || e < 650)
+        let checkHeart = checkarray.filter(e => e > 400 || e < 800)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {
@@ -100,11 +114,15 @@ const Cardiogram = () => {
         // array.shift() removing the item at the 0th index
         newdata.shift()
         array.shift()
-        updateData(newdata);
+        // updateData(newdata);
       }
-    }).catch(err => console.log(err))
+    }).catch(err => {console.log(err)
+    
+    })
 
   }, [data])
+
+  
 
   const stopAlarm = () => {
     gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
@@ -137,12 +155,15 @@ const Cardiogram = () => {
     firebase.putdatafire(params.PatientID, data);
   };
 
+  console.log("Passing the data as", data)
+  console.log("data array should be as ", testArray)
+
   return (
     <>
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-12 col-md-6">
-            <ApexChart data={data} title="Product Trends by Month" />
+            <ApexChart data={data} title="Patient ECG" />
             <button className="btn text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
             <button className="btn text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
           </div>

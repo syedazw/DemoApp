@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Chart from "react-apexcharts";
 
 export default function ApexChart(props) {
+  console.log("receiving props as", props.data)
   const series = [
     {
       name: "xx",

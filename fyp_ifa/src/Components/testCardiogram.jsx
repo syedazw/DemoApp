@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { getDatabase, ref, set, push, child, serverTimestamp } from "firebase/database";
 
 
-const Cardiogram = () => {
+const TestCardiogram = () => {
   const buttonStyle = { color: "white", backgroundColor: "#041342", borderRadius: "6px", textDecoration: "none" }
   const firebase = usefirebase();
   // console.log(firebase);
@@ -58,7 +58,7 @@ const Cardiogram = () => {
 
     axios.get("https://backend.thinger.io/v3/users/ismail_/devices/Nodemcu1/resources/ECG", {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM1NDcyNDgsImlhdCI6MTY4MzU0MDA0OCwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.up4qyKMKgJiq0qK74QlcL0BGKOWLLGh8EPOD5FqNVEo'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXYiOiJkZXZpY2UyIiwiaWF0IjoxNjgzNTMzMTAwLCJqdGkiOiI2NDU4YWQyYzRlY2ExYTU2ZGYwYjFjYmIiLCJzdnIiOiJhcC1zb3V0aGVhc3QuYXdzLnRoaW5nZXIuaW8iLCJ1c3IiOiJpc21haWxfIn0.vpR72w2A9vrfls97C5u9unFB38JWztI154Nl26c64Zs'
         
       }
     }).then(response => {
@@ -195,4 +195,4 @@ const Cardiogram = () => {
   );
 }
 
-export default Cardiogram;
+export default TestCardiogram;

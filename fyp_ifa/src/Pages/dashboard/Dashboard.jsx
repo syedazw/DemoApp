@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { usefirebase } from "../../context/firebase";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, where, query, getDocs } from "firebase/firestore";
+import TestCardiogram from "../../Components/testCardiogram";
 
 
 export default function Dashboard() {
@@ -100,10 +101,13 @@ export default function Dashboard() {
                     <h4 className="fw-bold text-center">CRITICAL PATIENTS</h4>
                 </div>
 
-                <div className="row">
-                    <div className="col-sm-12 col-md-5">
+                <div className="row mt-4">
+                    <div className="col-sm-12 col-md-6">
                         <Cardiogram
                             patid={params.PatientID} />
+                    </div>
+                    <div className="col-sm-12 col-md-6">
+                        <TestCardiogram patid={params.PatientID} />
                     </div>
                 </div>
             </div>

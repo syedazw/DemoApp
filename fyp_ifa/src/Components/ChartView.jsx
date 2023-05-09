@@ -11,7 +11,7 @@ export default function ApexChart(props) {
   ];
   const options = {
     chart: {
-      height: 350,
+      height: 360,
       type: "line",
       zoom: {
         enabled: true

@@ -1,16 +1,52 @@
-import React from "react"
+import React ,{useState ,useEffect} from "react"
 import { Outlet, Link } from "react-router-dom"
-
+import { usefirebase } from "../../context/firebase";
+import { getAuth } from "firebase/auth";
 // create a function which list down all the recommendations
 
 export default function HomeRecommendations() {
+    const firebase = usefirebase();
+    const auth = getAuth();
+
+    const [patdata, setpatdata] = useState([]);
+    useEffect(() => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return;
+        }
+        const userEmail = currentUser.email;
+
+        firebase.patData(userEmail)
+            .then((matchingData) => {
+                setpatdata(matchingData);
+            })
+            .catch((error) => {
+                console.log("Error fetching patient data:", error);
+            });
+    }, []);
+
+    const [patRep, setpatRep] = useState([]);
+    useEffect(() => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return;
+        }
+            const userEmail = currentUser.email;
+            firebase.patRepData(userEmail).then((matchingData) => {
+                setpatRep(matchingData);
+            })
+            .catch((error) =>{
+                console.log("Error when Fetching Reports", error);
+            })
+        
+    } ,[])
     return (
         <>
         <div className="container-fluid">
                 <div className="row bg-color text-light pt-4">
                     <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
 
-                    <div className="col-sm-12 col-md-2"><p className="text-center">Welcome Mr.Joseph</p></div>
+                    {patdata.length > 0 && <div className="col-sm-12 col-md-2"><h6 className="text-center">{patdata[0].data.fullname}</h6></div>}
 
                     <div className="col-sm-12 col-md-6 d-flex justify-content-start">
                         <form className="d-flex-inline mx-4" role="search">
@@ -53,7 +89,7 @@ export default function HomeRecommendations() {
 
             <div className="container-fluid" style={{ backgroundColor: "white" }}>
                 <div className="row">
-                    <h4 className="fw-bold text-center">RECOMMENDATIONS</h4>
+                    <h4 className="fw-bold text-center">REPORTS</h4>
                 </div>
             </div>
 
@@ -65,13 +101,13 @@ export default function HomeRecommendations() {
                                 <div className="col-sm-12 col-md-4 mx-auto">
                                     <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
                                         <div className="card-body">
-                                            <h5 className="card-title">Recommendations</h5>
+                                            <h5 className="card-title">REPORTS</h5>
                                             <hr className="border-5" style={{ color: "white" }}></hr>
                                             <ul className="list-unstyled">
-                                                <li><dl><dt><i className="bi bi-arrow-right mx-2 mb-2"></i>Term 1:</dt><dd className="mx-4 fw-light">Description................</dd></dl></li>
-                                                <li><dl><dt><i className="bi bi-arrow-right mx-2 mb-2"></i>Term 1:</dt><dd className="mx-4 fw-light">Description................</dd></dl></li>
-                                                <li><dl><dt><i className="bi bi-arrow-right mx-2 mb-2"></i>Term 1:</dt><dd className="mx-4 fw-light">Description................</dd></dl></li>
-                                                <li><dl><dt><i className="bi bi-arrow-right mx-2 mb-2"></i>Term 1:</dt><dd className="mx-4 fw-light">Description................</dd></dl></li>
+                                            {patRep.length > 0 &&
+                                                patRep[0].Reports.map((report, index) => (
+                                                <li><dl><dt><i className="bi bi-arrow-right mx-2 mb-2"></i>Test Name:</dt><dd className="mx-4 fw-dark">{report.testName}</dd></dl></li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>

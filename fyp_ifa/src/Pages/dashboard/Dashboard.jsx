@@ -18,31 +18,21 @@ export default function Dashboard() {
 
     const [docdata, setdocdata] = useState([]);
     useEffect(() => {
-        async function getdocdata() {
-            const currentUser = auth.currentUser;
-            const userEmail = currentUser.email;
-            const q = query(collection(firestore, "Doctor"));
-            const querySnapshot = await getDocs(q);
-            console.log("querysnapshot", querySnapshot)
-
-            if (querySnapshot.empty) {
-                console.log("No matching documents..");
-                return;
-            }
-
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                console.log("data", data.data.email)
-
-                if (data.data.email == userEmail) {
-                    console.log("Found a match:", data);
-                    setdocdata((prevData) => [...prevData, data]);
-                }
-
-            });
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return;
         }
-        getdocdata();
-    },[])
+        const userEmail = currentUser.email;
+
+        firebase.DocData(userEmail)
+            .then((matchingData) => {
+                setdocdata(matchingData);
+            })
+            .catch((error) => {
+                console.log("Error fetching patient data:", error);
+            });
+    }, []);
+
 
     return (
         <>

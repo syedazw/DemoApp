@@ -1,21 +1,24 @@
-import React from "react"
-import { usefirebase} from '../context/firebase'
+import React ,{useState} from "react"
+import { usefirebase } from '../context/firebase'
 import { useParams } from "react-router-dom";
+import Popup from "../message/ShowMessage";
 
 export default function MedicineForm() {
     const firebase = usefirebase();
     const params = useParams();
-    console.log("id",params)
-    console.log("firebase",firebase);
-    const [medicalReport, setMedicalReport] = React.useState([{medicineName:"", dosage:""}])
+    console.log("id", params)
+    console.log("firebase", firebase);
+    const [medicalReport, setMedicalReport] = React.useState([{ medicineName: "", dosage: "" }])
+    const [showPopup, setShowPopup] = useState(false);
+    
 
     const AddItem = () => {
-        const data = [...medicalReport, {medicineName:"", dosage:""}]
+        const data = [...medicalReport, { medicineName: "", dosage: "" }]
         setMedicalReport(data)
     }
 
     const handleChange = (e, i) => {
-        const {name,value} = e.target
+        const { name, value } = e.target
         const newData = [...medicalReport]
         newData[i][name] = value
         setMedicalReport(newData)
@@ -23,23 +26,30 @@ export default function MedicineForm() {
 
     const handleDelete = (i) => {
         const deleteData = [...medicalReport]
-        deleteData.splice(i,1)
+        deleteData.splice(i, 1)
         setMedicalReport(deleteData)
     }
 
     function handleClick() {
-        console.log("Storing data:",medicalReport)
+        setShowPopup(true);
+        console.log("Storing data:", medicalReport)
     }
 
-     //    ADD MEDICINE DATA TO FIRESTORE
 
-     const addMedToCollection = async() =>{
+
+    const handleClose = () => {
+        setShowPopup(false);
+    };
+
+    //    ADD MEDICINE DATA TO FIRESTORE
+
+    const addMedToCollection = async () => {
         const data = medicalReport;
-        const result = await firebase.addMedToCollection(params.PatientID,data);
+        const result = await firebase.addMedToCollection(params.PatientID, data);
         console.log("Medicine Added", result);
-        
 
-     }
+
+    }
     return (
         <>
             <div className="container-fluid">
@@ -63,7 +73,8 @@ export default function MedicineForm() {
                             )
                         })}
                         <div className="col-12">
-                            <button className="btn mt-5" type="submit" onClick={addMedToCollection} style={{ color: "white", backgroundColor: "#041342" }}>SAVE CHANGES</button>
+                            <button className="btn mt-5" type="submit" onClick={() => { addMedToCollection(); handleClick() }} style={{ color: "white", backgroundColor: "#041342" }}>SAVE CHANGES</button>
+                            <Popup show={showPopup} onClose={handleClose} message="Successfully Store Data!" />
                         </div>
                     </div>
                 </div>

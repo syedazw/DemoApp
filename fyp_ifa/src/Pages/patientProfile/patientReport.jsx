@@ -1,17 +1,40 @@
-import React from "react";
+import React ,{useState ,useEffect} from "react"
 import { Outlet, Link } from "react-router-dom"
 import CreateTestReport from "../../Form/createTestReport";
 import { useParams } from "react-router-dom";
+import { usefirebase } from "../../context/firebase";
+import { getAuth } from "firebase/auth";
 
 
 export default function PatientReport() {
     const params = useParams();
+    const firebase = usefirebase();
+    const auth = getAuth();
+
+    // *********   Doctor data ***************
+    const [docdata, setdocdata] = useState([]);
+    useEffect(() => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return;
+        }
+        const userEmail = currentUser.email;
+
+        firebase.DocData(userEmail)
+            .then((matchingData) => {
+                setdocdata(matchingData);
+            })
+            .catch((error) => {
+                console.log("Error fetching patient data:", error);
+            });
+    }, []);
+   
     return (
         <>
            <div className="container-fluid">
                 <div className="row bg-color text-light pt-4">
                     <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
-                    <div className="col-sm-12 col-md-2"><p className="text-center">Patient Profile</p></div>
+                    {docdata.length > 0 && <div className="col-sm-12 col-md-2"><h6 className="text-center">Dr. {docdata[0].data.fullname}</h6></div>}
                     <div className="col-sm-12 col-md-6 d-flex justify-content-start">
                         <form className="d-flex-inline mx-4" role="search"><input className="form-control col-sm-5" type="search" placeholder="Search" aria-label="Search"></input></form>
                         <i className="bi bi-bell-fill" style={{ color: "yellow" }}></i>

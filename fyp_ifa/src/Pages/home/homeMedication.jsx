@@ -1,16 +1,58 @@
-import React from "react"
+import React ,{useState ,useEffect} from "react"
 import { Outlet, Link } from "react-router-dom"
+import { usefirebase } from "../../context/firebase";
+import { getAuth } from "firebase/auth";
 
 // task: create a function which list all the medicine with dosage 
 
 
 export default function HomeMedication() {
+    const firebase = usefirebase();
+    const auth = getAuth();
+    const [patdata, setpatdata] = useState([]);
+    useEffect(() => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return;
+        }
+        const userEmail = currentUser.email;
+
+        firebase.patData(userEmail)
+            .then((matchingData) => {
+                setpatdata(matchingData);
+            })
+            .catch((error) => {
+                console.log("Error fetching patient data:", error);
+            });
+    }, []);
+
+    const [patMed, setpatMed] = useState([]);
+    useEffect(() => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return;
+        }
+        const userEmail = currentUser.email;
+
+        firebase.patMedData(userEmail)
+            .then((matchingData) => {
+                setpatMed(matchingData);
+                console.log("medication",setpatMed)
+            })
+            .catch((error) => {
+                console.log("Error fetching medication data:", error);
+            });
+    }, []);
+
+
+  
+    
     return (
         <>
             <div className="container-fluid">
                 <div className="row bg-color text-light pt-4">
                     <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
-                    <div className="col-sm-12 col-md-2"><p className="text-center">Welcome Mr.Joseph</p></div>
+                    {patdata.length > 0 && <div className="col-sm-12 col-md-2"><h6 className="text-center">{patdata[0].data.fullname}</h6></div>}
                     <div className="col-sm-12 col-md-6 d-flex justify-content-start">
                         <form className="d-flex-inline mx-4" role="search">
                             <input className="form-control col-sm-5" type="search" placeholder="Search" aria-label="Search"></input>
@@ -38,9 +80,9 @@ export default function HomeMedication() {
                                     <li className="nav-item"><Link to="/home" className="nav-link text-light mx-3">HOME</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">CARDIOGRAM</Link></li>
                                     <li className="nav-item"><Link to="/home/medication" className="nav-link text-primary mx-3">MEDICATIONS</Link></li>
-                                    <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">REPORTS</Link></li>
-                                    <li className="nav-item"><Link to="/home/update" className="nav-link text-light mx-3">UPDATES</Link></li>
-                                    <li className="nav-item"><Link to="/home/recommendation" className="nav-link text-light mx-3">RECOMMENDATIONS</Link></li>
+                                    <li className="nav-item"><Link to="/home/recommendation" className="nav-link text-light mx-3">REPORTS</Link></li>
+                                    <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPDATES</Link></li>
+                                    <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">RECOMMENDATIONS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPCOMING APPOINMENTS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">DOCTOR'S PROFILE</Link></li>
                                 </ul>
@@ -68,10 +110,10 @@ export default function HomeMedication() {
                                             <h5 className="card-title">Medications</h5>
                                             <hr className="border-5" style={{ color: "white" }}></hr>
                                             <ul className="list-unstyled">
-                                                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-capsule mb-2 mx-2" viewBox="0 0 16 16"><path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429l4.243 4.242Z" /></svg>Medicine 01 (1+1+1)</li>
-                                                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-capsule mb-2 mx-2" viewBox="0 0 16 16"><path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429l4.243 4.242Z" /></svg>Medicine 02 (1+1)</li>
-                                                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-capsule mb-2 mx-2" viewBox="0 0 16 16"><path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429l4.243 4.242Z" /></svg>Medicine 03 (1)</li>
-                                                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-capsule mb-2 mx-2" viewBox="0 0 16 16"><path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429l4.243 4.242Z" /></svg>Medicine 04 (1+1)</li>
+                                            {patMed.length > 0 && patMed[0].medications.map((medication, index) => (
+                                                <li><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-capsule mb-2 mx-2" viewBox="0 0 16 16"><path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429l4.243 4.242Z" /></svg>
+                                                {medication.data[0].medicineName} ({medication.data[0].dosage})</li>
+                                            ))}
                                             </ul>
                                         </div>
                                     </div>

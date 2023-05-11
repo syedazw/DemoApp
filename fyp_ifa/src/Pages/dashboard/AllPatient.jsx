@@ -3,9 +3,13 @@ import { Outlet, Link } from "react-router-dom"
 import { usefirebase } from '../../context/firebase'
 import DisplayPatientCard from "../../Components/displayPatientCard"
 import { getAuth } from "firebase/auth"
+import { useParams } from "react-router-dom";
 
 
 export default function AllPatient() {
+
+    const params = useParams();
+
     let critical = true
     const firebase = usefirebase();
     const auth = getAuth();
@@ -77,7 +81,9 @@ export default function AllPatient() {
 
                     <div className="col-12">
                         <nav className="navbar">
-                            <a className="navbar-brand text-light fw-bold" href="#">MENU</a>
+                            <Link to={`/dashboard`} className="navbar-brand text-light fw-bold">&lt; BACK</Link>
+
+                            {/* <a className="navbar-brand text-light fw-bold" href="#">MENU</a> */}
                             <button className="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="navbar-toggler-icon bg-light"></span>
                             </button>

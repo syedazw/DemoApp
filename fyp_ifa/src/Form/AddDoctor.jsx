@@ -13,11 +13,23 @@ export default function AddDoctor() {
     const [doctorRegister, setdoctorRegister] = React.useState({
         fullname: "",
         email: "",
+        password:"",
         doctorMobile: "",
         workPhone: "",
         age: "",
         gender: ""
     })
+
+    const handleSubmit = (event) =>{
+        event.preventDefault();
+
+        if (patientRegister.fullname === '' || patientRegister.careTaker === '' || patientRegister.assistant === '' || patientRegister.email === ''){
+            alert("Please fill all fields first");
+        }else{
+            //submit form
+        }
+        addPatientData();
+    };
 
     const [isfill, setIsFill] = React.useState(true)
     // const [image, setImage] = React.useState("https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80")
@@ -60,6 +72,7 @@ export default function AddDoctor() {
         const data = {
             fullname: doctorRegister.fullname,
             email: doctorRegister.email,
+            password: doctorRegister.password,
             doctorMobile: doctorRegister.doctorMobile,
             workPhone: doctorRegister.workPhone,
             age: doctorRegister.age,
@@ -115,6 +128,10 @@ export default function AddDoctor() {
                                 <div className="valid-feedback">Looks good!</div>
                             </div>
 
+                            <div className="col-sm-12 col-md-6">
+                                <label htmlFor="exampleInputPassword1" className="form-label mb-0 fw-bold" style={{ color: "#041342" }}>Password: </label>
+                                <input type="password" className="form-control" id="exampleInputPassword1" name="password" value={setdoctorRegister.password} onChange={handleChange} />
+                            </div>
 
                             <div className="col-sm-12 col-md-6">
                                 <label htmlFor="validationCustom07" className="form-label mb-0 fw-bold">Doctor Mobile:</label>

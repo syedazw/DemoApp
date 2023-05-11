@@ -10,11 +10,12 @@ export default function PatientInfo() {
         careTaker: "",
         assistant: "",
         email: "",
+        password: "",
         careTakerMobile: "",
         homeMobile: "",
         patientMobile: "",
         workPhone: "",
-        age: "",
+        // age: "",
         weight: "",
         height: "",
         dob: "",
@@ -22,7 +23,7 @@ export default function PatientInfo() {
         isCritical: false,
         gender: ""
     })
-
+    
     const [isfill, setIsFill] = React.useState(true)
     // const [image, setImage] = React.useState("https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80")
     console.log(patientRegister)
@@ -65,11 +66,12 @@ export default function PatientInfo() {
             careTaker: patientRegister.careTaker,
             assistant: patientRegister.assistant,
             email: patientRegister.email,
+            password: patientRegister.password,
             careTakerMobile: patientRegister.careTakerMobile,
             homeMobile: patientRegister.homeMobile,
             patientMobile: patientRegister.patientMobile,
             workPhone: patientRegister.workPhone,
-            age: patientRegister.age,
+            // age: patientRegister.age,
             weight: patientRegister.weight,
             height: patientRegister.height,
             dob: patientRegister.dob,
@@ -92,6 +94,9 @@ export default function PatientInfo() {
             <div className="container-fluid mt-5">
                 <div className="row">
                     <div className="col-sm-8 col-md-5 mx-auto">
+                        <div className="row">
+                            <h4 className="fw-bold text-center">ADD NEW PATIENTS</h4><br></br><br />
+                        </div>
                         
                         <form className="row g-3 needs-validation" onSubmit={addPatientData}>
 
@@ -136,6 +141,11 @@ export default function PatientInfo() {
                                 <div className="valid-feedback">Looks good!</div>
                             </div>
 
+                            <div className="col-sm-12 col-md-6">
+                                <label htmlFor="exampleInputPassword1" className="form-label mb-0 fw-bold" style={{ color: "#041342" }}>Password: </label>
+                                <input type="password" className="form-control" id="exampleInputPassword1" name="password" value={setpatientRegister.password} onChange={handleChange} />
+                            </div>
+
 
                             <div className="col-sm-12 col-md-6">
                                 <label htmlFor="validationCustom05" className="form-label mb-0 fw-bold">Caretaker Mobile:</label>
@@ -169,7 +179,7 @@ export default function PatientInfo() {
                                 <div className="valid-feedback">Looks good!</div>
                             </div>
 
-                            <div className="col-md-3">
+                            {/* <div className="col-md-3">
                                 <label htmlFor="validationCustom09" className="form-label mb-0 fw-bold">Age:</label>
                                 <select className="form-select" id="validationCustom09" required name="age" value={setpatientRegister.age} onChange={handleChange}>
                                     <option defaultValue selected disabled>Choose...</option>
@@ -191,7 +201,7 @@ export default function PatientInfo() {
                                     <option value="44">55</option>
                                 </select>
                                 <div className="invalid-feedback">Please select a valid city.</div>
-                            </div>
+                            </div> */}
 
 
                             <div className="col-md-3">

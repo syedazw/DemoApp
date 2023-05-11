@@ -1,13 +1,21 @@
-import React ,{useState ,useEffect} from "react"
+import React, { useEffect, useState } from "react";
+import Cardiogram from "../../Components/PlotECG";
 import { Outlet, Link } from "react-router-dom"
 import { usefirebase } from "../../context/firebase";
 import { getAuth } from "firebase/auth";
-// create a function which list down all the recommendations
+import { getFirestore, collection, where, query, getDocs } from "firebase/firestore";
+// import { useParams } from "react-router-dom";
 
-export default function HomeReports() {
-    const firebase = usefirebase();
+
+export default function PatientCardiogram() {
+
+    // const params = useParams();
+
     const auth = getAuth();
 
+    const firebase = usefirebase();
+
+    // **************************    PATIENT DATA ***************************
     const [patdata, setpatdata] = useState([]);
     useEffect(() => {
         const currentUser = auth.currentUser;
@@ -25,24 +33,46 @@ export default function HomeReports() {
             });
     }, []);
 
-    const [patRep, setpatRep] = useState([]);
-    useEffect(() => {
-        const currentUser = auth.currentUser;
-        if (!currentUser) {
-            return;
-        }
-            const userEmail = currentUser.email;
-            firebase.patRepData(userEmail).then((matchingData) => {
-                setpatRep(matchingData);
-            })
-            .catch((error) =>{
-                console.log("Error when Fetching Reports", error);
-            })
+    // ************************** PATIENT MEDICATION DATA  ***************************          
+    // const [patMed, setpatMed] = useState([]);
+    // useEffect(() => {
+    //     const currentUser = auth.currentUser;
+    //     if (!currentUser) {
+    //         return;
+    //     }
+    //     const userEmail = currentUser.email;
+
+    //     firebase.patMedData(userEmail)
+    //         .then((matchingData) => {
+    //             setpatMed(matchingData);
+    //             console.log("medication",setpatMed)
+    //         })
+    //         .catch((error) => {
+    //             console.log("Error fetching medication data:", error);
+    //         });
+    // }, []);
+
+    // // ************************** PATIENT REPORT DATA  *************************** 
+
+    // const [patRep, setpatRep] = useState([]);
+    // useEffect(() => {
+    //     const currentUser = auth.currentUser;
+    //     if (!currentUser) {
+    //         return;
+    //     }
+    //         const userEmail = currentUser.email;
+    //         firebase.patRepData(userEmail).then((matchingData) => {
+    //             setpatRep(matchingData);
+    //         })
+    //         .catch((error) =>{
+    //             console.log("Error when Fetching Reports", error);
+    //         })
         
-    } ,[])
+    // } ,[])
+
     return (
         <>
-        <div className="container-fluid">
+            <div className="container-fluid">
                 <div className="row bg-color text-light pt-4">
                     <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
 
@@ -68,16 +98,16 @@ export default function HomeReports() {
                     </div>
                     <div className="col-12 bg-color">
                         <nav className="navbar">
-                        <Link to={`/home`} className="navbar-brand text-light fw-bold">&lt; BACK</Link>
-
+                            <Link to={`/home`} className="navbar-brand text-light fw-bold">&lt; BACK</Link>
+                            
                             {/* <Link to="/allpatient" className="navbar-brand text-light fw-bold mx-5">MENU</Link> */}
                             <button className="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon bg-light"></span></button>
                             <div className="collapse navbar-collapse" id="navbarNavDropdown">
-                            <ul className="navbar-nav">
-                                    <li className="nav-item"><Link to="/home" className="nav-link text-light mx-3">HOME</Link></li>
+                                <ul className="navbar-nav">
+                                    <li className="nav-item"><Link to="/home" className="nav-link text-primary mx-3">HOME</Link></li>
                                     <li className="nav-item"><Link to="/home/cardiogram" className="nav-link text-light mx-3">CARDIOGRAM</Link></li>
                                     <li className="nav-item"><Link to="/home/medication" className="nav-link text-light mx-3">MEDICATIONS</Link></li>
-                                    <li className="nav-item"><Link to="/home/reports" className="nav-link text-primary mx-3">REPORTS</Link></li>
+                                    <li className="nav-item"><Link to="/home/recommendation" className="nav-link text-light mx-3">TESTS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPDATES</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">RECOMMENDATIONS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPCOMING APPOINMENTS</Link></li>
@@ -89,35 +119,63 @@ export default function HomeReports() {
                 </div>
             </div>
 
+
             <div className="container-fluid" style={{ backgroundColor: "white" }}>
                 <div className="row">
-                    <h4 className="fw-bold text-center">TESTS</h4>
+                    <h4 className="fw-bold text-center">Cardiogram</h4>
+                </div>
+            </div>
+            {/* we can't import medication, recommendation and update component as its function is taking id as props for each patient */}
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-sm-12 col-md-6">
+                        <Cardiogram />
+                    </div>
+                    <div className="col-sm-12 col-md-4">
+                    </div>
                 </div>
             </div>
 
-            <div className="container-fluid">
+            {/* creating a medication card */}
+            {/* <div className="container-fluid">
                 <div className="row">
-                    
+                    <div className="col-md-3">
+                        <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
+                            <div className="card-body">
+                                <h5 className="card-title">Medications</h5>
+                                <hr className="border-5" style={{ color: "white" }}></hr>
+                                <ul className="list-unstyled">
+                                    {patMed.length > 0 && patMed[0].medications.map((medication, index) => (
+                                        <li key={index}><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-capsule mb-2 mx-2" viewBox="0 0 16 16"><path d="M1.828 8.9 8.9 1.827a4 4 0 1 1 5.657 5.657l-7.07 7.071A4 4 0 1 1 1.827 8.9Zm9.128.771 2.893-2.893a3 3 0 1 0-4.243-4.242L6.713 5.429l4.243 4.242Z" /></svg>
+                                            {medication.data[0].medicineName}  ({medication.data[0].dosage})</li>
+                                    ))} 
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
                     <div className="container-fluid">
-                            <div className="row">
-                                <div className="col-sm-12 col-md-4 mx-auto">
-                                    <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
-                                        <div className="card-body">
-                                            <h5 className="card-title">TESTS</h5>
-                                            <hr className="border-5" style={{ color: "white" }}></hr>
-                                            <ul className="list-unstyled">
+                        <div className="row">
+                            <div className="col-sm-12 col-md-3">
+                                <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
+                                    <div className="card-body">
+                                        <h5 className="card-title">Report</h5>
+                                        <hr className="border-5" style={{ color: "white" }} />
+                                        <ul className="list-unstyled">
                                             {patRep.length > 0 &&
-                                                patRep[0].Reports.map((report, index) => (
-                                                <li><dl><dt><i className="bi bi-arrow-right mx-2 mb-2"></i>Test Name:</dt><dd className="mx-4 fw-dark">{report.testName}</dd></dl></li>
+                                                patRep[0].Reports.map((report) => (
+                                                    <li className="bi bi-file-text-fill me-2"> {report.testName}</li>
                                                 ))}
-                                            </ul>
-                                        </div>
+                                        </ul>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
+                    </div>
+
                 </div>
-            </div>
+            </div> */}
         </>
     )
 }

@@ -99,7 +99,7 @@ export default function HomePage() {
                     </div>
                     <div className="col-12 bg-color">
                         <nav className="navbar">
-                            <Link to="/allpatient" className="navbar-brand text-light fw-bold mx-5">MENU</Link>
+                            <Link to="#" className="navbar-brand text-light fw-bold mx-5">MENU</Link>
                             <button className="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon bg-light"></span></button>
                             <div className="collapse navbar-collapse" id="navbarNavDropdown">
                                 <ul className="navbar-nav">
@@ -159,7 +159,7 @@ export default function HomePage() {
                     <div className="col-sm-12 col-md-3">
                                 <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
                                     <div className="card-body">
-                                        <h5 className="card-title">Report</h5>
+                                        <h5 className="card-title">Tests</h5>
                                         <hr className="border-5" style={{ color: "white" }} />
                                         <ul className="list-unstyled">
                                             {patRep.length > 0 &&

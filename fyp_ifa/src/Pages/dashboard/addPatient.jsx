@@ -57,7 +57,9 @@ export default function AddPatient() {
 
                     <div className="col-12">
                         <nav className="navbar">
-                            <a className="navbar-brand text-light fw-bold" href="#">MENU</a>
+                            <Link to={`/dashboard`} className="navbar-brand text-light fw-bold">&lt; BACK</Link>
+
+                            {/* <a className="navbar-brand text-light fw-bold" href="#">MENU</a> */}
                             <button className="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="navbar-toggler-icon bg-light"></span>
                             </button>
@@ -80,7 +82,7 @@ export default function AddPatient() {
             </div>
             <div className="container-fluid">
                 <div className="row">
-                    <h4 className="fw-bold text-center">ADD NEW PATIENTS</h4>
+                    {/* <h4 className="fw-bold text-center">ADD NEW PATIENTS</h4> */}
                 </div>
 
                 <div className="row">

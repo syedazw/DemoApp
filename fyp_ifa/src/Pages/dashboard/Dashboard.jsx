@@ -106,9 +106,9 @@ export default function Dashboard() {
                         <Cardiogram
                             patid={params.PatientID} />
                     </div>
-                    <div className="col-sm-12 col-md-6">
+                    {/* <div className="col-sm-12 col-md-6">
                         <TestCardiogram patid={params.PatientID} />
-                    </div>
+                    </div> */}
                 </div>
             </div>
 

@@ -58,36 +58,17 @@ const Cardiogram = () => {
 
     axios.get("https://backend.thinger.io/v3/users/ismail_/devices/Nodemcu1/resources/ECG", {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM1NDcyNDgsImlhdCI6MTY4MzU0MDA0OCwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.up4qyKMKgJiq0qK74QlcL0BGKOWLLGh8EPOD5FqNVEo'
-        
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM4MjA3OTUsImlhdCI6MTY4MzgxMzU5NSwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.GPyitS9m-AiUc9QEs-HNjVluSt5nvDJhIPb8Wz0tFRU'
       }
     }).then(response => {
       // convert the array into string
       //console.log(JSON.stringify(response.data));  // console log out individual values
-      console.log("New data point",response.data)
-      let newData = response.data
-      console.log(newData)
+      console.log("New data point", response.data)
 
       // const val = Math.floor(Math.random() * (100 - 30 + 1)) + 300/10;
-      console.log("Before adding new data point", data)
       let array = [...data, response.data];
       checkarray = [...data, response.data];
-      //console.log("array", array);
-
-      // updateData(data.push(response.data))
-      updateData(prevData => [...prevData, newData]);
-      //console.log("checkarray", checkarray)
-      console.log("data",data)
-
-      //console.log("After adding new data point", data)
-
-    
-
-
-      // if (array.length>15) {
-      //   let newdata = array.slice(array.length-15)
-      //   updateData(newdata)
-      // }
+      updateData(data => [...data, response.data])
 
       if (checkarray.length > 15) {
         console.log("checkarray", checkarray)
@@ -99,33 +80,31 @@ const Cardiogram = () => {
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {
-          console.log("Heart Attack")
+          // console.log("Heart Attack")
           setAlarm(true)
           gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
           setIsSounding(true)
 
         } else {
-          checkarray = []
+          checkHeart = []
           gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
           setIsSounding(false);
         }
       }
 
-
       if (data.length > 15) {
-        let newdata = data
-        // array.shift() removing the item at the 0th index
-        newdata.shift()
         array.shift()
-        updateData(newdata);
-      }
-    }).catch(err => {console.log(err)
-    
+        let newArray = data.shift()
+        console.log(newArray)
+      } 
+    }).catch(err => {
+      console.log(err)
+
     })
 
   }, [data])
 
-  
+
 
   const stopAlarm = () => {
     gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
@@ -136,7 +115,7 @@ const Cardiogram = () => {
 
 
 
-  console.log("length of data", data.length);
+  // console.log("length of data", data.length);
 
   // console.log("passifng data to firebase", checkarray)
   // console.log('array length', data.length)
@@ -154,12 +133,13 @@ const Cardiogram = () => {
   //     DateTime: serverTimestamp()
   // };
 
+
+
   const putDatanew = () => {
     firebase.putdatafire(params.PatientID, data);
   };
 
   console.log("Passing the data as", data)
-  // console.log("data array should be as ", testArray)
 
   return (
     <>

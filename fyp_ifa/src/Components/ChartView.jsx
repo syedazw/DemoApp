@@ -2,11 +2,24 @@ import React, { useState } from "react";
 import Chart from "react-apexcharts";
 
 export default function ApexChart(props) {
-  console.log("receiving props as", props.data)
+  // console.log("receiving props as", props.data)
+
+  let newArray = props.data
+  console.log("receive array", newArray)
+  
+  // let plotData = []
+  if (newArray.length>15) {
+    newArray.shift()
+  } else {
+    newArray
+  }
+
+  // console.log("Plotting data values", plotData)
+  
   const series = [
     {
       name: "xx",
-      data: props.data
+      data: newArray
     }
   ];
   const options = {

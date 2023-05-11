@@ -1,7 +1,10 @@
 import React from "react"
 import { usefirebase } from '../context/firebase'
+import { useParams } from "react-router-dom";
 
 export default function PatientInfo() {
+    const params = useParams();
+    
     const firebase = usefirebase();
     console.log('firebase', firebase);
     // creating an state
@@ -88,6 +91,9 @@ export default function PatientInfo() {
                 <div className="row">
                     <div className="col-sm-8 col-md-5 mx-auto">
                         <p className="h5 mx-auto text-center fw-bold mb-3">PATIENT PERSONAL INFORMATION</p>
+                        
+                        <Link to={`/patientprofile/${params.PatientID}`} className="navbar-brand text-light fw-bold">&lt; BACK</Link>
+
                         <form className="row g-3 needs-validation" noValidate >
 
                             <div className="col-sm-12 col-md-12">

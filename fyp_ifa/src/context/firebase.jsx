@@ -147,6 +147,8 @@ export const FirebaseProvider = (props) => {
 
     }
 
+    // *****************  FIRESTORE DATA **************************
+
     const putdatafire = async (PatientID, data) => {
         const ref = collection(db, "Patients", PatientID, "ECGData")
         const result = await addDoc(ref, {
@@ -217,7 +219,7 @@ export const FirebaseProvider = (props) => {
     
         return matchingData;
     };
-        // ************************** PATIENT MEDICATION DATA  *************************** 
+        // ************************** PATIENT REPORT DATA  *************************** 
 
     const patRepData = async (userEmail) => {
         const q = query(collection(db, "Patients"));

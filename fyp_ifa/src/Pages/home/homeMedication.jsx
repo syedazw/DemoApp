@@ -73,14 +73,16 @@ export default function HomeMedication() {
                     </div>
                     <div className="col-12 bg-color">
                         <nav className="navbar">
-                            <Link to="/allpatient" className="navbar-brand text-light fw-bold mx-5">MENU</Link>
+                            <Link to={`/home`} className="navbar-brand text-light fw-bold">&lt; BACK</Link>
+
+                            {/* <Link to="/allpatient" className="navbar-brand text-light fw-bold mx-5">MENU</Link> */}
                             <button className="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon bg-light"></span></button>
                             <div className="collapse navbar-collapse" id="navbarNavDropdown">
                             <ul className="navbar-nav">
                                     <li className="nav-item"><Link to="/home" className="nav-link text-light mx-3">HOME</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">CARDIOGRAM</Link></li>
                                     <li className="nav-item"><Link to="/home/medication" className="nav-link text-primary mx-3">MEDICATIONS</Link></li>
-                                    <li className="nav-item"><Link to="/home/recommendation" className="nav-link text-light mx-3">REPORTS</Link></li>
+                                    <li className="nav-item"><Link to="/home/recommendation" className="nav-link text-light mx-3">TESTS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPDATES</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">RECOMMENDATIONS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPCOMING APPOINMENTS</Link></li>

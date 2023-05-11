@@ -9,6 +9,7 @@ import MainPage from './Pages/MainPage'
 import AdminPortal from './Pages/admin/AdminPortal'
 
 
+
 // doctor pages: dashboard, allpatient, assigned assistant, add new patient, remove healthy patient
 import Dashboard from './Pages/dashboard/Dashboard'
 import AllPatient from './Pages/dashboard/AllPatient'
@@ -22,11 +23,12 @@ import PatientMedication from './Pages/patientProfile/patientMedication'
 import PatientReport from './Pages/patientProfile/patientReport'
 import PatientNotes from './Pages/patientProfile/patientNotes'
 
-// home pages: home, medication, report, update, recommendations
+// home pages: home, medication, report, update, recommendations, cardiogram
 import HomePage from './Pages/home/homePage'
 import HomeMedication from './Pages/home/homeMedication'
 import HomeRecommendations from './Pages/home/homeRecommendation'
 import HomeUpdate from './Pages/home/homeUpdate'
+import PatientCardiogram from './Pages/patientProfile/patientCardiogram'
 
 //importing all the components
 
@@ -35,9 +37,10 @@ import HomeUpdate from './Pages/home/homeUpdate'
 import Account from './Form/Account'
 import LoginUser from './Form/loginUser'
 import AddDoctor from './Form/AddDoctor'
+import PatientInfo from './Form/createPatientAccount'
 // import DoctorInfo from './Form/DoctorInfo'
-import PatientInfo from './Form/patientInfo'
 import CreateAccount from './Form/CreateAccount' //import page for creating doctor account
+// import Medication from './Pages/home/medication'
 
 function App() {
 
@@ -48,6 +51,7 @@ function App() {
           <Route path="/" element={<LoginUser />}></Route>
           <Route path="/admin/portal" element={<AdminPortal />}></Route>
           <Route path="/admin/create/account" element={<AddDoctor />}></Route>   {/* creating account with different user domain */}
+          <Route path="/admin/create/patient/account" element={<PatientInfo />}></Route>
 
           {/*declaring the route for dashboard pages */}
           <Route path="/dashboard" element={< Dashboard/>}></Route>
@@ -71,10 +75,11 @@ function App() {
           <Route path='/home/medication' element={<HomeMedication />}></Route>
           <Route path='/home/recommendation' element={<HomeRecommendations />}></Route>
           <Route path='/home/update' element={<HomeUpdate />}></Route>
+          <Route path='/home/cardiogram' element={<PatientCardiogram />}></Route>
           
 
   
-          <Route path="/account" element={<Account />}></Route>
+          {/* <Route path="/account" element={<Account />}></Route> */}
           <Route path="/loginpage" element={<LoginUser />}></Route>          
           {/* <Route path='/doctor/personal/information' element={<DoctorInfo />}></Route> */}
           <Route path='/patient/personal/information' element={<PatientInfo />}></Route>

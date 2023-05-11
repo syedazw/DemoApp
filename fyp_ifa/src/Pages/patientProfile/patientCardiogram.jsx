@@ -4,11 +4,15 @@ import { Outlet, Link } from "react-router-dom"
 import { usefirebase } from "../../context/firebase";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, where, query, getDocs } from "firebase/firestore";
+// import { useParams } from "react-router-dom";
 
 
-export default function HomePage() {
+export default function PatientCardiogram() {
+
+    // const params = useParams();
+
     const auth = getAuth();
-   
+
     const firebase = usefirebase();
 
     // **************************    PATIENT DATA ***************************
@@ -30,46 +34,41 @@ export default function HomePage() {
     }, []);
 
     // ************************** PATIENT MEDICATION DATA  ***************************          
-    const [patMed, setpatMed] = useState([]);
-    useEffect(() => {
-        const currentUser = auth.currentUser;
-        if (!currentUser) {
-            return;
-        }
-        const userEmail = currentUser.email;
+    // const [patMed, setpatMed] = useState([]);
+    // useEffect(() => {
+    //     const currentUser = auth.currentUser;
+    //     if (!currentUser) {
+    //         return;
+    //     }
+    //     const userEmail = currentUser.email;
 
-        firebase.patMedData(userEmail)
-            .then((matchingData) => {
-                setpatMed(matchingData);
-                console.log("medication",setpatMed)
-            })
-            .catch((error) => {
-                console.log("Error fetching medication data:", error);
-            });
-    }, []);
+    //     firebase.patMedData(userEmail)
+    //         .then((matchingData) => {
+    //             setpatMed(matchingData);
+    //             console.log("medication",setpatMed)
+    //         })
+    //         .catch((error) => {
+    //             console.log("Error fetching medication data:", error);
+    //         });
+    // }, []);
 
-    // ************************** PATIENT REPORT DATA  *************************** 
+    // // ************************** PATIENT REPORT DATA  *************************** 
 
-    const [patRep, setpatRep] = useState([]);
-    useEffect(() => {
-        const currentUser = auth.currentUser;
-        if (!currentUser) {
-            return;
-        }
-            const userEmail = currentUser.email;
-            firebase.patRepData(userEmail).then((matchingData) => {
-                setpatRep(matchingData);
-            })
-            .catch((error) =>{
-                console.log("Error when Fetching Reports", error);
-            })
+    // const [patRep, setpatRep] = useState([]);
+    // useEffect(() => {
+    //     const currentUser = auth.currentUser;
+    //     if (!currentUser) {
+    //         return;
+    //     }
+    //         const userEmail = currentUser.email;
+    //         firebase.patRepData(userEmail).then((matchingData) => {
+    //             setpatRep(matchingData);
+    //         })
+    //         .catch((error) =>{
+    //             console.log("Error when Fetching Reports", error);
+    //         })
         
-    } ,[])
-
-
-    
-
-
+    // } ,[])
 
     return (
         <>
@@ -99,7 +98,9 @@ export default function HomePage() {
                     </div>
                     <div className="col-12 bg-color">
                         <nav className="navbar">
-                            <Link to="#" className="navbar-brand text-light fw-bold mx-5">MENU</Link>
+                            <Link to={`/home`} className="navbar-brand text-light fw-bold">&lt; BACK</Link>
+                            
+                            {/* <Link to="/allpatient" className="navbar-brand text-light fw-bold mx-5">MENU</Link> */}
                             <button className="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon bg-light"></span></button>
                             <div className="collapse navbar-collapse" id="navbarNavDropdown">
                                 <ul className="navbar-nav">
@@ -121,7 +122,7 @@ export default function HomePage() {
 
             <div className="container-fluid" style={{ backgroundColor: "white" }}>
                 <div className="row">
-                    <h4 className="fw-bold text-center">HOME</h4>
+                    <h4 className="fw-bold text-center">Cardiogram</h4>
                 </div>
             </div>
             {/* we can't import medication, recommendation and update component as its function is taking id as props for each patient */}
@@ -131,15 +132,12 @@ export default function HomePage() {
                         <Cardiogram />
                     </div>
                     <div className="col-sm-12 col-md-4">
-
-
-
                     </div>
                 </div>
             </div>
 
             {/* creating a medication card */}
-            <div className="container-fluid">
+            {/* <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-3">
                         <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
@@ -161,7 +159,7 @@ export default function HomePage() {
                             <div className="col-sm-12 col-md-3">
                                 <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
                                     <div className="card-body">
-                                        <h5 className="card-title">Tests</h5>
+                                        <h5 className="card-title">Report</h5>
                                         <hr className="border-5" style={{ color: "white" }} />
                                         <ul className="list-unstyled">
                                             {patRep.length > 0 &&
@@ -177,12 +175,7 @@ export default function HomePage() {
                     </div>
 
                 </div>
-            </div>
-
-
-
-
-
+            </div> */}
         </>
     )
 }

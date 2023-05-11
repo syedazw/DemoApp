@@ -39,9 +39,9 @@ export default function HomeUpdate() {
                                     <li className="nav-item"><Link to="/home" className="nav-link text-light mx-3">HOME</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">CARDIOGRAM</Link></li>
                                     <li className="nav-item"><Link to="/home/medication" className="nav-link text-light mx-3">MEDICATIONS</Link></li>
-                                    <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">REPORTS</Link></li>
+                                    <li className="nav-item"><Link to="/home/recommendation" className="nav-link text-light mx-3">TESTS</Link></li>
                                     <li className="nav-item"><Link to="/home/update" className="nav-link text-primary mx-3">UPDATES</Link></li>
-                                    <li className="nav-item"><Link to="/home/recommendation" className="nav-link text-light mx-3">RECOMMENDATIONS</Link></li>
+                                    <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">RECOMMENDATIONS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPCOMING APPOINMENTS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">DOCTOR'S PROFILE</Link></li>
                                 </ul>

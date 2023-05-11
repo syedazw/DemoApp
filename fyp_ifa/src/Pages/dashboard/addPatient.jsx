@@ -45,11 +45,10 @@ export default function AddPatient() {
                                 <span className="d-none d-sm-inline mx-1"></span>
                             </a>
                             <ul className="dropdown-menu text-small shadow">
-                                {/* <li><input type="file" className="dropdown-item"/>Upload Picture</li> */}
-                                <li><Link to="/dpi" className="dropdown-item">View Profile</Link></li>
+                                <li><Link to="#" className="dropdown-item">Upload Picture</Link></li>
+                                <li><Link to="#" className="dropdown-item">Edit Profile</Link></li>
                                 <li><hr className="dropdown-divider" /></li>
-                                <li><a className="dropdown-item">
-                                    <Link to="/account" className="nav-link">Sign Out</Link></a></li>
+                                <li><a className="dropdown-item"><Link to="/loginpage" className="nav-link">Sign Out</Link></a></li>
                                 <Outlet />
                             </ul>
                         </div>

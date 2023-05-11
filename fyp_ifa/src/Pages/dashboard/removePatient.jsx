@@ -70,7 +70,8 @@ export default function RemovePatient() {
                                 <span className="d-none d-sm-inline mx-1"></span>
                             </a>
                             <ul className="dropdown-menu text-small shadow">
-                                <li><Link to="/doctor/personal/information" className="dropdown-item">View Profile</Link></li>
+                                <li><Link to="#" className="dropdown-item">Upload Picture</Link></li>
+                                <li><Link to="#" className="dropdown-item">Edit Profile</Link></li>
                                 <li><hr className="dropdown-divider" /></li>
                                 <li><a className="dropdown-item"><Link to="/loginpage" className="nav-link">Sign Out</Link></a></li>
                                 <Outlet />

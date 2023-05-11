@@ -1,16 +1,52 @@
-import React from "react"
+import React ,{useState ,useEffect} from "react"
 import { Outlet, Link } from "react-router-dom"
+import { usefirebase } from "../../context/firebase";
+import { getAuth } from "firebase/auth";
+// create a function which list down all the recommendations
 
-//create a function which list down all the update
+export default function HomeReports() {
+    const firebase = usefirebase();
+    const auth = getAuth();
 
-export default function HomeUpdate() {
+    const [patdata, setpatdata] = useState([]);
+    useEffect(() => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return;
+        }
+        const userEmail = currentUser.email;
+
+        firebase.patData(userEmail)
+            .then((matchingData) => {
+                setpatdata(matchingData);
+            })
+            .catch((error) => {
+                console.log("Error fetching patient data:", error);
+            });
+    }, []);
+
+    const [patRep, setpatRep] = useState([]);
+    useEffect(() => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            return;
+        }
+            const userEmail = currentUser.email;
+            firebase.patRepData(userEmail).then((matchingData) => {
+                setpatRep(matchingData);
+            })
+            .catch((error) =>{
+                console.log("Error when Fetching Reports", error);
+            })
+        
+    } ,[])
     return (
         <>
         <div className="container-fluid">
                 <div className="row bg-color text-light pt-4">
                     <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
 
-                    <div className="col-sm-12 col-md-2"><p className="text-center">Welcome Mr.Joseph</p></div>
+                    {patdata.length > 0 && <div className="col-sm-12 col-md-2"><h6 className="text-center">{patdata[0].data.fullname}</h6></div>}
 
                     <div className="col-sm-12 col-md-6 d-flex justify-content-start">
                         <form className="d-flex-inline mx-4" role="search">
@@ -39,8 +75,8 @@ export default function HomeUpdate() {
                                     <li className="nav-item"><Link to="/home" className="nav-link text-light mx-3">HOME</Link></li>
                                     <li className="nav-item"><Link to="/home/cardiogram" className="nav-link text-light mx-3">CARDIOGRAM</Link></li>
                                     <li className="nav-item"><Link to="/home/medication" className="nav-link text-light mx-3">MEDICATIONS</Link></li>
-                                    <li className="nav-item"><Link to="/home/reports" className="nav-link text-light mx-3">REPORTS</Link></li>
-                                    <li className="nav-item"><Link to="#" className="nav-link text-primary mx-3">UPDATES</Link></li>
+                                    <li className="nav-item"><Link to="/home/reports" className="nav-link text-primary mx-3">REPORTS</Link></li>
+                                    <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPDATES</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">RECOMMENDATIONS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPCOMING APPOINMENTS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">DOCTOR'S PROFILE</Link></li>
@@ -53,24 +89,31 @@ export default function HomeUpdate() {
 
             <div className="container-fluid" style={{ backgroundColor: "white" }}>
                 <div className="row">
-                    <h4 className="fw-bold text-center">UPDATES</h4>
+                    <h4 className="fw-bold text-center">REPORTS</h4>
                 </div>
             </div>
 
             <div className="container-fluid">
                 <div className="row">
-                <div className="col-sm-12 col-md-4 mx-auto">
-                        <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
-                            <div className="card-body">
-                                <h5 className="card-title">Updates</h5>
-                                <hr className="border-5" style={{ color: "white" }}></hr>
-                                <ul className="list-unstyled">
-                                    <li><dl><dt><i className="bi bi-arrow-right mx-2 mb-2"></i>Term 1:</dt><dd className="mx-4 fw-light">Description................</dd></dl></li>
-                                    <li><dl><dt><i className="bi bi-arrow-right mx-2 mb-2"></i>Term 1:</dt><dd className="mx-4 fw-light">Description................</dd></dl></li>
-                                </ul>
+                    
+                    <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-sm-12 col-md-4 mx-auto">
+                                    <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
+                                        <div className="card-body">
+                                            <h5 className="card-title">REPORTS</h5>
+                                            <hr className="border-5" style={{ color: "white" }}></hr>
+                                            <ul className="list-unstyled">
+                                            {patRep.length > 0 &&
+                                                patRep[0].Reports.map((report, index) => (
+                                                <li><dl><dt><i className="bi bi-arrow-right mx-2 mb-2"></i>Test Name:</dt><dd className="mx-4 fw-dark">{report.testName}</dd></dl></li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </>

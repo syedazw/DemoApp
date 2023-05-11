@@ -2,7 +2,7 @@ import React from "react"
 // importing Firestore from firebase
 import { usefirebase } from '../context/firebase'
 
-export default function doctor() {
+export default function DoctorInfo() {
     const firebase = usefirebase();
     console.log('firebase', firebase);
     // creating an state

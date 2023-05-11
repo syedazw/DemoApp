@@ -25,7 +25,7 @@ import PatientNotes from './Pages/patientProfile/patientNotes'
 // home pages: home, medication, report, update, recommendations
 import HomePage from './Pages/home/homePage'
 import HomeMedication from './Pages/home/homeMedication'
-import HomeRecommendations from './Pages/home/homeRecommendation'
+import HomeRecommendations from './Pages/home/homeReports'
 import HomeUpdate from './Pages/home/homeUpdate'
 
 //importing all the components
@@ -38,6 +38,9 @@ import AddDoctor from './Form/AddDoctor'
 // import DoctorInfo from './Form/DoctorInfo'
 import PatientInfo from './Form/patientInfo'
 import CreateAccount from './Form/CreateAccount' //import page for creating doctor account
+import DoctorInfo from './Form/doctorInfo'
+import HomeReports from './Pages/home/homeReports'
+import HomeCardiogram from './Pages/home/homeCardiogram'
 
 function App() {
 
@@ -69,14 +72,15 @@ function App() {
           {/* dynamic id (:userID) */}
           <Route path='/home/' element={<HomePage />}></Route>  
           <Route path='/home/medication' element={<HomeMedication />}></Route>
-          <Route path='/home/recommendation' element={<HomeRecommendations />}></Route>
+          <Route path='/home/reports' element={<HomeReports />}></Route>
           <Route path='/home/update' element={<HomeUpdate />}></Route>
+          <Route path='/home/cardiogram' element={<HomeCardiogram />}></Route>
           
 
   
           <Route path="/account" element={<Account />}></Route>
           <Route path="/loginpage" element={<LoginUser />}></Route>          
-          {/* <Route path='/doctor/personal/information' element={<DoctorInfo />}></Route> */}
+          <Route path='/doctor/personal/information' element={<DoctorInfo />}></Route>
           <Route path='/patient/personal/information' element={<PatientInfo />}></Route>
 
           <Route path='*' element={<>Invalid url</>}></Route>

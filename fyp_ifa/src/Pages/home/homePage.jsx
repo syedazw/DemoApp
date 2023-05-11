@@ -104,9 +104,9 @@ export default function HomePage() {
                             <div className="collapse navbar-collapse" id="navbarNavDropdown">
                                 <ul className="navbar-nav">
                                     <li className="nav-item"><Link to="/home" className="nav-link text-primary mx-3">HOME</Link></li>
-                                    <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">CARDIOGRAM</Link></li>
+                                    <li className="nav-item"><Link to="/home/cardiogram" className="nav-link text-light mx-3">CARDIOGRAM</Link></li>
                                     <li className="nav-item"><Link to="/home/medication" className="nav-link text-light mx-3">MEDICATIONS</Link></li>
-                                    <li className="nav-item"><Link to="/home/recommendation" className="nav-link text-light mx-3">REPORTS</Link></li>
+                                    <li className="nav-item"><Link to="/home/reports" className="nav-link text-light mx-3">REPORTS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPDATES</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">RECOMMENDATIONS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light mx-3">UPCOMING APPOINMENTS</Link></li>
@@ -141,7 +141,7 @@ export default function HomePage() {
             {/* creating a medication card */}
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-3">
+                    <div className="col-sm-12 col-md-3">
                         <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
                             <div className="card-body">
                                 <h5 className="card-title">Medications</h5>
@@ -153,12 +153,10 @@ export default function HomePage() {
                                     ))} 
                                 </ul>
                             </div>
-
                         </div>
                     </div>
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-sm-12 col-md-3">
+
+                    <div className="col-sm-12 col-md-3">
                                 <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
                                     <div className="card-body">
                                         <h5 className="card-title">Report</h5>
@@ -170,11 +168,9 @@ export default function HomePage() {
                                                 ))}
                                         </ul>
                                     </div>
-
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                    
 
                 </div>
             </div>

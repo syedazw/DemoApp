@@ -84,6 +84,9 @@ const Cardiogram = () => {
           setAlarm(true)
           gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
           setIsSounding(true)
+          setTimeout(()=>{
+            checkHeart = []
+          }, 2000)
 
         } else {
           checkHeart = []
@@ -154,7 +157,7 @@ const Cardiogram = () => {
 
         <div className="row">
           <div className="col-sm-12 col-md-6 d-flex justify-content-center">
-            <button type="button" className="btn mb-2" style={buttonStyle}>View Cardiogram</button>
+            <p type="button" className="text-success fw-bold mb-2">View Cardiogram</p>
           </div>
         </div>
 

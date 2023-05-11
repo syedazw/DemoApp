@@ -157,36 +157,123 @@ export const FirebaseProvider = (props) => {
 
     }
 
+
+
     // ***************** QUERY FIREBASE DATA **************************
 
 
-// *********HOME PAGE DATA (PATIENTS DATA)********
+    // *********HOME PAGE DATA (PATIENTS DATA)********
+    const patData = async (userEmail) => {
+        const q = query(collection(db, "Patients"));
+        const querySnapshot = await getDocs(q);
+        console.log("querysnapshot", querySnapshot)
 
-//   const getpatdata = async (userEmail) => {
-//         const q = query(collection(firestore, "Patients"));
-//         const querySnapshot = await getDocs(q);
-      
-//         if (querySnapshot.empty) {
-//           console.log("No matching documents..");
-//           return [];
-//         }
-      
-//         const patdata = [];
-//         querySnapshot.forEach((doc) => {
-//           const data = doc.data();
-      
-//           if (data.email === userEmail) {
-//             console.log("Found a match:", data);
-//             patdata.push(data);
-//           }
-//         });
-      
-//         return patdata;
-//       };
+        if (querySnapshot.empty) {
+            console.log("No matching documents..");
+            return [];
+        }
 
+        const matchingData = [];
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            console.log("data", data.data.email)
+
+            if (data.data.email == userEmail) {
+                console.log("Found a match:", data);
+                matchingData.push(data);
+            }
+        });
+
+        return matchingData;
+    }
+    // ************************** PATIENT MEDICATION DATA  *************************** 
+    const patMedData = async (userEmail) => {
+        const q = query(collection(db, "Patients"));
+        const querySnapshot = await getDocs(q);
+        console.log("querysnapshot", querySnapshot)
     
+        if (querySnapshot.empty) {
+            console.log("No matching documents..");
+            return [];
+        }
+    
+        const matchingData = [];
+    
+        await Promise.all(
+            querySnapshot.docs.map(async (doc) => {
+                const data = doc.data();
+                console.log("data", data.data.email)
+    
+                if (data.data.email == userEmail) {
+                    console.log("Found a match:", data);
+                    const medicationsRef = collection(doc.ref, "Medication");
+                    const medicationsSnapshot = await getDocs(medicationsRef);
+                    const medicationsData = medicationsSnapshot.docs.map((doc) => doc.data());
+                    console.log("medications:", medicationsData);
+                    matchingData.push({ ...data, medications: medicationsData });
+                }
+            })
+        );
+    
+        return matchingData;
+    };
+        // ************************** PATIENT MEDICATION DATA  *************************** 
 
+    const patRepData = async (userEmail) => {
+        const q = query(collection(db, "Patients"));
+        const querySnapshot = await getDocs(q);
+        console.log("querysnapshot", querySnapshot)
+    
+        if (querySnapshot.empty) {
+            console.log("No matching documents..");
+            return [];
+        }
+    
+        const matchingData = [];
+    
+        await Promise.all(
+            querySnapshot.docs.map(async (doc) => {
+                const data = doc.data();
+                console.log("data", data.data.email)
+    
+                if (data.data.email == userEmail) {
+                    console.log("Found a match:", data);
+                    const RepRef = collection(doc.ref, "Reports");
+                    const RepSnapshot = await getDocs(RepRef);
+                    const RepData = RepSnapshot.docs.map((doc) => doc.data());
+                    console.log("Reports==:", RepData);
+                    matchingData.push({ ...data, Reports: RepData});
+                }
+            })
+        );
+    
+        return matchingData;
+    };
 
+    const DocData = async (userEmail) => {
+        const q = query(collection(db, "Doctor"));
+        const querySnapshot = await getDocs(q);
+        console.log("querysnapshot", querySnapshot)
+
+        if (querySnapshot.empty) {
+            console.log("No matching documents..");
+            return [];
+        }
+
+        const matchingData = [];
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            console.log("data", data.data.email)
+
+            if (data.data.email == userEmail) {
+                console.log("Found a match:", data);
+                matchingData.push(data);
+            }
+        });
+
+        return matchingData;
+    }
+    
     // ******************************** RETRIEVING DATA ***********************************
     // getting patient Data
     const ListPatientData = () => {
@@ -222,13 +309,15 @@ export const FirebaseProvider = (props) => {
 
 
 
+
+
     return (
         <FirebaseContext.Provider value={{
             signupUserWithEmailAndPassword, signinUserWithEmailAndPassword,
             uploadDataToFirestore, uploadFilesToFirestore,
             addMedToCollection, addNotesToCollection,
             addReportToCollection, ListPatientData, getPatientProfilebyId, getNotesById,
-            getMedByID, getReportById,  putData, putdatafire,
+            getMedByID, getReportById, putData, putdatafire, patData, patMedData, patRepData,DocData 
         }}>
             {props.children}
         </FirebaseContext.Provider>

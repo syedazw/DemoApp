@@ -1,51 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet, Link } from "react-router-dom"
+import { usefirebase } from "../../context/firebase";
+import { getAuth } from "firebase/auth";
 
 export default function RemovePatient() {
+    const firebase = usefirebase();
+    const auth = getAuth();
 
-    const AssistantBD = [
-        {
-            id: 1,
-            patientName: "Ali",
-            assistantName: "Akbar"
-        },
-        {
-            id: 2,
-            patientName: "Ajmal",
-            assistantName: "Aslam"
-        },
-        {
-            id: 3,
-            patientName: "Ajmal",
-            assistantName: "Aslam"
-        },
-    ]
+    const [patientData, setPatientData] = useState([]);
+    const [remPat , setRemPat] = useState([]);
 
-    const tableCard = AssistantBD.map(item => {
-        console.log(item)
-        return (
-            <>
-                {/* <table class="table"> */}
+    // function handleRemove()
+    // const [checkArray, setCheckArray] = useState(false)
+    useEffect(() => {
+        firebase.ListPatientData()
+            .then((querySnapshot) => {
+                {
+                    const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    setPatientData(data);
+                    console.log("data",)
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                setError("Error retrieving patient data.");
+            });
+    }, []);
 
+      // *********   Doctor data ***************
+      const [docdata, setdocdata] = useState([]);
+      useEffect(() => {
+          const currentUser = auth.currentUser;
+          if (!currentUser) {
+              return;
+          }
+          const userEmail = currentUser.email;
+  
+          firebase.DocData(userEmail)
+              .then((matchingData) => {
+                  setdocdata(matchingData);
+              })
+              .catch((error) => {
+                  console.log("Error fetching patient data:", error);
+              });
+      }, []);
+  
 
-                <tr>
-                    <th scope="row">{item.id}</th>
-                    <td>{item.patientName}</td>
-                    <td>{item.assistantName}</td>
-                    <td><button className="bg-color text-light">Remove</button></td>
-                </tr>
-
-                {/* </tbody> */}
-                {/* </table> */}
-            </>
-        )
-    })
+    const patdata = [patientData]
+    console.log("patiendata", patdata);
     return (
         <>
-            <div className="container-fluid">
+
+
+
+
+            < div className="container-fluid" >
                 <div className="row bg-color text-light pt-4">
                     <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
-                    <div className="col-sm-12 col-md-2"><p className="text-center">Welcome Dr. Authur</p></div>
+                    {docdata.length > 0 && <div className="col-sm-12 col-md-2">  
+                    <h6 className="text-center">Dr. {docdata[0].data.fullname}</h6></div>}
                     <div className="col-sm-12 col-md-6 d-flex justify-content-start">
                         <form className="d-flex-inline mx-4" role="search">
                             <input className="form-control col-sm-5" type="search" placeholder="Search" aria-label="Search"></input>
@@ -73,7 +86,7 @@ export default function RemovePatient() {
                                 <span className="navbar-toggler-icon bg-light"></span>
                             </button>
                             <div className="collapse navbar-collapse" id="navbarNavDropdown">
-                            <ul className="navbar-nav">
+                                <ul className="navbar-nav">
                                     <li className="nav-item"><Link to="/dashboard" className="nav-link text-light"><i className="bi bi-house-fill px-2"></i>DASHBOARD</Link></li>
                                     <li className="nav-item"><Link to="/dashboard/allpatient" className="nav-link text-light"><i className="bi bi-people-fill px-2"></i>ALL PATIENTS</Link></li>
                                     <li className="nav-item"><Link to="#" className="nav-link text-light"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" className="bi bi-heart-pulse-fill mx-2" viewBox="0 0 16 16"><path d="M1.475 9C2.702 10.84 4.779 12.871 8 15c3.221-2.129 5.298-4.16 6.525-6H12a.5.5 0 0 1-.464-.314l-1.457-3.642-1.598 5.593a.5.5 0 0 1-.945.049L5.889 6.568l-1.473 2.21A.5.5 0 0 1 4 9H1.475Z" /><path d="M.88 8C-2.427 1.68 4.41-2 7.823 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C11.59-2 18.426 1.68 15.12 8h-2.783l-1.874-4.686a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8H.88Z" /></svg>CRITICAL PATIENTS</Link></li>
@@ -88,7 +101,7 @@ export default function RemovePatient() {
                         </nav>
                     </div>
                 </div>
-            </div>
+            </div >
             <div className="container-fluid">
                 <div className="row">
                     <h4 className="fw-bold text-center">REMOVE HEALTHY PATIENT</h4>
@@ -100,15 +113,29 @@ export default function RemovePatient() {
                             <thead className="bg-color text-light">
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col">Patient Id</th>
                                     <th scope="col">Patient Name</th>
                                     <th scope="col">Assistant Name</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="table-group-divider">
-                                {tableCard}
+
+                                {/* <table class="table"> */}
+                                {patientData.map((item, index) => (
+
+                                    <tr key={item.id}>
+                                        <th scope="row">{index + 1}</th>
+                                        <th >{item.id}</th>
+                                        <td scope="row">{item.data.fullname}</td>
+                                        <td scope="row">{item.data.assistant}
+                                        </td>
+                                        <td><button className="bg-color text-light">Remove</button></td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
+
 
                     </div>
 

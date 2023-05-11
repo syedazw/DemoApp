@@ -12,12 +12,9 @@ import { getDatabase, ref, set, push, child, serverTimestamp } from "firebase/da
 const TestCardiogram = () => {
   const buttonStyle = { color: "white", backgroundColor: "#041342", borderRadius: "6px", textDecoration: "none" }
   const firebase = usefirebase();
-  // console.log(firebase);
   const database = getDatabase();
 
   const params = useParams();
-  // console.log("params is", params)
-
 
   const [data, updateData] = useState([]);
   const [fetchingData, setFetching] = useState(false)
@@ -56,38 +53,19 @@ const TestCardiogram = () => {
 
   useEffect(() => {
 
-    axios.get("https://backend.thinger.io/v3/users/ismail_/devices/Nodemcu1/resources/ECG", {
+    axios.get("https://backend.thinger.io/v3/users/ismail_/devices/device2/resources/ECG", {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXYiOiJkZXZpY2UyIiwiaWF0IjoxNjgzNTMzMTAwLCJqdGkiOiI2NDU4YWQyYzRlY2ExYTU2ZGYwYjFjYmIiLCJzdnIiOiJhcC1zb3V0aGVhc3QuYXdzLnRoaW5nZXIuaW8iLCJ1c3IiOiJpc21haWxfIn0.vpR72w2A9vrfls97C5u9unFB38JWztI154Nl26c64Zs'
-        
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM4MzU2OTQsImlhdCI6MTY4MzgyODQ5NCwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.Z4iPwwf0Np9ULQZBZAhSnjhDlJyIHnB-bXF9Br4uYtE'
       }
     }).then(response => {
       // convert the array into string
       //console.log(JSON.stringify(response.data));  // console log out individual values
-      console.log("New data point",response.data)
-      let newData = response.data
-      console.log(newData)
+      console.log("New data point", response.data)
 
       // const val = Math.floor(Math.random() * (100 - 30 + 1)) + 300/10;
-      console.log("Before adding new data point", data)
       let array = [...data, response.data];
       checkarray = [...data, response.data];
-      //console.log("array", array);
-
-      // updateData(data.push(response.data))
-      updateData(prevData => [...prevData, newData]);
-      //console.log("checkarray", checkarray)
-      console.log("data",data)
-
-      //console.log("After adding new data point", data)
-
-    
-
-
-      // if (array.length>15) {
-      //   let newdata = array.slice(array.length-15)
-      //   updateData(newdata)
-      // }
+      updateData(data => [...data, response.data])
 
       if (checkarray.length > 15) {
         console.log("checkarray", checkarray)
@@ -95,37 +73,38 @@ const TestCardiogram = () => {
         // orignal - store the value which are greater than 800 or less than 400
         // normal - between 401 and 799
         // abnormal - less than 400, greater than 800
-        let checkHeart = checkarray.filter(e => e > 400 || e < 800)
+        let checkHeart = checkarray.filter(e => e > 510 || e < 580)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {
-          console.log("Heart Attack")
+          // console.log("Heart Attack")
           setAlarm(true)
           gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
           setIsSounding(true)
+          setTimeout(()=>{
+            checkHeart = []
+          }, 2000)
 
         } else {
-          checkarray = []
+          checkHeart = []
           gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
           setIsSounding(false);
         }
       }
 
-
       if (data.length > 15) {
-        let newdata = data
-        // array.shift() removing the item at the 0th index
-        newdata.shift()
         array.shift()
-        updateData(newdata);
-      }
-    }).catch(err => {console.log(err)
-    
+        let newArray = data.shift()
+        console.log(newArray)
+      } 
+    }).catch(err => {
+      console.log(err)
+
     })
 
   }, [data])
 
-  
+
 
   const stopAlarm = () => {
     gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
@@ -136,7 +115,7 @@ const TestCardiogram = () => {
 
 
 
-  console.log("length of data", data.length);
+  // console.log("length of data", data.length);
 
   // console.log("passifng data to firebase", checkarray)
   // console.log('array length', data.length)
@@ -154,12 +133,13 @@ const TestCardiogram = () => {
   //     DateTime: serverTimestamp()
   // };
 
+
+
   const putDatanew = () => {
     firebase.putdatafire(params.PatientID, data);
   };
 
   console.log("Passing the data as", data)
-  // console.log("data array should be as ", testArray)
 
   return (
     <>
@@ -174,7 +154,7 @@ const TestCardiogram = () => {
 
         <div className="row">
           <div className="col-sm-12 col-md-6 d-flex justify-content-center">
-            <button type="button" className="btn mb-2" style={buttonStyle}>View Cardiogram</button>
+            <button type="button" className="btn btn-success mb-2">View Cardiogram</button>
           </div>
         </div>
 

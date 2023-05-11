@@ -53,7 +53,7 @@ export default function ApexChart(props) {
   };
   return (
     <>
-      <Chart options={options} series={series} type="line" height={200} width={350} />
+      <Chart options={options} series={series} type="line" height={200} width={330} />
     </>
   );
 }

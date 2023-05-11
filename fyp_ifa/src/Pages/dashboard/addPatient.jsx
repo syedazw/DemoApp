@@ -57,7 +57,7 @@ export default function AddPatient() {
 
                     <div className="col-12">
                         <nav className="navbar">
-                            <Link to={`/dashboard`} className="navbar-brand text-light fw-bold">&lt; BACK</Link>
+                            <Link to={`/dashboard`} className="navbar-brand text-light fw-bold">MENU</Link>
                             <button className="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="navbar-toggler-icon bg-light"></span>
                             </button>

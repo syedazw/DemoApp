@@ -12,12 +12,9 @@ import { getDatabase, ref, set, push, child, serverTimestamp } from "firebase/da
 const Cardiogram = () => {
   const buttonStyle = { color: "white", backgroundColor: "#041342", borderRadius: "6px", textDecoration: "none" }
   const firebase = usefirebase();
-  // console.log(firebase);
   const database = getDatabase();
 
   const params = useParams();
-  // console.log("params is", params)
-
 
   const [data, updateData] = useState([]);
   const [fetchingData, setFetching] = useState(false)
@@ -76,7 +73,7 @@ const Cardiogram = () => {
         // orignal - store the value which are greater than 800 or less than 400
         // normal - between 401 and 799
         // abnormal - less than 400, greater than 800
-        let checkHeart = checkarray.filter(e => e > 400 || e < 800)
+        let checkHeart = checkarray.filter(e => e > 510 || e < 580)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {
@@ -84,7 +81,7 @@ const Cardiogram = () => {
           setAlarm(true)
           gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
           setIsSounding(true)
-          setTimeout(()=>{
+          setTimeout(() => {
             checkHeart = []
           }, 2000)
 
@@ -99,7 +96,7 @@ const Cardiogram = () => {
         array.shift()
         let newArray = data.shift()
         console.log(newArray)
-      } 
+      }
     }).catch(err => {
       console.log(err)
 
@@ -157,7 +154,7 @@ const Cardiogram = () => {
 
         <div className="row">
           <div className="col-sm-12 col-md-6 d-flex justify-content-center">
-            <p type="button" className="text-success fw-bold mb-2">View Cardiogram</p>
+            <button type="button" className="btn btn-success mb-2">View Cardiogram</button>
           </div>
         </div>
 

@@ -42,6 +42,7 @@ import CreateAccount from './Form/CreateAccount'
 import DoctorInfo from './Form/doctorInfo'
 import HomeReports from './Pages/home/homeReports'
 import HomeCardiogram from './Pages/home/homeCardiogram'
+import CriticalPatient from './Pages/dashboard/criticalPatient'
 // import Medication from './Pages/home/medication'
 
 function App() {
@@ -61,6 +62,7 @@ function App() {
           <Route path="/dashboard/assistant" element={<AssignedAssistant />}> </Route>
           <Route path="/dashboard/add/patient" element={< AddPatient/>}> </Route>
           <Route path="/dashboard/remove/patient" element={<RemovePatient />}> </Route>
+          <Route path="/dashboard/critical/patient" element={<CriticalPatient />}> </Route>
 
 
           {/* patient profile pages */}

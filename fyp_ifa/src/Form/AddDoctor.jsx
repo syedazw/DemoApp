@@ -90,31 +90,15 @@ export default function AddDoctor() {
         // input type --> text: first name, last name, email, phone, state, date of birth, address, city, country
         // input type --> checkbox: Member of any other medical association
         <>
-            <div className="container-fluid mt-5">
+            <div className="container-fluid mt-3">
                 <div className="row">
-                    <div className="col-sm-8 col-md-5 mx-auto">
-                        <div className="row">
-                            <h4 className="fw-bold text-center">ADD NEW DOCTOR</h4>
-                            <br /><br /><br />
-                        </div>
-                        
-                        <form className="row g-3 needs-validation" onSubmit={addDoctorData}>
+                    <div className="col-sm-8 col-md-3 mx-auto">
+                    <h4 className="text-center">ADD NEW DOCTOR</h4>
+                    </div>
 
-                            <div className="col-sm-12 col-md-12">
-
-                                {/* <div className="d-flex justify-content-center mb-4">
-                                    <img src={image} className="rounded-circle" alt="example placeholder" style={{ width: "200px", height: "200px" }} name="image" value={setImage.image} onChange={handleImage} />
-                                </div>
-
-                                <div className="d-flex justify-content-center">
-                                    <div className="btn btn-rounded" style={{ color: "white", backgroundColor: "#041342" }}>
-                                        <label className="form-label text-white m-1" for="customFile2" >Upload Image</label>
-                                        <input type="file" className="form-control d-none" id="customFile2" name="image" onChange={handleImage} />
-                                    </div>
-                                </div> */}
-                                
-                            </div>
-                            
+                    <div className="row">
+                        <div className="col-sm-12 col-md-6 mx-auto">
+                        <form className="row g-3 needs-validation" onSubmit={addDoctorData}>    
                             <div className="col-sm-12 col-md-6">
                                 <label htmlFor="validationCustom01" className="form-label fw-bold mb-0">Full Name:</label>
                                 <input type="text" className="form-control" id="validationCustom01" required name="fullname" value={setdoctorRegister.fullname} onChange={handleChange} />
@@ -190,6 +174,7 @@ export default function AddDoctor() {
                                 style={{ color: "white", backgroundColor: "#041342" }}>CREATE ACCOUNT</button>
                             </div>
                         </form>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -146,8 +146,12 @@ export default function PatientProfile() {
                     <div className="col-sm-4 col-md-6">
                         <Cardiogram
                             patid={params.PatientID}
+<<<<<<< HEAD
                         />
                         {/* <button type="button" className="btn btn-width bg-color text-light mx-5 mt-2">View Full Screen</button> */}
+=======
+                        /> 
+>>>>>>> 7d96516d2aea2df3f38f7b0ffe65ce953dec337f
                     </div>
                 </div>
             </div>

@@ -43,6 +43,7 @@ import DoctorInfo from './Form/doctorInfo'
 import HomeReports from './Pages/home/homeReports'
 import HomeCardiogram from './Pages/home/homeCardiogram'
 import CriticalPatient from './Pages/dashboard/criticalPatient'
+import CreateAccountbyAdmin from './Form/createAccountByAdmin'
 // import Medication from './Pages/home/medication'
 
 function App() {
@@ -54,7 +55,7 @@ function App() {
           <Route path="/" element={<LoginUser />}></Route>
           <Route path="/admin/portal" element={<AdminPortal />}></Route>
           <Route path="/admin/create/account" element={<AddDoctor />}></Route>   {/* creating account with different user domain */}
-          <Route path="/admin/create/patient/account" element={<PatientInfo />}></Route>
+          <Route path="/admin/create/patient/account" element={<CreateAccountbyAdmin />}></Route>
 
           {/*declaring the route for dashboard pages */}
           <Route path="/dashboard" element={< Dashboard/>}></Route>

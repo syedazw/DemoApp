@@ -23,16 +23,17 @@ const Cardiogram = () => {
   const [gainNode, setGainNode] = useState(null);
   const [isSounding, setIsSounding] = useState(false);
   const [deviceStatus, setDeviceStatus] = useState(null)
+  const [alarm, setAlarm] = useState(false)
 
 
   useEffect(() => {
-    const context = new AudioContext();
-    const oscillator = context.createOscillator();
-    const gainNode = context.createGain();
-    oscillator.connect(gainNode);
-    gainNode.connect(context.destination);
-    oscillator.type = 'triangle'; // set oscillator type to sine wave
-    oscillator.frequency.setValueAtTime(440, context.currentTime); // set frequency to 440 Hz
+    const context = new AudioContext();  // Creating an audio context object 'context' which handle audio processing in the browser
+    const oscillator = context.createOscillator();  // Creating an instance to generate periodic waveform
+    const gainNode = context.createGain();  // control the volume of the sound
+    oscillator.connect(gainNode); // connect oscillator to gain node
+    gainNode.connect(context.destination);  // connect gainNode to audiocontext destination
+    oscillator.type = 'triangle';     // set the waveform type to triangle
+    oscillator.frequency.setValueAtTime(440, context.currentTime);   // set the frequency of the oscillator to 440Hz
     gainNode.gain.setValueAtTime(0, context.currentTime); // set initial volume to 0
     oscillator.start(0);
     setAudioContext(context);
@@ -47,7 +48,7 @@ const Cardiogram = () => {
     };
   }, []);
 
-  const [alarm, setAlarm] = useState(false)
+  
 
 
   let checkarray = []
@@ -56,7 +57,7 @@ const Cardiogram = () => {
 
     axios.get("https://backend.thinger.io/v3/users/ismail_/devices/Nodemcu1/resources/ECG", {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM4NjYzOTYsImlhdCI6MTY4Mzg1OTE5Niwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.HKenqDvdmxvw2clAO3dJBHFXjo-E9qtITSx-YXXbezk'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM4NzQxMjksImlhdCI6MTY4Mzg2NjkyOSwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.1fgCMKCLVRIqBABBfwj6yPYGapLcEAtFveDNCtKZhag'
       }
     }).then(response => {
       // convert the array into string
@@ -71,21 +72,14 @@ const Cardiogram = () => {
 
       if (checkarray.length > 15) {
         console.log("checkarray", checkarray)
-
-        // orignal - store the value which are greater than 800 or less than 400
-        // normal - between 401 and 799
-        // abnormal - less than 400, greater than 800
-        let checkHeart = checkarray.filter(e => e > 510 && e < 580)
+        let checkHeart = checkarray.filter(e => e > 0 && e < 58)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {
-          // console.log("Heart Attack")
+          console.log("Abnormality Detect")
           setAlarm(true)
           gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
           setIsSounding(true)
-          setTimeout(() => {
-            checkHeart = []
-          }, 2000)
 
         } else {
           checkHeart = []
@@ -138,20 +132,27 @@ const Cardiogram = () => {
         </div>
 
         <div className="row">
-          <div className="col-sm-12 col-md-4 mx-5">
+          <div className="col-sm-12 col-md-6 d-flex justify-content-center">
           {deviceStatus ? null: <p className="text-danger fw-bold">Device not activated</p>}
           </div>
         </div>
 
         <div className="row">
-          <div className="col-sm-12 col-md-6 d-flex justify-content-center">
+          <div className="col-sm-12 col-md-6 d-flex justify-content-center p-0">
             {alarm ?
-                <p className="text-danger fw-bold m-4">Abnormal Condition</p> :
-                <p className="text-success fw-bold">Normal Condition</p>
+                <p className="text-danger fw-bold">Abnormality Detect</p> :
+                null
               }
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-sm-12 col-md-6 d-flex justify-content-center">
             {isSounding ? <button onClick={stopAlarm} className="btn btn-danger btn-block">Stop Alarm</button> : null}
           </div>
         </div>
+
+
       </div>
 
     </>

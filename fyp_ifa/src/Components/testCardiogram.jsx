@@ -23,16 +23,17 @@ const TestCardiogram = () => {
   const [gainNode, setGainNode] = useState(null);
   const [isSounding, setIsSounding] = useState(false);
   const [deviceStatus, setDeviceStatus] = useState(null)
+  const [alarm, setAlarm] = useState(false)
 
 
   useEffect(() => {
-    const context = new AudioContext();
-    const oscillator = context.createOscillator();
-    const gainNode = context.createGain();
-    oscillator.connect(gainNode);
-    gainNode.connect(context.destination);
-    oscillator.type = 'triangle'; // set oscillator type to sine wave
-    oscillator.frequency.setValueAtTime(440, context.currentTime); // set frequency to 440 Hz
+    const context = new AudioContext();  // Creating an audio context object 'context' which handle audio processing in the browser
+    const oscillator = context.createOscillator();  // Creating an instance to generate periodic waveform
+    const gainNode = context.createGain();  // control the volume of the sound
+    oscillator.connect(gainNode); // connect oscillator to gain node
+    gainNode.connect(context.destination);  // connect gainNode to audiocontext destination
+    oscillator.type = 'sine';     // set the waveform type to triangle
+    oscillator.frequency.setValueAtTime(440, context.currentTime);   // set the frequency of the oscillator to 440Hz
     gainNode.gain.setValueAtTime(0, context.currentTime); // set initial volume to 0
     oscillator.start(0);
     setAudioContext(context);
@@ -47,7 +48,7 @@ const TestCardiogram = () => {
     };
   }, []);
 
-  const [alarm, setAlarm] = useState(false)
+  
 
 
   let checkarray = []
@@ -72,20 +73,14 @@ const TestCardiogram = () => {
       if (checkarray.length > 15) {
         console.log("checkarray", checkarray)
 
-        // orignal - store the value which are greater than 800 or less than 400
-        // normal - between 401 and 799
-        // abnormal - less than 400, greater than 800
         let checkHeart = checkarray.filter(e => e > 510 && e < 580)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {
-          // console.log("Heart Attack")
+          console.log("Abnormality Detect")
           setAlarm(true)
           gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
           setIsSounding(true)
-          setTimeout(() => {
-            checkHeart = []
-          }, 2000)
 
         } else {
           checkHeart = []
@@ -96,8 +91,6 @@ const TestCardiogram = () => {
 
       if (data.length > 15) {
         array.shift()
-        let newArray = data.shift()
-        console.log(newArray)
       }
     }).catch(err => {
       console.log(err)
@@ -112,28 +105,6 @@ const TestCardiogram = () => {
     gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
     setIsSounding(false);
   };
-
-
-
-
-
-  // console.log("length of data", data.length);
-
-  // console.log("passifng data to firebase", checkarray)
-  // console.log('array length', data.length)
-
-  // const putDatanew = () => {
-  //   const dbRef = ref(database); // Get a reference to the Firebase Realtime Database root
-
-  //   // Create a new child node under "Patients" with the current timestamp as the key
-  //   const newChildRef = push(child(dbRef, "Patients"));
-
-
-  //   // Set the ECG data as the value of the new child node
-  //   set(newChildRef, {
-  //     ecgData: data,
-  //     DateTime: serverTimestamp()
-  // };
 
 
 
@@ -169,9 +140,20 @@ const TestCardiogram = () => {
 
         <div className="row">
           <div className="col-sm-12 col-md-6 d-flex justify-content-center">
+            {alarm ?
+                <p className="text-danger fw-bold">Abnormality Detect</p> :
+                null
+              }
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-sm-12 col-md-6 d-flex justify-content-center">
             {isSounding ? <button onClick={stopAlarm} className="btn btn-danger btn-block">Stop Alarm</button> : null}
           </div>
         </div>
+
+
       </div>
 
     </>

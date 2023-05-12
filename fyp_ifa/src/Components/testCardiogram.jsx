@@ -134,7 +134,7 @@ const TestCardiogram = () => {
 
         <div className="row">
           <div className="col-sm-12 col-md-4 mx-5">
-          {deviceStatus ? null: <p className="text-danger fw-bold">Device not activated</p>}
+          {deviceStatus ? null: <p className="text-danger fw-bold">Device not connected</p>}
           </div>
         </div>
 

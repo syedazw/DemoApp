@@ -113,30 +113,6 @@ const Cardiogram = () => {
     setIsSounding(false);
   };
 
-
-
-
-
-  // console.log("length of data", data.length);
-
-  // console.log("passifng data to firebase", checkarray)
-  // console.log('array length', data.length)
-
-  // const putDatanew = () => {
-  //   const dbRef = ref(database); // Get a reference to the Firebase Realtime Database root
-
-  //   // Create a new child node under "Patients" with the current timestamp as the key
-  //   const newChildRef = push(child(dbRef, "Patients"));
-
-
-  //   // Set the ECG data as the value of the new child node
-  //   set(newChildRef, {
-  //     ecgData: data,
-  //     DateTime: serverTimestamp()
-  // };
-
-
-
   const putDatanew = () => {
     firebase.putdatafire(params.PatientID, data);
   };

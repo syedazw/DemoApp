@@ -59,7 +59,8 @@ export default function HomeReports() {
                                 <span className="d-none d-sm-inline mx-1"></span>
                             </a>
                             <ul className="dropdown-menu text-small shadow">
-                                <li><Link to="/patient/personal/information" className="dropdown-item">View Profile</Link></li>
+                                <li><Link to="#" className="dropdown-item">Upload Picture</Link></li>
+                                <li><Link to="#" className="dropdown-item">Edit Profile</Link></li>
                                 <li><hr className="dropdown-divider" /></li>
                                 <li><a className="dropdown-item"><Link to="/loginpage" className="nav-link">Sign Out</Link></a></li>
                                 <Outlet />
@@ -91,7 +92,7 @@ export default function HomeReports() {
 
             <div className="container-fluid" style={{ backgroundColor: "white" }}>
                 <div className="row">
-                    <h4 className="fw-bold text-center">TESTS</h4>
+                    <h4 className="fw-bold text-center">REPORTS</h4>
                 </div>
             </div>
 

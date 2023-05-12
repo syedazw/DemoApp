@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { Outlet, Link } from "react-router-dom"
 import { usefirebase } from '../../context/firebase'
-import DisplayPatientCard from "../../Components/displayPatientCard"
+// import DisplayPatientCard from "../../Components/displayPatientCard"
 import { getAuth } from "firebase/auth"
 import { useParams } from "react-router-dom";
+import DisplayAllPatientCard from "../../Components/displayAllPatientCard"
 
 
 export default function AllPatient() {
@@ -114,7 +115,7 @@ export default function AllPatient() {
                     <div className="col-md-12 col-sm-12">
                         <div className="card-group">
                             {patientData.map((item) => (
-                                <DisplayPatientCard key={item.id}
+                                <DisplayAllPatientCard key={item.id}
                                     id={item.id}
                                     {...item.data} />
                             ))}

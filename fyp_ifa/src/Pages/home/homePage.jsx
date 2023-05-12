@@ -77,7 +77,7 @@ export default function HomePage() {
                 <div className="row bg-color text-light pt-4">
                     <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
 
-                    {patdata.length > 0 && <div className="col-sm-12 col-md-2"><h6 className="text-center">{patdata[0].data.fullname}</h6></div>}
+                    {patdata.length > 0 && <div className="col-sm-12 col-md-2"><h6 className="text-center fw-italic">Welcome {patdata[0].data.fullname}</h6></div>}
 
                     <div className="col-sm-12 col-md-6 d-flex justify-content-start">
                         <form className="d-flex-inline mx-4" role="search">
@@ -90,7 +90,8 @@ export default function HomePage() {
                                 <span className="d-none d-sm-inline mx-1"></span>
                             </a>
                             <ul className="dropdown-menu text-small shadow">
-                                <li><Link to="/patient/personal/information" className="dropdown-item">View Profile</Link></li>
+                                <li><Link to="#" className="dropdown-item">Upload Picture</Link></li>
+                                <li><Link to="#" className="dropdown-item">Edit Profile</Link></li>
                                 <li><hr className="dropdown-divider" /></li>
                                 <li><a className="dropdown-item"><Link to="/loginpage" className="nav-link">Sign Out</Link></a></li>
                                 <Outlet />
@@ -144,7 +145,7 @@ export default function HomePage() {
                     <div className="col-sm-12 col-md-3">
                         <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
                             <div className="card-body">
-                                <h5 className="card-title">Medications</h5>
+                                <h5 className="card-title">MEDICATIONS</h5>
                                 <hr className="border-5" style={{ color: "white" }}></hr>
                                 <ul className="list-unstyled">
                                     {patMed.length > 0 && patMed[0].medications.map((medication, index) => (
@@ -159,7 +160,7 @@ export default function HomePage() {
                     <div className="col-sm-12 col-md-3">
                                 <div className="card mb-5" style={{ color: "white", backgroundColor: "#041342" }}>
                                     <div className="card-body">
-                                        <h5 className="card-title">Tests</h5>
+                                        <h5 className="card-title">REPORTS</h5>
                                         <hr className="border-5" style={{ color: "white" }} />
                                         <ul className="list-unstyled">
                                             {patRep.length > 0 &&

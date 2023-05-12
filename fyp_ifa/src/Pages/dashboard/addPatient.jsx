@@ -80,7 +80,7 @@ export default function AddPatient() {
             </div>
             <div className="container-fluid">
                 <div className="row">
-                    {/* <h4 className="fw-bold text-center">ADD NEW PATIENTS</h4> */}
+                    <h4 className="fw-bold text-center">ADD NEW PATIENTS</h4>
                 </div>
 
                 <div className="row">

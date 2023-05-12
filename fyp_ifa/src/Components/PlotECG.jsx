@@ -22,6 +22,7 @@ const Cardiogram = () => {
   const [oscillator, setOscillator] = useState(null);
   const [gainNode, setGainNode] = useState(null);
   const [isSounding, setIsSounding] = useState(false);
+  const [deviceStatus, setDeviceStatus] = useState(null)
 
 
   useEffect(() => {
@@ -55,11 +56,12 @@ const Cardiogram = () => {
 
     axios.get("https://backend.thinger.io/v3/users/ismail_/devices/Nodemcu1/resources/ECG", {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM4MzgyMTgsImlhdCI6MTY4MzgzMTAxOCwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.JPzd5CnGz8tJHbWITsJvBwn95u3q-Lhxg3xRxsWiUXQ'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM4NjYzOTYsImlhdCI6MTY4Mzg1OTE5Niwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.HKenqDvdmxvw2clAO3dJBHFXjo-E9qtITSx-YXXbezk'
       }
     }).then(response => {
       // convert the array into string
       //console.log(JSON.stringify(response.data));  // console log out individual values
+      setDeviceStatus(true)
       console.log("New data point", response.data)
 
       // const val = Math.floor(Math.random() * (100 - 30 + 1)) + 300/10;
@@ -73,7 +75,7 @@ const Cardiogram = () => {
         // orignal - store the value which are greater than 800 or less than 400
         // normal - between 401 and 799
         // abnormal - less than 400, greater than 800
-        let checkHeart = checkarray.filter(e => e > 510 || e < 580)
+        let checkHeart = checkarray.filter(e => e > 510 && e < 580)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {
@@ -99,7 +101,7 @@ const Cardiogram = () => {
       }
     }).catch(err => {
       console.log(err)
-
+      setDeviceStatus(false)
     })
 
   }, [data])
@@ -155,15 +157,22 @@ const Cardiogram = () => {
         <div className="row">
           <div className="col-sm-12 col-md-6 d-flex justify-content-center">
             <button type="button" className="btn btn-success mb-2">View Cardiogram</button>
+            
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-sm-12 col-md-4 mx-5">
+          {deviceStatus ? null: <p className="text-danger fw-bold">Device not activated</p>}
           </div>
         </div>
 
         <div className="row">
           <div className="col-sm-12 col-md-6 d-flex justify-content-center">
-            {/* {alarm ?
-                <button className="btn btn-danger btn-block">Abnormal Condition</button> :
-                <button className="btn btn-success btn-block">Normal Condition</button>
-              } */}
+            {alarm ?
+                <p className="text-danger fw-bold m-4">Abnormal Condition</p> :
+                <p className="text-success fw-bold">Normal Condition</p>
+              }
             {isSounding ? <button onClick={stopAlarm} className="btn btn-danger btn-block">Stop Alarm</button> : null}
           </div>
         </div>

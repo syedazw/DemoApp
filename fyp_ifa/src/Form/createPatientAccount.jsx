@@ -21,7 +21,10 @@ export default function PatientInfo() {
         dob: "",
         homeAddress: "",
         isCritical: false,
-        gender: ""
+        gender: "",
+        deviceName: "",
+        deviceToken: "",
+
     })
     
     const [isfill, setIsFill] = React.useState(true)
@@ -77,7 +80,9 @@ export default function PatientInfo() {
             dob: patientRegister.dob,
             homeAddress: patientRegister.homeAddress,
             critical: patientRegister.isCritical,
-            gender: patientRegister.gender
+            gender: patientRegister.gender,
+            deviceName : patientRegister.deviceName,
+            deviceToken: patientRegister.deviceToken
         }
         const result = firebase.uploadDataToFirestore(collectionName, data);
         console.log("suucessfully added patient data with generated id", result); // result shows id of collection
@@ -236,6 +241,18 @@ export default function PatientInfo() {
                                     </div>
                                 </div>
                             </div>
+
+                            <div className="col-sm-12 col-md-4">
+                                <label htmlFor="validationCustom04" className="form-label mb-0 fw-bold">Device Name:</label>
+                                <input type="email" className="form-control" id="validationCustom04" required name="device name" value={setpatientRegister.deviceName} onChange={handleChange} />
+                                
+                            </div>
+                            <div className="col-sm-12 col-md-4">
+                                <label htmlFor="validationCustom04" className="form-label mb-0 fw-bold">Device Token:</label>
+                                <input type="email" className="form-control" id="validationCustom04" required name="device token" value={setpatientRegister.deviceToken} onChange={handleChange} />
+                               
+                            </div>
+                            
 
                             <div className="col-md-8">
                                 <div className="form-check">

@@ -7,7 +7,7 @@ import MainPage from './Pages/MainPage'
 
 // admin pages: database, create account, login
 import AdminPortal from './Pages/admin/AdminPortal'
-
+import DeviceInfo from './Pages/admin/DeviceInfo'
 
 
 // doctor pages: dashboard, allpatient, assigned assistant, add new patient, remove healthy patient
@@ -56,6 +56,7 @@ function App() {
           <Route path="/admin/portal" element={<AdminPortal />}></Route>
           <Route path="/admin/create/account" element={<AddDoctor />}></Route>   {/* creating account with different user domain */}
           <Route path="/admin/create/patient/account" element={<CreateAccountbyAdmin />}></Route>
+          <Route path="/admin/view/device/info" element={<DeviceInfo/>}></Route>
 
           {/*declaring the route for dashboard pages */}
           <Route path="/dashboard" element={< Dashboard/>}></Route>

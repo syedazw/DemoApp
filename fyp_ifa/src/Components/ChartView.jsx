@@ -4,15 +4,15 @@ import Chart from "react-apexcharts";
 export default function ApexChart(props) {
   // console.log("receiving props as", props.data)
 
-  let newArray = props.data
+  let newArray = props.data.slice(-15);
   console.log("receive array", newArray)
   
   // let plotData = []
-  if (newArray.length>15) {
-    newArray.shift()
-  } else {
-    newArray
-  }
+  // if (newArray.length>15) {
+  //   newArray.shift()
+  // } else {
+  //   newArray
+  // }
 
   // console.log("Plotting data values", plotData)
   

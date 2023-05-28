@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 
 
 import { getDatabase, ref, set, push, child, serverTimestamp } from "firebase/database";
+// import LineGraph from "./lineECG";
 
 
 const Cardiogram = () => {
@@ -57,7 +58,7 @@ const Cardiogram = () => {
 
     axios.get("https://backend.thinger.io/v3/users/ismail_/devices/Nodemcu1/resources/ECG", {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODM4NzQxMjksImlhdCI6MTY4Mzg2NjkyOSwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.1fgCMKCLVRIqBABBfwj6yPYGapLcEAtFveDNCtKZhag'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODUyOTI5NjIsImlhdCI6MTY4NTI4NTc2Miwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.NAo0VLNOFododREmDvtH7jt8ff13RNRDCF-m2MVlKrI'
       }
     }).then(response => {
       // convert the array into string
@@ -72,7 +73,7 @@ const Cardiogram = () => {
 
       if (checkarray.length > 15) {
         console.log("checkarray", checkarray)
-        let checkHeart = checkarray.filter(e => e > 0 && e < 58)
+        let checkHeart = checkarray.filter(e => e > 400 && e < 800)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {

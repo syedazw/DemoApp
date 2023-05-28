@@ -3,14 +3,16 @@ import axios from "axios";
 import ApexChart from "./ChartView";
 import { usefirebase } from "../context/firebase";
 import { Timestamp } from 'firebase/firestore';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 
 import { getDatabase, ref, set, push, child, serverTimestamp } from "firebase/database";
-// import LineGraph from "./lineECG";
 
 
-const Cardiogram = () => {
+
+const Cardiogram = (props) => {
+  console.log("Props receive by cardiogram component", props)
+  const navigate = useNavigate();
   const buttonStyle = { color: "white", backgroundColor: "#041342", borderRadius: "6px", textDecoration: "none" }
   const firebase = usefirebase();
   const database = getDatabase();
@@ -49,16 +51,16 @@ const Cardiogram = () => {
     };
   }, []);
 
-  
+
 
 
   let checkarray = []
 
   useEffect(() => {
 
-    axios.get("https://backend.thinger.io/v3/users/ismail_/devices/Nodemcu1/resources/ECG", {
+    axios.get(props.method, {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODUyOTI5NjIsImlhdCI6MTY4NTI4NTc2Miwicm9sZSI6InVzZXIiLCJ1c3IiOiJpc21haWxfIn0.NAo0VLNOFododREmDvtH7jt8ff13RNRDCF-m2MVlKrI'
+        'Authorization': props.deviceToken
       }
     }).then(response => {
       // convert the array into string
@@ -116,9 +118,11 @@ const Cardiogram = () => {
 
   return (
     <>
+    
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-12 col-md-6">
+          <p className="px-3 fw-bold">{props.fullname}</p>
             <ApexChart data={data} title="Patient ECG" />
             <button className="btn text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
             <button className="btn text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
@@ -127,33 +131,22 @@ const Cardiogram = () => {
 
         <div className="row">
           <div className="col-sm-12 col-md-6 d-flex justify-content-center">
-            <button type="button" className="btn btn-success mb-2">View Cardiogram</button>
             
+
           </div>
         </div>
 
         <div className="row">
-          <div className="col-sm-12 col-md-6 d-flex justify-content-center">
-          {deviceStatus ? null: <p className="text-danger fw-bold">Device not connected</p>}
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-sm-12 col-md-6 d-flex justify-content-center p-0">
+          <div className="col-sm-12 col-md-6 mx-auto">
+          <button type="button" className="btn btn-success btn-width mb-2" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button>
+            {deviceStatus ? null : <p className="text-danger fw-bold text-width pt-0">Device not connected</p>}
             {alarm ?
-                <p className="text-danger fw-bold">Abnormality Detect</p> :
-                null
-              }
+              <p className="text-danger fw-bold text-width">Abnormality Detect</p> :
+              null
+            }
+            {isSounding ? <button onClick={stopAlarm} className="btn btn-danger btn-width pt-0 mt-0">Stop Alarm</button> : null}
           </div>
         </div>
-
-        <div className="row">
-          <div className="col-sm-12 col-md-6 d-flex justify-content-center">
-            {isSounding ? <button onClick={stopAlarm} className="btn btn-danger btn-block">Stop Alarm</button> : null}
-          </div>
-        </div>
-
-
       </div>
 
     </>

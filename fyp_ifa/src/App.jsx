@@ -44,7 +44,7 @@ import HomeReports from './Pages/home/homeReports'
 import HomeCardiogram from './Pages/home/homeCardiogram'
 import CriticalPatient from './Pages/dashboard/criticalPatient'
 import CreateAccountbyAdmin from './Form/createAccountByAdmin'
-// import Medication from './Pages/home/medication'
+
 
 function App() {
 
@@ -90,6 +90,7 @@ function App() {
           <Route path='/doctor/personal/information' element={<DoctorInfo />}></Route>
           <Route path='/patient/personal/information' element={<PatientInfo />}></Route>
 
+          {/* <Route path='/line' element={<LineGraph />}></Route> */}
           <Route path='*' element={<>Invalid url</>}></Route>
         </Routes>
       </BrowserRouter>

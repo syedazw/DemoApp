@@ -43,8 +43,7 @@ export default function DisplayAllPatientCard(props) {
                             </div>
                             <div className="row">
                                 <div className="col-6">
-                                    <dl><dt className="px-3 pb-0 fw-light">D.O.B</dt><dd className="px-3 pb-0 fw-bold">{props.dob
-                                    }</dd></dl>
+                                    <dl><dt className="px-3 pb-0 fw-light">D.O.B</dt><dd className="px-3 pb-0 fw-bold">{props.dob}</dd></dl>
                                     <dl><dt className="px-3 pb-0 fw-light">Age</dt><dd className="px-3 pb-0 fw-bold">{props.age}</dd></dl>
                                     <dl><dt className="px-3 pb-0 fw-light">Weight</dt><dd className="px-3 pb-0 fw-bold">{props.weight} KG</dd></dl>
                                     <dl><dt className="px-3 pb-0 fw-light">Height</dt><dd className="px-3 pb-0 fw-bold">{props.height}</dd></dl>

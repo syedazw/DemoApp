@@ -85,7 +85,7 @@ export default function PatientInfo() {
             method: patientRegister.method,
             deviceName: patientRegister.deviceName,
             deviceToken: patientRegister.deviceToken,
-            deviceAssignedDate: patientRegister.deviceAssignDate
+            deviceAssignDate: patientRegister.deviceAssignDate
         }
         const result = firebase.uploadDataToFirestore(collectionName, data);
         console.log("suucessfully added patient data with generated id", result); // result shows id of collection
@@ -165,7 +165,7 @@ export default function PatientInfo() {
 
                             <div className="col-sm-12 col-md-2">
                                 <label htmlFor="validationCustom10" className="form-label mb-0 fw-bold">Gender:</label>
-                                <select className="form-select" id="validationCustom10" required name="gender" value={patientRegister.gender} onChange={handleChange}>
+                                <select className="form-select" id="validationCustom10" required name="gender" value={setpatientRegister.gender} onChange={handleChange}>
                                     <option defaultValue disabled selected>Select Gender</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
@@ -246,7 +246,6 @@ export default function PatientInfo() {
                                 <div className="valid-feedback">Looks good!</div>
                             </div>
 
-
                             <div className="col-md-8">
                                 <div className="form-check">
                                     <input className="form-check-input" type="checkbox" value="isCritical" id="invalidCheck" required name="isCritical" checked={patientRegister.isCritical} onChange={handleChange} />
@@ -258,7 +257,6 @@ export default function PatientInfo() {
                                     </div>
                                 </div>
                             </div>
-
                             <p className="fw-bold h4 mb-0 text-decoration-underline">DEVICE INFORMATION</p>
 
                             <div className="col-sm-12 col-md-3">

@@ -1,9 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { initializeApp } from "firebase/app";
 //  A function that creates a user (SIGNUP)
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 // importing Firestore from firebase
-import { getFirestore, addDoc, doc, getDoc, collection, serverTimestamp, getDocs, query, where } from "firebase/firestore";
+import { getFirestore, addDoc, doc, getDoc, collection, serverTimestamp, getDocs, query, deleteDoc, updateDoc, setDoc } from "firebase/firestore";
 import { getStorage, uploadBytes, ref as ref_storage } from 'firebase/storage'
 import { getDatabase, set, ref as ref_database } from "firebase/database";
 
@@ -193,19 +195,19 @@ export const FirebaseProvider = (props) => {
         const q = query(collection(db, "Patients"));
         const querySnapshot = await getDocs(q);
         console.log("querysnapshot", querySnapshot)
-    
+
         if (querySnapshot.empty) {
             console.log("No matching documents..");
             return [];
         }
-    
+
         const matchingData = [];
-    
+
         await Promise.all(
             querySnapshot.docs.map(async (doc) => {
                 const data = doc.data();
                 console.log("data", data.data.email)
-    
+
                 if (data.data.email == userEmail) {
                     console.log("Found a match:", data);
                     const medicationsRef = collection(doc.ref, "Medication");
@@ -216,39 +218,39 @@ export const FirebaseProvider = (props) => {
                 }
             })
         );
-    
+
         return matchingData;
     };
-        // ************************** PATIENT REPORT DATA  *************************** 
+    // ************************** PATIENT REPORT DATA  *************************** 
 
     const patRepData = async (userEmail) => {
         const q = query(collection(db, "Patients"));
         const querySnapshot = await getDocs(q);
         console.log("querysnapshot", querySnapshot)
-    
+
         if (querySnapshot.empty) {
             console.log("No matching documents..");
             return [];
         }
-    
+
         const matchingData = [];
-    
+
         await Promise.all(
             querySnapshot.docs.map(async (doc) => {
                 const data = doc.data();
                 console.log("data", data.data.email)
-    
+
                 if (data.data.email == userEmail) {
                     console.log("Found a match:", data);
                     const RepRef = collection(doc.ref, "Reports");
                     const RepSnapshot = await getDocs(RepRef);
                     const RepData = RepSnapshot.docs.map((doc) => doc.data());
                     console.log("Reports==:", RepData);
-                    matchingData.push({ ...data, Reports: RepData});
+                    matchingData.push({ ...data, Reports: RepData });
                 }
             })
         );
-    
+
         return matchingData;
     };
 
@@ -275,7 +277,7 @@ export const FirebaseProvider = (props) => {
 
         return matchingData;
     }
-    
+
     // ******************************** RETRIEVING DATA ***********************************
     // getting patient Data
     const ListPatientData = () => {
@@ -309,8 +311,71 @@ export const FirebaseProvider = (props) => {
         return result;
     }
 
+    // **************** CRUD OPERATION ************************
 
+    const onDelete = async (PatientID) => {
+        if (window.confirm("Are you sure you want to delete it?")) {
+            const docref = doc(db, "Patients", PatientID)
+            await deleteDoc(docref);
+        }
+        toast.success('Device Successfully Deleted', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
+    }
 
+    const update = async (patientID) => {
+        const docRef = doc(db, "Patients", patientID);
+        const newDeviceToken = window.prompt("Please enter the DeviceToken you want to update");
+        if (newDeviceToken) {
+            try {
+                const docSnapshot = await getDoc(docRef);
+                if (docSnapshot.exists()) {
+                    const existingData = docSnapshot.data();
+                    const updatedData = {
+                        ...existingData,
+                        data: {
+                            ...existingData.data,
+                            deviceToken: newDeviceToken
+                        }
+                    };
+                    await setDoc(docRef, updatedData);
+                    toast.success('Updated Successfully', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                        });
+                    console.log("Device token updated successfully");
+                } else {
+                    console.log("Document does not exist");
+                }
+            } catch (error) {
+                console.error("Error updating device token:", error);
+            }
+        }
+    };
+
+    // const getPatientData = async() => {
+    //     const querySnapshot = await getDocs(collection(db, "Patients"));
+    //     const patientData = querySnapshot.docs.map((doc) => ({
+    //         id: doc.id,
+    //         data: doc.data(),
+            
+    //     }));
+    //     return patientData;
+    // };
+   
 
 
     return (
@@ -319,7 +384,9 @@ export const FirebaseProvider = (props) => {
             uploadDataToFirestore, uploadFilesToFirestore,
             addMedToCollection, addNotesToCollection,
             addReportToCollection, ListPatientData, getPatientProfilebyId, getNotesById,
-            getMedByID, getReportById, putData, putdatafire, patData, patMedData, patRepData,DocData 
+            getMedByID, getReportById, putData, putdatafire, patData, patMedData, patRepData, DocData,
+            getMedByID, getReportById, putData, putdatafire, patData, patMedData, patRepData, DocData, onDelete,
+             update,
         }}>
             {props.children}
         </FirebaseContext.Provider>

@@ -25,8 +25,20 @@ const Cardiogram = (props) => {
   const [oscillator, setOscillator] = useState(null);
   const [gainNode, setGainNode] = useState(null);
   const [isSounding, setIsSounding] = useState(false);
-  const [deviceStatus, setDeviceStatus] = useState(null)
+  const [deviceStatus, setDeviceStatus] = useState(false)
   const [alarm, setAlarm] = useState(false)
+  const [electrodeVal, setelectrodeVal] = useState(false)
+
+  // let electrodeMessage
+  // if (electrodeVal) {
+  //   // electrode connected
+  //   electrodeMessage = <p className="d-inline text-success"> Connected! </p>
+  // } else if (electrodeVal === false) {
+  //   electrodeMessage = <p className="d-inline text-danger"> Disconnected </p>
+  // } else {
+  //   electrodeMessage = <p>abc</p>
+  // }
+
 
 
   useEffect(() => {
@@ -51,10 +63,15 @@ const Cardiogram = (props) => {
     };
   }, []);
 
-
-
-
   let checkarray = []
+
+  // function updateElectrodeStatusToActive() {
+  //   setelectrodeVal(true)
+  // }
+
+  // function updateElectrodeStatusToDisable() {
+  //   setelectrodeVal(false)
+  // }
 
   useEffect(() => {
 
@@ -63,12 +80,9 @@ const Cardiogram = (props) => {
         'Authorization': props.deviceToken
       }
     }).then(response => {
-      // convert the array into string
-      //console.log(JSON.stringify(response.data));  // console log out individual values
-      setDeviceStatus(true)
-      console.log("New data point", response.data)
+      console.log(response.data)
+      setDeviceStatus(true) // show the device is activated/connected
 
-      // const val = Math.floor(Math.random() * (100 - 30 + 1)) + 300/10;
       let array = [...data, response.data];
       checkarray = [...data, response.data];
       updateData(data => [...data, response.data])
@@ -76,6 +90,7 @@ const Cardiogram = (props) => {
       if (checkarray.length > 15) {
         console.log("checkarray", checkarray)
         let checkHeart = checkarray.filter(e => e > 400 && e < 800)
+        setelectrodeVal(true)
         console.log("heart", checkHeart)
 
         if (checkHeart.length > 0) {
@@ -88,8 +103,47 @@ const Cardiogram = (props) => {
           checkHeart = []
           gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
           setIsSounding(false);
+          setAlarm(false)
         }
       }
+
+
+      // if (checkarray.length > 0) {
+      //   let duplicateVal = checkarray.filter(e => e < 300 || e > 1000)
+      //   console.log(duplicateVal)
+
+      //   // let dynamicCondition = null
+      //   // let dynamicCondition = duplicateVal.every(val => val < 300 || val > 1000)  //store the boolean value - true or false
+
+      //   // if dynamic condition return true that mean electrode is discconnected, else false that mean electrodes are connected 
+
+      //   let dynamicCondition = duplicateVal.length === checkarray.length
+      //   // console.log("boolean", dynamicCondition)
+
+
+      //   if (dynamicCondition) {
+      //     setelectrodeVal(false)
+      //   } else {
+      //     setelectrodeVal(true)
+      //   }
+
+      //   if (duplicateVal.length > 0) {
+      //     setelectrodeVal(false)
+      //     duplicateVal = []
+      //   } else {
+      //     setelectrodeVal(true)
+      //   }
+      // }
+
+      if (response.data < 300 || response.data > 1000) {
+        setelectrodeVal(false)
+      } else {
+        setelectrodeVal(true)
+      }
+
+
+
+
 
       if (data.length > 15) {
         array.shift()
@@ -118,32 +172,68 @@ const Cardiogram = (props) => {
 
   return (
     <>
-    
+
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-12 col-md-6">
-          <p className="px-3 fw-bold">{props.fullname}</p>
-            <ApexChart data={data} title="Patient ECG" />
-            <button className="btn text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
-            <button className="btn text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
+            <p className="px-3 mb-0 fw-bold">Patient Name: {props.fullname}</p>
+
+            <p className="px-3 mt-0 fw-bold d-inline">Device Status:
+              {
+                deviceStatus ?
+                  <p className="d-inline text-success"> Connected </p>
+                  : <p className="d-inline text-danger"> Not Connected </p>
+              }
+            </p>
+
+            <p className="px-3 mt-0 mb-0 fw-bold d-block">Electrodes Status:
+              {
+                electrodeVal ?
+                  (<p className="d-inline text-success"> Connected</p>)
+                  :
+                  (<p className="d-inline text-danger"> Not Connected </p>)
+              }
+            </p>
+
+            <p className="px-3 pt-0 mt-0 fw-bold d-block">Patient Condition:
+              {
+                alarm ?
+                  (
+                    <p className="d-inline text-danger"> Abnormality Detect </p>
+                  )
+
+                  : (
+                    <p className="d-inline text-success"> Normal </p>
+                  )
+              }
+            </p>
+
+
           </div>
+
+
+
+
+
         </div>
 
+
+
+
         <div className="row">
-          <div className="col-sm-12 col-md-6 d-flex justify-content-center">
-            
+          <div className="col-md-6">
+            <ApexChart data={data} title="Patient ECG" />
+            <div className="btn-group">
+              <button className="btn text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
+              <button className="btn text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
+            </div>
 
           </div>
         </div>
 
         <div className="row">
           <div className="col-sm-12 col-md-6 mx-auto">
-          <button type="button" className="btn btn-success btn-width mb-2" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button>
-            {deviceStatus ? null : <p className="text-danger fw-bold text-width pt-0">Device not connected</p>}
-            {alarm ?
-              <p className="text-danger fw-bold text-width">Abnormality Detect</p> :
-              null
-            }
+            <button type="button" className="btn btn-success btn-width mb-2 d-block" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button>
             {isSounding ? <button onClick={stopAlarm} className="btn btn-danger btn-width pt-0 mt-0">Stop Alarm</button> : null}
           </div>
         </div>

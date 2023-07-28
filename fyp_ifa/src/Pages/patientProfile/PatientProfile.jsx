@@ -144,10 +144,11 @@ export default function PatientProfile() {
                         ))}
                     </div>
                     <div className="col-sm-4 col-md-6">
-                        <Cardiogram
-                            patid={params.PatientID}
-                        />
-                        {/* <button type="button" className="btn btn-width bg-color text-light mx-5 mt-2">View Full Screen</button> */}
+                    {medicalRecord.map((item) => (
+                            <Cardiogram key={item.id}
+                                id={item.id}
+                                {...item.data} />
+                        ))}
                     </div>
                 </div>
             </div>

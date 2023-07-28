@@ -89,7 +89,7 @@ export default function Dashboard() {
 
 
             <div className="container-fluid">
-                
+
                 <div className="row">
                     <h4 className="fw-bold text-center">CRITICAL PATIENTS</h4>
                 </div>

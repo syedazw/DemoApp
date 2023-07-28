@@ -8,8 +8,6 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { getFirestore, addDoc, doc, getDoc, collection, serverTimestamp, getDocs, query, deleteDoc, updateDoc, setDoc } from "firebase/firestore";
 import { getStorage, uploadBytes, ref as ref_storage } from 'firebase/storage'
 import { getDatabase, set, ref as ref_database } from "firebase/database";
-import { getMessaging, getToken, onMessage, messaging } from 'firebase/messaging';
-
 // export const [restrictAccess, setRestrictAccess] = useState(false)
 
 
@@ -25,8 +23,6 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
-// Initialize Firebase Cloud Messaging and get a reference to the service
-const message = getMessaging(firebaseApp);
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(firebaseApp);
 // initilize firebase storage

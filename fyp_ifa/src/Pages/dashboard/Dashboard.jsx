@@ -95,16 +95,21 @@ export default function Dashboard() {
                 </div>
 
                 <div className="row mt-4">
-                    <div className="col-sm-12 col-md-6">
-                        <div className="d-inline-flex">
-                            {patientData.map((item) => (
-                                <Cardiogram key={item.id}
-                                    id={item.id}
-                                    {...item.data} />
-                            ))}
-                        </div>
+
+
+                    {/* <div className="col-sm-12 col-md-12"> */}
+                    <div className="d-inline-flex">
+                        {patientData.map((item) => (
+                            <Cardiogram key={item.id}
+                                id={item.id}
+                                {...item.data} />
+                        ))}
+
+                        {/* </div> */}
+
 
                     </div>
+
 
                 </div>
             </div>

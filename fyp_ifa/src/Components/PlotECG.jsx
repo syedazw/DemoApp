@@ -122,7 +122,7 @@ const Cardiogram = (props) => {
 
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-12 col-md-6">
+          <div className="col-sm-12 col-md-6">
             <p className="px-3 mb-0 fw-bold">Patient Name: {props.fullname}</p>
 
             <p className="px-3 mt-0 fw-bold d-inline">Device Status:

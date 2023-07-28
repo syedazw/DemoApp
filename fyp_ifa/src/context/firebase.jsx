@@ -8,7 +8,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { getFirestore, addDoc, doc, getDoc, collection, serverTimestamp, getDocs, query, deleteDoc, updateDoc, setDoc } from "firebase/firestore";
 import { getStorage, uploadBytes, ref as ref_storage } from 'firebase/storage'
 import { getDatabase, set, ref as ref_database } from "firebase/database";
-
+import { getMessaging, getToken, onMessage ,messaging } from 'firebase/messaging';
 
 // export const [restrictAccess, setRestrictAccess] = useState(false)
 
@@ -25,6 +25,8 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
+// Initialize Firebase Cloud Messaging and get a reference to the service
+const message = getMessaging(firebaseApp);
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(firebaseApp);
 // initilize firebase storage
@@ -118,6 +120,49 @@ export const FirebaseProvider = (props) => {
 
 
     };
+     
+    //       *********************** PUSH NOTIFICATION ***********************************
+
+const requestPermission = async () => {
+  console.log("Requesting User Permission......");
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === "granted") {
+      console.log("Notification User Permission Granted.");
+
+      const currentToken = await getToken(messaging, {
+        vapidKey:
+          "BNR5KcDXNh_Wk7n9WyDm5f6TQY9IgQC3tsixzdeHQWv21fnT6jiai_4lpNSfpoD2kRMedV5MhL7H0X7kimXSLUs",
+      });
+
+      if (currentToken) {
+        console.log("Client Token:", currentToken);
+
+        // Store the FCM token in Firestore
+        const currentUser = firebase.auth().currentUser;
+        if (currentUser) {
+          const tokenRef = collection(firebase.firestore(), "tokens");
+          await addDoc(tokenRef, {
+            userId: currentUser.uid,
+            token: currentToken,
+          });
+          console.log("FCM Token stored in Firestore.");
+        } else {
+          console.log("No user is logged in.");
+        }
+      } else {
+        console.log("Failed to generate the app registration token.");
+      }
+    } else {
+      console.log("User Permission Denied.");
+    }
+  } catch (error) {
+    console.error("An error occurred when requesting user permission:", error);
+  }
+};
+
+requestPermission();
+
 
     // Add doctors data to Firestore
 

@@ -6,8 +6,6 @@ import { usefirebase } from "../../context/firebase";
 import { getAuth } from "firebase/auth";
 import { getFirestore, collection, where, query, getDocs } from "firebase/firestore";
 // import TestCardiogram from "../../Components/testCardiogram";
-
-
 export default function Dashboard() {
 
     const firebase = usefirebase();

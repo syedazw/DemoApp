@@ -9,8 +9,8 @@ export default function AssignedAssistant() {
     const auth = getAuth()
 
     const [patientData, setPatientData] = useState([]);
-    //  Doctor's Data
-    const [docdata, setdocdata] = useState([]);
+    const [docdata, setdocdata] = useState([]); //  Doctor's Data
+
     useEffect(() => {
         const currentUser = auth.currentUser;
         if (!currentUser) {
@@ -28,7 +28,6 @@ export default function AssignedAssistant() {
     }, []);
 
 
-    // const [checkArray, setCheckArray] = useState(false)
     useEffect(() => {
         firebase.ListPatientData()
             .then((querySnapshot) => {

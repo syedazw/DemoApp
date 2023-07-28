@@ -2,23 +2,21 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ApexChart from "./ChartView";
 import { usefirebase } from "../context/firebase";
-import { Timestamp } from 'firebase/firestore';
 import { useParams, useNavigate } from "react-router-dom";
-
-
-import { getDatabase, ref, set, push, child, serverTimestamp } from "firebase/database";
+import { getDatabase } from "firebase/database";
 
 
 
 const Cardiogram = (props) => {
   console.log("Props receive by cardiogram component", props)
-  const navigate = useNavigate();
+  const navigate = useNavigate();  //create instance for navigation
   const buttonStyle = { color: "white", backgroundColor: "#041342", borderRadius: "6px", textDecoration: "none" }
   const firebase = usefirebase();
   const database = getDatabase();
 
   const params = useParams();
 
+  // creating multiple use state
   const [data, updateData] = useState([]);
   const [fetchingData, setFetching] = useState(false)
   const [audioContext, setAudioContext] = useState(null);
@@ -28,18 +26,6 @@ const Cardiogram = (props) => {
   const [deviceStatus, setDeviceStatus] = useState(false)
   const [alarm, setAlarm] = useState(false)
   const [electrodeVal, setelectrodeVal] = useState(false)
-
-  // let electrodeMessage
-  // if (electrodeVal) {
-  //   // electrode connected
-  //   electrodeMessage = <p className="d-inline text-success"> Connected! </p>
-  // } else if (electrodeVal === false) {
-  //   electrodeMessage = <p className="d-inline text-danger"> Disconnected </p>
-  // } else {
-  //   electrodeMessage = <p>abc</p>
-  // }
-
-
 
   useEffect(() => {
     const context = new AudioContext();  // Creating an audio context object 'context' which handle audio processing in the browser
@@ -65,104 +51,65 @@ const Cardiogram = (props) => {
 
   let checkarray = []
 
-  // function updateElectrodeStatusToActive() {
-  //   setelectrodeVal(true)
-  // }
 
-  // function updateElectrodeStatusToDisable() {
-  //   setelectrodeVal(false)
-  // }
-
-  useEffect(() => {
-
-    axios.get(props.method, {
-      headers: {
-        'Authorization': props.deviceToken
-      }
-    }).then(response => {
-      console.log(response.data)
-      setDeviceStatus(true) // show the device is activated/connected
-
-      let array = [...data, response.data];
-      checkarray = [...data, response.data];
-      updateData(data => [...data, response.data])
-
-      if (checkarray.length > 15) {
-        console.log("checkarray", checkarray)
-        let checkHeart = checkarray.filter(e => e > 400 && e < 800)
-        setelectrodeVal(true)
-        console.log("heart", checkHeart)
-
-        if (checkHeart.length > 0) {
-          console.log("Abnormality Detect")
-          setAlarm(true)
-          gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
-          setIsSounding(true)
-
-        } else {
-          checkHeart = []
-          gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
-          setIsSounding(false);
-          setAlarm(false)
+  useEffect(
+    () => {
+      axios.get(props.method, {
+        headers: {
+          'Authorization': props.deviceToken
         }
-      }
+      }).then(response => {
+        console.log(response.data)
+        setDeviceStatus(true) // show the device is activated/connected
 
+        let array = [...data, response.data];
+        checkarray = [...data, response.data];
+        updateData(data => [...data, response.data])
 
-      // if (checkarray.length > 0) {
-      //   let duplicateVal = checkarray.filter(e => e < 300 || e > 1000)
-      //   console.log(duplicateVal)
+        if (checkarray.length > 15) {
+          console.log("checkarray", checkarray)
+          let checkHeart = checkarray.filter(e => e > 400 && e < 800)
+          setelectrodeVal(true)
+          console.log("heart", checkHeart)
 
-      //   // let dynamicCondition = null
-      //   // let dynamicCondition = duplicateVal.every(val => val < 300 || val > 1000)  //store the boolean value - true or false
+          if (checkHeart.length > 0) {
+            console.log("Abnormality Detect")
+            setAlarm(true)
+            gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
+            setIsSounding(true)
 
-      //   // if dynamic condition return true that mean electrode is discconnected, else false that mean electrodes are connected 
+          } else {
+            checkHeart = []
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
+            setIsSounding(false);
+            setAlarm(false)
+          }
+        }
 
-      //   let dynamicCondition = duplicateVal.length === checkarray.length
-      //   // console.log("boolean", dynamicCondition)
+        if (response.data < 300 || response.data > 1000) {
+          setelectrodeVal(false)
+        } else {
+          setelectrodeVal(true)
+        }
 
+        if (data.length > 15) {
+          array.shift()
+          let newArray = data.shift()
+          console.log(newArray)
+        }
+      }).catch(err => {
+        console.log(err)
+        setDeviceStatus(false)
+      })
 
-      //   if (dynamicCondition) {
-      //     setelectrodeVal(false)
-      //   } else {
-      //     setelectrodeVal(true)
-      //   }
-
-      //   if (duplicateVal.length > 0) {
-      //     setelectrodeVal(false)
-      //     duplicateVal = []
-      //   } else {
-      //     setelectrodeVal(true)
-      //   }
-      // }
-
-      if (response.data < 300 || response.data > 1000) {
-        setelectrodeVal(false)
-      } else {
-        setelectrodeVal(true)
-      }
-
-
-
-
-
-      if (data.length > 15) {
-        array.shift()
-        let newArray = data.shift()
-        console.log(newArray)
-      }
-    }).catch(err => {
-      console.log(err)
-      setDeviceStatus(false)
-    })
-
-  }, [data])
+    }, [data])
 
 
 
-  const stopAlarm = () => {
-    gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
-    setIsSounding(false);
-  };
+  // const stopAlarm = () => {
+  //   gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
+  //   setIsSounding(false);
+  // };
 
   const putDatanew = () => {
     firebase.putdatafire(params.PatientID, data);
@@ -234,7 +181,10 @@ const Cardiogram = (props) => {
         <div className="row">
           <div className="col-sm-12 col-md-6 mx-auto">
             <button type="button" className="btn btn-success btn-width mb-2 d-block" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button>
-            {isSounding ? <button onClick={stopAlarm} className="btn btn-danger btn-width pt-0 mt-0">Stop Alarm</button> : null}
+            {isSounding ? <button onClick={() => {
+              gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
+              setIsSounding(false);
+            }} className="btn btn-danger btn-width pt-0 mt-0">Stop Alarm</button> : null}
           </div>
         </div>
       </div>

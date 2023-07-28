@@ -44,3 +44,7 @@
     cursor: pointer;
   }
   
+.hover--effect li Link:visited {
+  background-color: violet;
+  color: white;
+}

@@ -7,7 +7,7 @@ login page display
         1.1.1 View database and can take actions (edit, delete, reset password)
         1.1.2 Create account for doctor
 
----------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
 2. doctor portal
     2.1 login page (note: no signup page) ---> work on login page later
     2.2 dashboard (code file: Dashboard.jsx)

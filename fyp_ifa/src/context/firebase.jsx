@@ -8,7 +8,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { getFirestore, addDoc, doc, getDoc, collection, serverTimestamp, getDocs, query, deleteDoc, updateDoc, setDoc } from "firebase/firestore";
 import { getStorage, uploadBytes, ref as ref_storage } from 'firebase/storage'
 import { getDatabase, set, ref as ref_database } from "firebase/database";
-import { getMessaging, getToken, onMessage ,messaging } from 'firebase/messaging';
+import { getMessaging, getToken, onMessage, messaging } from 'firebase/messaging';
 
 // export const [restrictAccess, setRestrictAccess] = useState(false)
 
@@ -19,7 +19,7 @@ const firebaseConfig = {
     authDomain: "heartaid-app.firebaseapp.com",
     projectId: "heartaid-app",
     storageBucket: "heartaid-app.appspot.com",
-    messagingSenderId: "119958904964",
+    // messagingSenderId: "119958904964",
     appId: "1:119958904964:web:bb21f11164fe56d5b362d1",
     databaseURL: "https://heartaid-app-default-rtdb.firebaseio.com/"
 };
@@ -120,48 +120,8 @@ export const FirebaseProvider = (props) => {
 
 
     };
-     
-    //       *********************** PUSH NOTIFICATION ***********************************
 
-const requestPermission = async () => {
-  console.log("Requesting User Permission......");
-  try {
-    const permission = await Notification.requestPermission();
-    if (permission === "granted") {
-      console.log("Notification User Permission Granted.");
-
-      const currentToken = await getToken(messaging, {
-        vapidKey:
-          "BNR5KcDXNh_Wk7n9WyDm5f6TQY9IgQC3tsixzdeHQWv21fnT6jiai_4lpNSfpoD2kRMedV5MhL7H0X7kimXSLUs",
-      });
-
-      if (currentToken) {
-        console.log("Client Token:", currentToken);
-
-        // Store the FCM token in Firestore
-        const currentUser = firebase.auth().currentUser;
-        if (currentUser) {
-          const tokenRef = collection(firebase.firestore(), "tokens");
-          await addDoc(tokenRef, {
-            userId: currentUser.uid,
-            token: currentToken,
-          });
-          console.log("FCM Token stored in Firestore.");
-        } else {
-          console.log("No user is logged in.");
-        }
-      } else {
-        console.log("Failed to generate the app registration token.");
-      }
-    } else {
-      console.log("User Permission Denied.");
-    }
-  } catch (error) {
-    console.error("An error occurred when requesting user permission:", error);
-  }
-};
-
-requestPermission();
+    
 
 
     // Add doctors data to Firestore
@@ -372,7 +332,7 @@ requestPermission();
             draggable: true,
             progress: undefined,
             theme: "colored",
-            });
+        });
     }
 
     const update = async (patientID) => {
@@ -400,7 +360,7 @@ requestPermission();
                         draggable: true,
                         progress: undefined,
                         theme: "colored",
-                        });
+                    });
                     console.log("Device token updated successfully");
                 } else {
                     console.log("Document does not exist");
@@ -416,11 +376,11 @@ requestPermission();
     //     const patientData = querySnapshot.docs.map((doc) => ({
     //         id: doc.id,
     //         data: doc.data(),
-            
+
     //     }));
     //     return patientData;
     // };
-   
+
 
 
     return (
@@ -431,7 +391,7 @@ requestPermission();
             addReportToCollection, ListPatientData, getPatientProfilebyId, getNotesById,
             getMedByID, getReportById, putData, putdatafire, patData, patMedData, patRepData, DocData,
             getMedByID, getReportById, putData, putdatafire, patData, patMedData, patRepData, DocData, onDelete,
-             update,
+            update,
         }}>
             {props.children}
         </FirebaseContext.Provider>

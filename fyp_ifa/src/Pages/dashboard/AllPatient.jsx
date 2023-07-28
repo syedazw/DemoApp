@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { Outlet, Link } from "react-router-dom"
+import { Outlet, Link, useParams } from "react-router-dom"
 import { usefirebase } from '../../context/firebase'
-// import DisplayPatientCard from "../../Components/displayPatientCard"
 import { getAuth } from "firebase/auth"
-import { useParams } from "react-router-dom";
 import DisplayAllPatientCard from "../../Components/displayAllPatientCard"
 
 
 export default function AllPatient() {
-
-    const params = useParams();
-
-    let critical = true
     const firebase = usefirebase();
     const auth = getAuth();
     console.log(firebase);
@@ -33,7 +27,7 @@ export default function AllPatient() {
 
     const medicalRecord = [patientData]
     console.log("Making a card of data:", medicalRecord)
-                // *********   Doctor data ***************
+    // *********   Doctor data ***************
     const [docdata, setdocdata] = useState([]);
     useEffect(() => {
         const currentUser = auth.currentUser;

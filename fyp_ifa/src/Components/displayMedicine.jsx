@@ -1,18 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"
+
 
 export default function DisplayMedication(props) {
-    // this function receive medicine as props
-    // console.log("role",props.role)
-    // const [isPatient, setIsPatient] = React.useState(false)
-    // if (props.role === 'patient') {
-    //     setIsPatient(true)
-    // } else {
-    //     setIsPatient(false)
-    // }
-    const navigate = useNavigate();
-
-    // const navigationButton = {{isPatient ? View: Edit}}
 
     return (
         <>

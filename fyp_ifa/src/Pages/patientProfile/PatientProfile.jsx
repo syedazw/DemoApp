@@ -36,7 +36,7 @@ export default function PatientProfile() {
         })
     }, [])
 
-    
+
     // 3. Medication
     const [med, setmed] = useState([]);
     useEffect(() => {
@@ -77,7 +77,7 @@ export default function PatientProfile() {
     }, []);
 
 
-    
+
 
 
 
@@ -91,8 +91,8 @@ export default function PatientProfile() {
 
                 <div className="row bg-color text-light pt-4">
                     <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
-                    {docdata.length > 0 && <div className="col-sm-12 col-md-2">  
-                    <h6 className="text-center">Dr. {docdata[0].data.fullname}</h6></div>}
+                    {docdata.length > 0 && <div className="col-sm-12 col-md-2">
+                        <h6 className="text-center">Dr. {docdata[0].data.fullname}</h6></div>}
                     <div className="col-sm-12 col-md-6 d-flex justify-content-start">
                         <form className="d-flex-inline mx-4" role="search"><input className="form-control col-sm-5" type="search" placeholder="Search" aria-label="Search"></input></form>
                         <i className="bi bi-bell-fill" style={{ color: "yellow" }}></i>
@@ -143,8 +143,8 @@ export default function PatientProfile() {
                                 {...item.data} />
                         ))}
                     </div>
-                    <div className="col-sm-4 col-md-6">
-                    {medicalRecord.map((item) => (
+                    <div className="col-md-6">
+                        {medicalRecord.map((item) => (
                             <Cardiogram key={item.id}
                                 id={item.id}
                                 {...item.data} />
@@ -152,6 +152,7 @@ export default function PatientProfile() {
                     </div>
                 </div>
             </div>
+
 
             <div className="container-fluid mt-2">
                 <div className="row">

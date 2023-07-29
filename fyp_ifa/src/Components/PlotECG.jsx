@@ -27,6 +27,8 @@ const Cardiogram = (props) => {
   const [alarm, setAlarm] = useState(false)
   const [electrodeVal, setelectrodeVal] = useState(false)
 
+  const criticalValues = []
+
   useEffect(() => {
     const context = new AudioContext();  // Creating an audio context object 'context' which handle audio processing in the browser
     const oscillator = context.createOscillator();  // Creating an instance to generate periodic waveform
@@ -68,7 +70,8 @@ const Cardiogram = (props) => {
 
         if (checkarray.length > 15) {
           console.log("checkarray", checkarray)
-          let checkHeart = checkarray.filter(e => e > 400 && e < 800)
+          let checkHeart = checkarray.filter(e => e > 1000 || e < 100)
+
           setelectrodeVal(true)
           console.log("heart", checkHeart)
 
@@ -79,8 +82,8 @@ const Cardiogram = (props) => {
             setIsSounding(true)
             console.log("------------------", checkHeart)
 
-          } else if (checkHeart.length > 200) {
-            checkHeart.length = 0
+          } else if (checkHeart.length >= 20) {
+            criticalValues.length = 0
             gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
             setIsSounding(false);
             setAlarm(false)
@@ -106,9 +109,6 @@ const Cardiogram = (props) => {
     }, [data])
 
 
-
-
-
   const putDatanew = () => {
     firebase.putdatafire(params.PatientID, data);
   };
@@ -117,6 +117,7 @@ const Cardiogram = (props) => {
 
   return (
     <>
+
       <div className="card m-2 col-sm-12 col-md-4" style={{ width: "25rem", height: "32rem", borderColor: alarm ? 'red' : '#041342' }}>
         <p className="card-text px-3 mb-0 fw-bold">Patient Name: {props.fullname}</p>
         <p className="card-text px-3 mt-0 mb-0 fw-bold d-inline">Device Status:{deviceStatus ? <p className="d-inline text-success"> Connected </p> : <p className="d-inline text-danger"> Not Connected </p>}</p>

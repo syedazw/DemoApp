@@ -26,12 +26,12 @@ export default function PatientInfo() {
         homeAddress: "",
         isCritical: false,
         gender: "",
-        method:"",
+        method: "",
         deviceName: "",
-        deviceToken:"",
+        deviceToken: "",
         deviceAssignDate: ""
     })
-    
+
     const [isfill, setIsFill] = React.useState(true)
     // const [image, setImage] = React.useState("https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80")
     console.log(patientRegister)
@@ -72,16 +72,16 @@ export default function PatientInfo() {
 
         if (!patientRegister.email.endsWith("@patient.com")) {
             return toast.error("Only patient.com email domains are allowed", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "colored",
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
             });
-          }
+        }
 
         const collectionName = "Patients";
         const data = {
@@ -111,51 +111,33 @@ export default function PatientInfo() {
             // Add data to Firestore
             const result = await firebase.uploadDataToFirestore(collectionName, data);
             console.log("Successfully added patient data with generated id", result);
-      
+
             // Create a new patient account
             const newAccount = await firebase.signupUserWithEmailAndPassword(
-              patientRegister.email,
-              patientRegister.password
+                patientRegister.email,
+                patientRegister.password
             );
             console.log("Patient Account successfully created", newAccount);
-          } catch (error) {
+        } catch (error) {
             console.error(
-              "Error occurred while saving data or creating account:",
-              error.message
+                "Error occurred while saving data or creating account:",
+                error.message
             );
             // Handle the error if needed
-          }
+        }
     };
 
     return (
         // input type --> text: first name, last name, email, phone, state, date of birth, address, city, country
         // input type --> checkbox: Member of any other medical association
         <>
-        <div className="row bg-color text-light pt-4">
-            <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
-                    <div className="col-sm-12 col-md-6 d-flex justify-content-start">
-                        <div className="dropdown pb-4 mx-4 ms-auto">
-                            <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="hugenerd" width="30" height="30" className="rounded-circle" />
-                                {/* <span className="d-none d-sm-inline mx-1"></span> */}
-                            </a>
-                            <ul className="dropdown-menu text-small shadow">
-                                <li><Link to="#" className="dropdown-item">Upload Picture</Link></li>
-                                <li><Link to="#" className="dropdown-item">Edit Profile</Link></li>
-                                <li><hr className="dropdown-divider" /></li>
-                                <li><a className="dropdown-item"><Link to="/loginpage" className="nav-link">Sign Out</Link></a></li>
-                                <Outlet />
-                            </ul>
-                        </div>
-                    </div>
-            </div>
             <div className="container-fluid mt-5">
                 <div className="row">
-                    <div className="col-sm-8 col-md-10 mx-auto"> 
-                        <form className="row g-3 needs-validation" onSubmit={addPatientData}>                           
+                    <div className="col-sm-8 col-md-10 mx-auto">
+                        <form className="row g-3 needs-validation" onSubmit={addPatientData}>
                             <div className="col-sm-12 col-md-3">
-                                <label htmlFor="validationCustom01" className="form-label fw-bold mb-0">Full Name:</label>
-                                <input type="text" className="form-control" id="validationCustom01" required name="fullname" value={patientRegister.fullname} onChange={handleChange} />
+                                <label htmlFor="validationCustomFullName" className="form-label fw-bold mb-0">Full Name:</label>
+                                <input type="text" className="form-control" id="validationCustomFullName" required name="fullname" value={patientRegister.fullname} onChange={handleChange} />
                                 <div className="valid-feedback">Looks good!</div>
                             </div>
 
@@ -173,7 +155,7 @@ export default function PatientInfo() {
                             </div>
 
 
-                           
+
 
 
                             <div className="col-sm-12 col-md-3">
@@ -215,8 +197,8 @@ export default function PatientInfo() {
                             </div>
 
                             <div className="col-sm-12 col-md-2">
-                                <label htmlFor="validationCustom10" className="form-label mb-0 fw-bold">Gender:</label>
-                                <select className="form-select" id="validationCustom10" required name="gender" value={setpatientRegister.gender} onChange={handleChange}>
+                                <label htmlFor="validationCustomGender" className="form-label mb-0 fw-bold">Gender:</label>
+                                <select className="form-select" id="validationCustomGender" required name="gender" value={setpatientRegister.gender} onChange={handleChange}>
                                     <option defaultValue disabled selected>Select Gender</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
@@ -226,8 +208,8 @@ export default function PatientInfo() {
 
 
                             <div className="col-md-2">
-                                <label htmlFor="validationCustom09" className="form-label mb-0 fw-bold">Age:</label>
-                                <select className="form-select" id="validationCustom09" required name="age" value={setpatientRegister.age} onChange={handleChange}>
+                                <label htmlFor="validationCustomAge" className="form-label mb-0 fw-bold">Age:</label>
+                                <select className="form-select" id="validationCustomAge" required name="age" value={setpatientRegister.age} onChange={handleChange}>
                                     <option defaultValue selected disabled>Choose...</option>
                                     <option value="40">40</option>
                                     <option value="41">41</option>
@@ -251,8 +233,8 @@ export default function PatientInfo() {
 
 
                             <div className="col-md-2">
-                                <label htmlFor="validationCustom10" className="form-label mb-0 fw-bold">Weight:</label>
-                                <select className="form-select" id="validationCustom10" required name="weight" value={setpatientRegister.weight} onChange={handleChange}>
+                                <label htmlFor="validationCustomWeight" className="form-label mb-0 fw-bold">Weight:</label>
+                                <select className="form-select" id="validationCustomWeight" required name="weight" value={setpatientRegister.weight} onChange={handleChange}>
                                     <option defaultValue disabled selected>Choose...</option>
                                     <option value="50">50 kg</option>
                                     <option value="60">60 kg</option>
@@ -292,8 +274,8 @@ export default function PatientInfo() {
                             </div>
 
                             <div className="col-sm-12 col-md-12">
-                                <label htmlFor="validationCustom09" className="form-label mb-0 fw-bold">Home Address:</label>
-                                <textarea className="form-control h-75" id="validationCustom09" required name="homeAddress" value={patientRegister.homeAddress} onChange={handleChange} />
+                                <label htmlFor="validationCustomHomeAddress" className="form-label mb-0 fw-bold">Home Address:</label>
+                                <textarea className="form-control h-75" id="validationCustomHomeAddress" required name="homeAddress" value={patientRegister.homeAddress} onChange={handleChange} />
                                 <div className="valid-feedback">Looks good!</div>
                             </div>
 
@@ -311,8 +293,8 @@ export default function PatientInfo() {
                             <p className="fw-bold h4 mb-0 text-decoration-underline">DEVICE INFORMATION</p>
 
                             <div className="col-sm-12 col-md-3">
-                                <label htmlFor="validationCustom01" className="form-label fw-bold mb-0">Device Name:</label>
-                                <input type="text" className="form-control" id="validationCustom01" required name="deviceName" value={patientRegister.deviceName} onChange={handleChange} />
+                                <label htmlFor="validationCustomDeviceName" className="form-label fw-bold mb-0">Device Name:</label>
+                                <input type="text" className="form-control" id="validationCustomDeviceName" required name="deviceName" value={patientRegister.deviceName} onChange={handleChange} />
                                 <div className="valid-feedback">Looks good!</div>
                             </div>
 
@@ -329,17 +311,17 @@ export default function PatientInfo() {
                             </div>
 
                             <div className="col-sm-12 col-md-6">
-                                <label htmlFor="validationCustom01" className="form-label fw-bold mb-0">Method:</label>
-                                <input type="text" className="form-control" id="validationCustom01" required name="method" value={patientRegister.method} onChange={handleChange} />
+                                <label htmlFor="validationCustomMethod" className="form-label fw-bold mb-0">Method:</label>
+                                <input type="text" className="form-control" id="validationCustomMethod" required name="method" value={patientRegister.method} onChange={handleChange} />
                                 <div className="valid-feedback">Looks good!</div>
                             </div>
 
                             <div className="col-sm-12 col-md-12">
-                                <label htmlFor="validationCustom09" className="form-label mb-0 fw-bold">Bearer Token:</label>
-                                <textarea className="form-control h-50" id="validationCustom09" required name="deviceToken" value={patientRegister.deviceToken} onChange={handleChange} />
+                                <label htmlFor="validationCustomToken" className="form-label mb-0 fw-bold">Bearer Token:</label>
+                                <textarea className="form-control h-50" id="validationCustomToken" required name="deviceToken" value={patientRegister.deviceToken} onChange={handleChange} />
                                 <div className="valid-feedback">Looks good!</div>
                             </div>
-                            
+
                             <div className="col-12">
                                 <button className="btn" type="submit" onClick={addPatientData} style={{ color: "white", backgroundColor: "#041342" }}>CREATE ACCOUNT</button>
                             </div>

@@ -1,5 +1,6 @@
 import React from "react"
 import { usefirebase } from '../context/firebase'
+import { toast } from "react-toastify";
 // import LoginUser from "./loginUser";
 // import Swal from 'sweetalert2';
 // import Alert from '../App';
@@ -20,16 +21,16 @@ export default function AddDoctor() {
         gender: ""
     })
 
-    const handleSubmit = (event) =>{
-        event.preventDefault();
+    // const handleSubmit = (event) =>{
+    //     event.preventDefault();
 
-        if (patientRegister.fullname === '' || patientRegister.careTaker === '' || patientRegister.assistant === '' || patientRegister.email === ''){
-            alert("Please fill all fields first");
-        }else{
-            //submit form
-        }
-        addPatientData();
-    };
+    //     if (patientRegister.fullname === '' || patientRegister.careTaker === '' || patientRegister.assistant === '' || patientRegister.email === ''){
+    //         alert("Please fill all fields first");
+    //     }else{
+    //         //submit form
+    //     }
+    //     addPatientData();
+    // };
 
     const [isfill, setIsFill] = React.useState(true)
     // const [image, setImage] = React.useState("https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80")
@@ -64,10 +65,25 @@ export default function AddDoctor() {
 
     // FUNCTION TO STORE INPUT DATA IN FIRESTORE
 
-    const addDoctorData = (event) => {
+    const addDoctorData = async (event) => {
         event.preventDefault();
 
         // Add data to firestore
+
+        if (!doctorRegister.email.endsWith("@doctor.com")) {
+            return toast.error("Only doctor.com email domains are allowed", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          }
+
+
         const collectionName = "Doctor";
         const data = {
             fullname: doctorRegister.fullname,
@@ -78,12 +94,27 @@ export default function AddDoctor() {
             age: doctorRegister.age,
             gender: doctorRegister.gender
         }
-        let password = 12345678
-        const result = firebase.uploadDataToFirestore(collectionName, data);
-        console.log("suucessfully added doctor data with generated id", result); // result shows id of collection
-        const newAccount = firebase.signupUserWithEmailAndPassword(doctorRegister.email, password)
-        console.log("Doctor Account successfully created", newAccount)
-    }
+
+        try {
+            // Add data to Firestore
+            const result = await firebase.uploadDataToFirestore(collectionName, data);
+            console.log("suucessfully added doctor data with generated id", result); // result shows id of collection
+      
+            // Create a new patient account
+            const newAccount = await firebase.signupUserWithEmailAndPassword(
+                doctorRegister.email,
+                doctorRegister.password
+                );
+            console.log("Doctor Account successfully created", newAccount)
+
+            } catch (error) {
+            console.error(
+              "Error occurred while saving data or creating account:",
+              error.message
+            );
+            // Handle the error if needed
+          }
+    };
 
 
     return (

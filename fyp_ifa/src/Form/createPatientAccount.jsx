@@ -1,7 +1,11 @@
 import React from "react"
 import { usefirebase } from '../context/firebase'
+import { toast } from "react-toastify";
+import { Outlet, Link } from "react-router-dom"
 
 export default function PatientInfo() {
+
+
     const firebase = usefirebase();
     console.log('firebase', firebase);
     // creating an state
@@ -61,9 +65,24 @@ export default function PatientInfo() {
 
     // FUNCTION TO STORE INPUT DATA IN FIRESTORE
 
-    const addPatientData = (event) => {
+    const addPatientData = async (event) => {
         event.preventDefault();
+
         // Add data to firestore
+
+        if (!patientRegister.email.endsWith("@patient.com")) {
+            return toast.error("Only patient.com email domains are allowed", {
+              position: "top-right",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
+          }
+
         const collectionName = "Patients";
         const data = {
             fullname: patientRegister.fullname,
@@ -86,18 +105,50 @@ export default function PatientInfo() {
             deviceName: patientRegister.deviceName,
             deviceToken: patientRegister.deviceToken,
             deviceAssignDate: patientRegister.deviceAssignDate
-        }
-        const result = firebase.uploadDataToFirestore(collectionName, data);
-        console.log("suucessfully added patient data with generated id", result); // result shows id of collection
-        const newAccount = firebase.signupUserWithEmailAndPassword(patientRegister.email, patientRegister.password)
-        console.log("Patient Account successfully created", newAccount)
-    }
+        };
 
+        try {
+            // Add data to Firestore
+            const result = await firebase.uploadDataToFirestore(collectionName, data);
+            console.log("Successfully added patient data with generated id", result);
+      
+            // Create a new patient account
+            const newAccount = await firebase.signupUserWithEmailAndPassword(
+              patientRegister.email,
+              patientRegister.password
+            );
+            console.log("Patient Account successfully created", newAccount);
+          } catch (error) {
+            console.error(
+              "Error occurred while saving data or creating account:",
+              error.message
+            );
+            // Handle the error if needed
+          }
+    };
 
     return (
         // input type --> text: first name, last name, email, phone, state, date of birth, address, city, country
         // input type --> checkbox: Member of any other medical association
         <>
+        <div className="row bg-color text-light pt-4">
+            <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
+                    <div className="col-sm-12 col-md-6 d-flex justify-content-start">
+                        <div className="dropdown pb-4 mx-4 ms-auto">
+                            <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="hugenerd" width="30" height="30" className="rounded-circle" />
+                                {/* <span className="d-none d-sm-inline mx-1"></span> */}
+                            </a>
+                            <ul className="dropdown-menu text-small shadow">
+                                <li><Link to="#" className="dropdown-item">Upload Picture</Link></li>
+                                <li><Link to="#" className="dropdown-item">Edit Profile</Link></li>
+                                <li><hr className="dropdown-divider" /></li>
+                                <li><a className="dropdown-item"><Link to="/loginpage" className="nav-link">Sign Out</Link></a></li>
+                                <Outlet />
+                            </ul>
+                        </div>
+                    </div>
+            </div>
             <div className="container-fluid mt-5">
                 <div className="row">
                     <div className="col-sm-8 col-md-10 mx-auto"> 

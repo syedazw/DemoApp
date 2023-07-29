@@ -49,8 +49,12 @@ export const FirebaseProvider = (props) => {
         });
     }, []);
     // creating a function for signup
-    const signupUserWithEmailAndPassword = (username, password) => {
-        return createUserWithEmailAndPassword(firebaseAuth, username, password);
+    const signupUserWithEmailAndPassword = async (username, password) => {
+        return await createUserWithEmailAndPassword(
+            firebaseAuth,
+            username, 
+            password
+        );
 
     };
 

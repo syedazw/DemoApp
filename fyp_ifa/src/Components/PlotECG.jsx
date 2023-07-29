@@ -4,6 +4,7 @@ import ApexChart from "./ChartView";
 import { usefirebase } from "../context/firebase";
 import { useParams, useNavigate } from "react-router-dom";
 import { getDatabase } from "firebase/database";
+import { notifyOnMobile } from "../utils/notify";
 
 
 
@@ -78,6 +79,8 @@ const Cardiogram = (props) => {
             gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
             setIsSounding(true)
             console.log("------------------", checkHeart)
+
+            // notifyOnMobile();
 
           } else if (checkHeart.length > 200) {
             checkHeart.length = 0

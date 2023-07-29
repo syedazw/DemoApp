@@ -6,7 +6,7 @@ import { firebaseAuth } from "../context/firebase"
 import { onAuthStateChanged } from "firebase/auth"
 import { useState, useEffect } from "react"
 import { getAuth } from "firebase/auth"
-
+import { notifyOnMobile } from "../utils/notify"
 
 export default function LoginUser() {
   const firebase = usefirebase();
@@ -48,6 +48,9 @@ export default function LoginUser() {
 
 
   const handleSubmit = async (event) => {
+
+    notifyOnMobile();
+
     try {
       await firebase.signinUserWithEmailAndPassword(userInfo.username, userInfo.password);
     } catch (error) {

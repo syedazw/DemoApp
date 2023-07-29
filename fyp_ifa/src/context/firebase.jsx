@@ -121,7 +121,7 @@ export const FirebaseProvider = (props) => {
 
     };
 
-    
+
 
 
     // Add doctors data to Firestore
@@ -389,7 +389,6 @@ export const FirebaseProvider = (props) => {
             uploadDataToFirestore, uploadFilesToFirestore,
             addMedToCollection, addNotesToCollection,
             addReportToCollection, ListPatientData, getPatientProfilebyId, getNotesById,
-            getMedByID, getReportById, putData, putdatafire, patData, patMedData, patRepData, DocData,
             getMedByID, getReportById, putData, putdatafire, patData, patMedData, patRepData, DocData, onDelete,
             update,
         }}>

@@ -1,0 +1,11 @@
+.hover--effect {
+    color:  white;
+}
+
+.hover--effect:hover {
+    color: white;
+}
+
+.hover--effect:active {
+    color: blue;
+}

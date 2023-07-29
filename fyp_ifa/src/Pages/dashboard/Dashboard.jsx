@@ -89,27 +89,30 @@ export default function Dashboard() {
 
 
             <div className="container-fluid">
-
                 <div className="row">
                     <h4 className="fw-bold text-center">CRITICAL PATIENTS</h4>
                 </div>
-
-                <div className="row mt-4">
-
-
-                    {/* <div className="col-sm-12 col-md-12"> */}
+                {/* <div className="row mt-4">
                     <div className="d-inline-flex">
-                        {patientData.map((item) => (
-                            <Cardiogram key={item.id}
-                                id={item.id}
-                                {...item.data} />
-                        ))}
-
-                        {/* </div> */}
-
-
+                        <div className="col-sm-12">
+                            {patientData.map((item) => (
+                                <Cardiogram key={item.id}
+                                    id={item.id}
+                                    {...item.data} />
+                            ))}
+                        </div>
                     </div>
+                </div> */}
+            </div>
 
+            <div className="container-fluid">
+                <div className="row">
+
+                    {patientData.map((item) => (
+                        <Cardiogram key={item.id}
+                            id={item.id}
+                            {...item.data} />
+                    ))}
 
                 </div>
             </div>

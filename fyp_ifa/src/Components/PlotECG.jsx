@@ -72,14 +72,15 @@ const Cardiogram = (props) => {
           setelectrodeVal(true)
           console.log("heart", checkHeart)
 
-          if (checkHeart.length > 0) {
+          if (checkHeart.length > 0 && checkHeart.length < 20) {
             console.log("Abnormality Detect")
             setAlarm(true)
             gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
             setIsSounding(true)
+            console.log("------------------", checkHeart)
 
-          } else {
-            checkHeart = []
+          } else if (checkHeart.length > 200) {
+            checkHeart.length = 0
             gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
             setIsSounding(false);
             setAlarm(false)
@@ -106,10 +107,7 @@ const Cardiogram = (props) => {
 
 
 
-  // const stopAlarm = () => {
-  //   gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
-  //   setIsSounding(false);
-  // };
+
 
   const putDatanew = () => {
     firebase.putdatafire(params.PatientID, data);
@@ -119,76 +117,26 @@ const Cardiogram = (props) => {
 
   return (
     <>
-
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-sm-12 col-md-6">
-            <p className="px-3 mb-0 fw-bold">Patient Name: {props.fullname}</p>
-
-            <p className="px-3 mt-0 fw-bold d-inline">Device Status:
-              {
-                deviceStatus ?
-                  <p className="d-inline text-success"> Connected </p>
-                  : <p className="d-inline text-danger"> Not Connected </p>
-              }
-            </p>
-
-            <p className="px-3 mt-0 mb-0 fw-bold d-block">Electrodes Status:
-              {
-                electrodeVal ?
-                  (<p className="d-inline text-success"> Connected</p>)
-                  :
-                  (<p className="d-inline text-danger"> Not Connected </p>)
-              }
-            </p>
-
-            <p className="px-3 pt-0 mt-0 fw-bold d-block">Patient Condition:
-              {
-                alarm ?
-                  (
-                    <p className="d-inline text-danger"> Abnormality Detect </p>
-                  )
-
-                  : (
-                    <p className="d-inline text-success"> Normal </p>
-                  )
-              }
-            </p>
-
-
+      <div className="card m-2 col-sm-12 col-md-4" style={{ width: "25rem", height: "32rem", borderColor: alarm ? 'red' : '#041342' }}>
+        <p className="card-text px-3 mb-0 fw-bold">Patient Name: {props.fullname}</p>
+        <p className="card-text px-3 mt-0 mb-0 fw-bold d-inline">Device Status:{deviceStatus ? <p className="d-inline text-success"> Connected </p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
+        <p className="card-text px-3 mt-0 mb-0 fw-bold d-block">Electrodes Status:{electrodeVal ? <p className="d-inline text-success mt-0"> Connected</p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
+        <p className="px-3 pt-0 mt-0 fw-bold d-block">Patient Condition:{alarm ? (<p className="d-inline text-danger"> Abnormality Detect </p>) : (<p className="d-inline text-success"> Normal </p>)}</p>
+        <div className="card-body">
+          <ApexChart data={data} title="Patient ECG" />
+          <div className="btn-group">
+            <button className="btn text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
+            <button className="btn text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
           </div>
-
-
-
-
-
-        </div>
-
-
-
-
-        <div className="row">
-          <div className="col-md-6">
-            <ApexChart data={data} title="Patient ECG" />
-            <div className="btn-group">
-              <button className="btn text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
-              <button className="btn text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
-            </div>
-
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-sm-12 col-md-6 mx-auto">
-            <button type="button" className="btn btn-success btn-width mb-2 d-block" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button>
-            {isSounding ? <button onClick={() => {
+          <button type="button" className="btn btn-success btn-width mb-2 mx-auto d-block" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button>
+          {isSounding ? <button
+            data-playing="false" role="switch" aria-checked="false"
+            onClick={() => {
               gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
               setIsSounding(false);
-            }} className="btn btn-danger btn-width pt-0 mt-0">Stop Alarm</button> : null}
-          </div>
+            }} className="btn btn-danger btn-width pt-0 mx-auto">Stop Alarm</button> : null}
         </div>
       </div>
-
     </>
 
 

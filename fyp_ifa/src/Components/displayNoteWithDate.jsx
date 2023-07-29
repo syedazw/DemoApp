@@ -1,24 +1,9 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom"
-import { useNavigate } from "react-router-dom";
 
 export default function DisplayNotesWithDate(props) {
     console.log("receiving props---", props);
-    // const array = [
-    //     {
-    //         term: "2023-04-06",
-    //         description: "Take medicine on time"
-    //     },
-    //     {
-    //         term: "2023-04-06",
-    //         description: "Take medicine on time"
-    //     },
-    //     {
-    //         term: "2023-04-06",
-    //         description: "Take medicine on time"
-    //     },
-    // ]
-    const navigate = useNavigate();
+
+
     return (
         <>
             <ul className="list-unstyled">

@@ -8,8 +8,6 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import { getFirestore, addDoc, doc, getDoc, collection, serverTimestamp, getDocs, query, deleteDoc, updateDoc, setDoc } from "firebase/firestore";
 import { getStorage, uploadBytes, ref as ref_storage } from 'firebase/storage'
 import { getDatabase, set, ref as ref_database } from "firebase/database";
-
-
 // export const [restrictAccess, setRestrictAccess] = useState(false)
 
 
@@ -19,7 +17,7 @@ const firebaseConfig = {
     authDomain: "heartaid-app.firebaseapp.com",
     projectId: "heartaid-app",
     storageBucket: "heartaid-app.appspot.com",
-    messagingSenderId: "119958904964",
+    // messagingSenderId: "119958904964",
     appId: "1:119958904964:web:bb21f11164fe56d5b362d1",
     databaseURL: "https://heartaid-app-default-rtdb.firebaseio.com/"
 };
@@ -51,8 +49,12 @@ export const FirebaseProvider = (props) => {
         });
     }, []);
     // creating a function for signup
-    const signupUserWithEmailAndPassword = (username, password) => {
-        return createUserWithEmailAndPassword(firebaseAuth, username, password);
+    const signupUserWithEmailAndPassword = async (username, password) => {
+        return await createUserWithEmailAndPassword(
+            firebaseAuth,
+            username, 
+            password
+        );
 
     };
 
@@ -118,6 +120,9 @@ export const FirebaseProvider = (props) => {
 
 
     };
+
+
+
 
     // Add doctors data to Firestore
 
@@ -327,7 +332,7 @@ export const FirebaseProvider = (props) => {
             draggable: true,
             progress: undefined,
             theme: "colored",
-            });
+        });
     }
 
     const update = async (patientID) => {
@@ -355,7 +360,7 @@ export const FirebaseProvider = (props) => {
                         draggable: true,
                         progress: undefined,
                         theme: "colored",
-                        });
+                    });
                     console.log("Device token updated successfully");
                 } else {
                     console.log("Document does not exist");
@@ -371,11 +376,11 @@ export const FirebaseProvider = (props) => {
     //     const patientData = querySnapshot.docs.map((doc) => ({
     //         id: doc.id,
     //         data: doc.data(),
-            
+
     //     }));
     //     return patientData;
     // };
-   
+
 
 
     return (
@@ -384,9 +389,8 @@ export const FirebaseProvider = (props) => {
             uploadDataToFirestore, uploadFilesToFirestore,
             addMedToCollection, addNotesToCollection,
             addReportToCollection, ListPatientData, getPatientProfilebyId, getNotesById,
-            getMedByID, getReportById, putData, putdatafire, patData, patMedData, patRepData, DocData,
             getMedByID, getReportById, putData, putdatafire, patData, patMedData, patRepData, DocData, onDelete,
-             update,
+            update,
         }}>
             {props.children}
         </FirebaseContext.Provider>

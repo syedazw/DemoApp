@@ -32,7 +32,7 @@ export default function SpecificPatientInfo(props) {
                             <div className="d-flex justify-content-center">
                                 <div className="btn btn-group">
                                     <button className="btn text-dark bg-light">Status</button>
-                                    <button className={critical ? "btn btn-danger" : "btn btn-success"}>{critical ? "Critical" : "Normal"}</button>
+                                    <button className={props.critical ? "btn btn-danger" : "btn btn-success"}>{props.critical ? "Critical" : "Normal"}</button>
                                 </div>
                             </div>
                             <div className="row">

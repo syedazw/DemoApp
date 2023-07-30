@@ -112,11 +112,13 @@ const Cardiogram = (props) => {
   };
 
   console.log("Passing the data as", data)
+  const allowToView = props.allow
+  const newHeight = props.height
 
   return (
     <>
 
-      <div className="card mx-2 col-sm-12 col-md-4" style={{ width: "25rem", height: "30.5rem", borderColor: alarm ? 'red' : '#041342' }}>
+      <div className="card mx-2 col-sm-12 col-md-4" style={{ width: "25rem", height: newHeight, borderColor: alarm ? 'red' : '#041342' }}>
         <p className="card-text mx-3 px-3 mb-0 fw-bold">Patient Name: {props.fullname}</p>
         <p className="card-text mx-3 px-3 mt-0 mb-0 fw-bold d-inline">Device Status:{deviceStatus ? <p className="d-inline text-success"> Connected </p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
         <p className="card-text mx-3 px-3 mt-0 mb-0 fw-bold d-block">Electrodes Status:{electrodeVal ? <p className="d-inline text-success mt-0"> Connected</p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
@@ -127,7 +129,13 @@ const Cardiogram = (props) => {
             <button className="btn text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
             <button className="btn text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
           </div>
-          <button type="button" className="btn btn-success btn-width mb-2 mx-auto d-block" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button>
+          <br></br>
+          {
+            newHeight === "30rem" ?
+              <button type="button" className="btn btn-success btn-width mb-2 mx-auto d-block" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button> :
+              null
+          }
+
           {isSounding ? <button
             data-playing="false" role="switch" aria-checked="false"
             onClick={() => {
@@ -135,6 +143,7 @@ const Cardiogram = (props) => {
               setIsSounding(false);
             }} className="btn btn-danger btn-width pt-0 mx-auto">Stop Alarm</button> : null}
         </div>
+
       </div>
     </>
 

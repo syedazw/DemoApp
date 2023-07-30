@@ -47,7 +47,6 @@ export default function PatientProfile() {
     }, [])
 
 
-
     // 4. Report
     const [report, setReport] = useState([]);
     useEffect(() => {
@@ -143,14 +142,20 @@ export default function PatientProfile() {
                                 {...item.data} />
                         ))}
                     </div>
-                    <div className="col-md-6">
-                        {medicalRecord.map((item) => (
+
+
+                    {
+                        medicalRecord.map((item) => (
                             <Cardiogram key={item.id}
                                 id={item.id}
-                                {...item.data} />
-                        ))}
-                    </div>
+                                {...item.data} height={"28rem"} allow={false} />
+                        ))
+                    }
+
+
                 </div>
+
+
             </div>
 
 

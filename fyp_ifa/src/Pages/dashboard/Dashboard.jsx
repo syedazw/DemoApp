@@ -100,7 +100,7 @@ export default function Dashboard() {
                     {patientData.map((item) => (
                         <Cardiogram key={item.id}
                             id={item.id}
-                            {...item.data} />
+                            {...item.data} height={"30rem"} />
                     ))}
 
                 </div>

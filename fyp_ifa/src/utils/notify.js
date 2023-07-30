@@ -1,4 +1,4 @@
-export function notifyOnMobile() {
+export function notifyOnMobile(information) {
   if (!("Notification" in window)) {
     console.log("This browser does not support desktop notification");
   }
@@ -17,7 +17,7 @@ export function notifyOnMobile() {
   function showNotification() {
     if (Notification.permission === "granted") {
       const notificationOptions = {
-        body: "Something went wrong!",
+        body: information,
         icon: "path_to_icon.png",
       };
 

@@ -3,11 +3,11 @@ import Chart from "react-apexcharts";
 
 export default function ApexChart(props) {
 
-  let newArray = props.data.slice(-15); //separating last 15 numbers from array for plotting
+  let newArray = props.data.slice(-25); //separating last 25 numbers from array for plotting
 
   const series = [
     {
-      name: "xx",
+      name: "",
       data: newArray
     }
   ];
@@ -42,7 +42,7 @@ export default function ApexChart(props) {
   };
   return (
     <>
-      <Chart options={options} series={series} type="line" height={200} width={350} />
+      <Chart options={options} series={series} type="line" height={200} width={355} />
     </>
   );
 }

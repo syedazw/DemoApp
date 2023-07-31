@@ -12,14 +12,21 @@ import { getDatabase, set, ref as ref_database } from "firebase/database";
 
 
 
+const apiKey = import.meta.env.VITE_REACT_APP_apiKey;
+const authDomain = import.meta.env.VITE_REACT_APP_authDomain;
+const projectId = import.meta.env.VITE_REACT_APP_projectId;
+const storageBucket = import.meta.env.VITE_REACT_APP_storageBucket;
+const messagingSenderId = import.meta.env.VITE_REACT_APP_messagingSenderId;
+const appId = import.meta.env.VITE_REACT_APP_appId;
+const databaseURL = import.meta.env.VITE_REACT_APP_databaseURL;
 const firebaseConfig = {
-    apiKey: "AIzaSyAFMk6ZLOjY9KGIRJib0oGzDZ5t8mN8oCw",
-    authDomain: "heartaid-app.firebaseapp.com",
-    projectId: "heartaid-app",
-    storageBucket: "heartaid-app.appspot.com",
-    // messagingSenderId: "119958904964",
-    appId: "1:119958904964:web:bb21f11164fe56d5b362d1",
-    databaseURL: "https://heartaid-app-default-rtdb.firebaseio.com/"
+  apiKey,
+  authDomain,
+  projectId,
+  storageBucket,
+  messagingSenderId,
+  appId,
+  databaseURL,
 };
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);

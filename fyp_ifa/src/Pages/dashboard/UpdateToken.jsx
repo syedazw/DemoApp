@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
-import Cardiogram from "../../Components/PlotECG";
 import { Outlet, Link } from "react-router-dom"
-import { useParams } from "react-router-dom";
 import { usefirebase } from "../../context/firebase";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, where, query, getDocs } from "firebase/firestore";
+import DeviceInfo from "../admin/DeviceInfo";
 import DashboardNavigation from "../../Components/dashboardNavigation";
+// import DashboardNavigation from "../../Components/dashboardNavigation";
+// import DeviceInfo from "../admin/DeviceInfo";
+// import { usefirebase } from "../../context/firebase";
 
-export default function Dashboard() {
 
+export default function UpdatePatientToken(props) {
     const firebase = usefirebase();
     const auth = getAuth();
-    const firestore = getFirestore();
-    const params = useParams();
-    console.log("params is", params)
-
 
     const [patientData, setPatientData] = useState([]);
+
     useEffect(() => {
         firebase.ListPatientData()
             .then((querySnapshot) => {
@@ -32,7 +30,7 @@ export default function Dashboard() {
             });
     }, []);
 
-
+    // *********   Doctor data ***************
     const [docdata, setdocdata] = useState([]);
     useEffect(() => {
         const currentUser = auth.currentUser;
@@ -51,14 +49,21 @@ export default function Dashboard() {
     }, []);
 
 
+    const patdata = [patientData]
+    console.log("patiendata", patdata);
+
+
     return (
         <>
-            <div className="container-fluid">
+
+
+
+
+            < div className="container-fluid" >
                 <div className="row bg-color text-light pt-4">
                     <div className="col-sm-12 col-md-4"><h4 className="text-center">Immediate First Aid</h4></div>
-
-                    {docdata.length > 0 && <div className="col-sm-12 col-md-2"><h6 className="text-center">Welcome Dr. {docdata[0].data.fullname}</h6></div>}
-
+                    {docdata.length > 0 && <div className="col-sm-12 col-md-2">
+                        <h6 className="text-center">Dr. {docdata[0].data.fullname}</h6></div>}
                     <div className="col-sm-12 col-md-6 d-flex justify-content-start">
                         <form className="d-flex-inline mx-4" role="search">
                             <input className="form-control col-sm-5" type="search" placeholder="Search" aria-label="Search"></input>
@@ -70,39 +75,26 @@ export default function Dashboard() {
                                 <span className="d-none d-sm-inline mx-1"></span>
                             </a>
                             <ul className="dropdown-menu text-small shadow">
-                                {/* <li><Link to="#" className="dropdown-item">Upload Picture</Link></li>
+                                <li><Link to="#" className="dropdown-item">Upload Picture</Link></li>
                                 <li><Link to="#" className="dropdown-item">Edit Profile</Link></li>
-                                <li><hr className="dropdown-divider" /></li> */}
+                                <li><hr className="dropdown-divider" /></li>
                                 <li><a className="dropdown-item"><Link to="/loginpage" className="nav-link">Sign Out</Link></a></li>
                                 <Outlet />
                             </ul>
                         </div>
                     </div>
-
-
                     <div className="col-12">
                         <DashboardNavigation />
                     </div>
-
                 </div>
-            </div>
-
+            </div >
 
             <div className="container-fluid">
                 <div className="row">
-                    <h4 className="fw-bold text-center">DASHBOARD</h4>
-                </div>
-            </div>
-
-            <div className="container-fluid">
-                <div className="row">
-
-                    {patientData.map((item) => (
-                        <Cardiogram key={item.id}
-                            id={item.id}
-                            {...item.data} height={"30rem"} />
-                    ))}
-
+                    <div className="col-md-2"></div>
+                    <div className="col-md-8">
+                        <DeviceInfo heading={'UPDATE TOKEN'} />
+                    </div>
                 </div>
             </div>
 

@@ -69,11 +69,12 @@ const Cardiogram = (props) => {
 
         if (checkarray.length > 15) {
           console.log("checkarray", checkarray)
-          let checkHeart = checkarray.filter(e => e > 400 && e < 800)
+          let checkHeart = checkarray.filter(e => e > 1000 || e < 100)
+
           setelectrodeVal(true)
           console.log("heart", checkHeart)
 
-          if (checkHeart.length > 0 && checkHeart.length < 20) {
+          if (checkHeart.length > 0) {
             console.log("Abnormality Detect")
             setAlarm(true)
             gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // set volume to 0.5
@@ -82,7 +83,7 @@ const Cardiogram = (props) => {
 
             // notifyOnMobile();
 
-          } else if (checkHeart.length > 200) {
+          } else if (checkHeart.length >= 20) {
             checkHeart.length = 0
             gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
             setIsSounding(false);
@@ -109,29 +110,35 @@ const Cardiogram = (props) => {
     }, [data])
 
 
-
-
-
   const putDatanew = () => {
     firebase.putdatafire(params.PatientID, data);
   };
 
   console.log("Passing the data as", data)
+  const allowToView = props.allow
+  const newHeight = props.height
 
   return (
     <>
-      <div className="card m-2 col-sm-12 col-md-4" style={{ width: "25rem", height: "32rem", borderColor: alarm ? 'red' : '#041342' }}>
-        <p className="card-text px-3 mb-0 fw-bold">Patient Name: {props.fullname}</p>
-        <p className="card-text px-3 mt-0 mb-0 fw-bold d-inline">Device Status:{deviceStatus ? <p className="d-inline text-success"> Connected </p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
-        <p className="card-text px-3 mt-0 mb-0 fw-bold d-block">Electrodes Status:{electrodeVal ? <p className="d-inline text-success mt-0"> Connected</p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
-        <p className="px-3 pt-0 mt-0 fw-bold d-block">Patient Condition:{alarm ? (<p className="d-inline text-danger"> Abnormality Detect </p>) : (<p className="d-inline text-success"> Normal </p>)}</p>
+
+      <div className="card mx-2 col-sm-12 col-md-4" style={{ width: "25rem", height: newHeight, borderColor: alarm ? 'red' : '#041342' }}>
+        <p className="card-text mx-3 px-3 mb-0 fw-bold">Patient Name: {props.fullname}</p>
+        <p className="card-text mx-3 px-3 mt-0 mb-0 fw-bold d-inline">Device Status:{deviceStatus ? <p className="d-inline text-success"> Connected </p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
+        <p className="card-text mx-3 px-3 mt-0 mb-0 fw-bold d-block">Electrodes Status:{electrodeVal ? <p className="d-inline text-success mt-0"> Connected</p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
+        <p className="px-3 pt-0 mx-3 mt-0 fw-bold d-block">Patient Condition:{alarm ? (<p className="d-inline text-danger"> Abnormality Detect </p>) : (<p className="d-inline text-success"> Normal </p>)}</p>
         <div className="card-body">
           <ApexChart data={data} title="Patient ECG" />
           <div className="btn-group">
             <button className="btn text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
             <button className="btn text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
           </div>
-          <button type="button" className="btn btn-success btn-width mb-2 mx-auto d-block" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button>
+          <br></br>
+          {
+            newHeight === "30rem" ?
+              <button type="button" className="btn btn-success btn-width mb-2 mx-auto d-block" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button> :
+              null
+          }
+
           {isSounding ? <button
             data-playing="false" role="switch" aria-checked="false"
             onClick={() => {
@@ -139,6 +146,7 @@ const Cardiogram = (props) => {
               setIsSounding(false);
             }} className="btn btn-danger btn-width pt-0 mx-auto">Stop Alarm</button> : null}
         </div>
+
       </div>
     </>
 

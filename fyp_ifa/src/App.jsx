@@ -44,6 +44,7 @@ import HomeCardiogram from './Pages/home/homeCardiogram'
 import CriticalPatient from './Pages/dashboard/criticalPatient'
 import CreateAccountbyAdmin from './Pages/admin/createAccountByAdmin'
 import CreateDoctorAccount from './Pages/admin/CreateDoctorAccount'
+import UpdatePatientToken from './Pages/dashboard/UpdateToken'
 
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
           <Route path="/dashboard/add/patient" element={< AddPatient />}> </Route>
           <Route path="/dashboard/remove/patient" element={<RemovePatient />}> </Route>
           <Route path="/dashboard/critical/patient" element={<CriticalPatient />}> </Route>
+          <Route path="/dashboard/update/token" element={<UpdatePatientToken />}> </Route>
 
 
           {/* patient profile pages */}

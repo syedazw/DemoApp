@@ -43,6 +43,14 @@ export default function RemovePatient() {
             });
     }, []);
 
+    const handleDelete = (PatientID) =>{
+        firebase.onDelete(PatientID);
+        // Update local state by removing the deleted item
+      setPatientData((prevData) =>
+      prevData.filter((item) => item.id !== PatientID)
+    );
+    };
+
 
     const patdata = [patientData]
     console.log("patiendata", patdata);
@@ -111,7 +119,7 @@ export default function RemovePatient() {
                                         <td scope="row">{item.data.fullname}</td>
                                         <td scope="row">{item.data.assistant}
                                         </td>
-                                        <td><button className="bg-color text-light">Remove</button></td>
+                                        <td><button className="bg-color text-light" onClick={() => {handleDelete(item.id)}}>Remove</button></td>
                                     </tr>
                                 ))}
                             </tbody>

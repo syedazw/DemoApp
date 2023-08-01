@@ -45,6 +45,7 @@ import CriticalPatient from './Pages/dashboard/criticalPatient'
 import CreateAccountbyAdmin from './Pages/admin/createAccountByAdmin'
 import CreateDoctorAccount from './Pages/admin/CreateDoctorAccount'
 import UpdatePatientToken from './Pages/dashboard/UpdateToken'
+import UpdatePatientTokenByAdmin from './Pages/admin/UpdatePatientToken'
 
 
 function App() {
@@ -57,7 +58,7 @@ function App() {
           <Route path="/admin/portal" element={<AdminPortal />}></Route>
           <Route path="/admin/create/account" element={<CreateDoctorAccount />}></Route>   {/* creating account with different user domain */}
           <Route path="/admin/create/patient/account" element={<CreateAccountbyAdmin />}></Route>
-          <Route path="/admin/view/device/info" element={<DeviceInfo />}></Route>
+          <Route path="/admin/view/device/info" element={<UpdatePatientTokenByAdmin />}></Route>
 
           {/*declaring the route for dashboard pages */}
           <Route path="/dashboard" element={< Dashboard />}></Route>

@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 
 
-export default function DeviceInfo() {
+export default function DeviceInfo(props) {
     const firebase = usefirebase();
     const params = useParams();
 
@@ -19,7 +19,7 @@ export default function DeviceInfo() {
                 {
                     const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     setpatdata(data);
-                    console.log("data",data)
+                    console.log("data", data)
                 }
             })
             .catch((err) => {
@@ -30,12 +30,12 @@ export default function DeviceInfo() {
 
     const [patientData, setPatientData] = useState([]);
 
-    const handleDelete = (PatientID) =>{
+    const handleDelete = (PatientID) => {
         firebase.onDelete(PatientID);
         // Update local state by removing the deleted item
-      setPatientData((prevData) =>
-      prevData.filter((item) => item.id !== PatientID)
-    );
+        setPatientData((prevData) =>
+            prevData.filter((item) => item.id !== PatientID)
+        );
     };
 
 
@@ -43,14 +43,14 @@ export default function DeviceInfo() {
         firebase.update(PatientID);
         // firebase.getPatientData()
     };
-   
+
 
     return (
 
         <>
             <div className="container-fluid">
                 <div className="row">
-                    <h4 className="fw-bold text-center pt-5">VIEW DEVICE INFORMATION</h4>
+                    <h4 className="fw-bold text-center">{props.heading}</h4>
                 </div>
 
                 <div className="row">
@@ -77,7 +77,7 @@ export default function DeviceInfo() {
                                             <td className="text-wrap" scope="row">'{item.data.deviceToken}'</td>
                                             <td><button className="btn btn-primary btn-width text-light" onClick={() => handleUpdate(item.id)}>Edit Token</button>
                                                 <button className="btn btn-danger btn-width mt-2" onClick={() => handleDelete(item.id)}>Delete Kit</button>
-                                               
+
                                             </td>
                                         </tr>
                                     ))}

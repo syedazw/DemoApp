@@ -13,13 +13,14 @@ import {
 } from "firebase/firestore";
 import DashboardNavigation from "../../Components/dashboardNavigation";
 import { filterSearch } from "../../utils/search";
+import { Error } from "../../utils/toastify";
 
 export default function Dashboard() {
   const firebase = usefirebase();
   const auth = getAuth();
   const firestore = getFirestore();
   const params = useParams();
-  console.log("params is", params);
+  // console.log("params is", params);
 
   const [patientData, setPatientData] = useState([]);
   useEffect(() => {
@@ -27,8 +28,6 @@ export default function Dashboard() {
       .ListPatientData()
 
       .then((querySnapshot) => {
-        console.log({ querySnapshot });
-
         // querySnapshot?.docs?.map((value) => {
         //   console.log({ value });
         // });
@@ -39,12 +38,10 @@ export default function Dashboard() {
         // setPatientData(data);
         const filteredData = filterSearch(data);
 
-        console.log({ filteredData });
         setPatientData(filteredData);
-        console.log("data");
       })
       .catch((err) => {
-        console.error(err);
+        // console.error(err);
         setError("Error retrieving patient data.");
       });
   }, []);
@@ -63,7 +60,8 @@ export default function Dashboard() {
         setdocdata(matchingData);
       })
       .catch((error) => {
-        console.log("Error fetching patient data:", error);
+        Error(error?.message);
+        // console.log("Error fetching patient data:", error);
       });
   }, []);
 
@@ -119,7 +117,7 @@ export default function Dashboard() {
                                 <li><hr className="dropdown-divider" /></li> */}
                 <li>
                   <a className="dropdown-item">
-                    <Link to="/loginpage" className="nav-link">
+                    <Link to="/" className="nav-link">
                       Sign Out
                     </Link>
                   </a>

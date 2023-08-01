@@ -33,41 +33,6 @@ export default function LoginUser2() {
       onAuthStateChanged(firebaseAuth, (user) => {
         if (user) {
           setuser(user);
-
-          // setUserID(prevValue => user.uid)
-          // setStoreEmail(value => user.email)
-
-          // check for admin domain
-          let userEmail = user.email;
-          // let userID = user.uid;
-
-          const domain = userEmail.split("@")[1];
-
-          // if (domain === "admin.com") {
-          //   console.log("Login as admin");
-          //   navigate("/admin/portal");
-          // } else if (domain === "doctor.com") {
-          //   console.log("Login as doctor");
-          //   navigate("/dashboard");
-          // } else if (domain === "patient.com") {
-          //   console.log("Login as patient");
-          //   navigate("/home");
-          // } else {
-          //   console.log("Invalid email domain");
-          //   navigate("/");
-          // }
-
-          // if (userEmail.slice(-10) === "@admin.com") {
-          //   console.log("Login as admin");
-          // } else if (userEmail.slice(-11) === "@doctor.com") {
-          //   console.log("Login as doctor");
-          //   navigate("/dashboard");
-          // } else if (userEmail.slice(-12) === "@patient.com") {
-          //   console.log("Login as patient");
-          //   navigate("/home");
-          // } else {
-          //   navigate("/");
-          // }
         } else {
           console.log("Fail to get user");
         }

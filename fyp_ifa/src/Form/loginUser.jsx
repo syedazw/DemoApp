@@ -48,52 +48,92 @@ export default function LoginUser() {
     });
   }
 
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     onAuthStateChanged(firebaseAuth, (user) => {
+  //       if (user) {
+  //         setuser(user);
+
+  //         // setUserID(prevValue => user.uid)
+  //         // setStoreEmail(value => user.email)
+
+  //         // check for admin domain
+  //         let userEmail = user.email;
+  //         // let userID = user.uid;
+
+  //         const domain = userEmail.split("@")[1];
+
+  //         // if (domain === "admin.com") {
+  //         //   console.log("Login as admin");
+  //         //   navigate("/admin/portal");
+  //         // } else if (domain === "doctor.com") {
+  //         //   console.log("Login as doctor");
+  //         //   navigate("/dashboard");
+  //         // } else if (domain === "patient.com") {
+  //         //   console.log("Login as patient");
+  //         //   navigate("/home");
+  //         // } else {
+  //         //   console.log("Invalid email domain");
+  //         //   navigate("/");
+  //         // }
+
+  //         // if (userEmail.slice(-10) === "@admin.com") {
+  //         //   console.log("Login as admin");
+  //         // } else if (userEmail.slice(-11) === "@doctor.com") {
+  //         //   console.log("Login as doctor");
+  //         //   navigate("/dashboard");
+  //         // } else if (userEmail.slice(-12) === "@patient.com") {
+  //         //   console.log("Login as patient");
+  //         //   navigate("/home");
+  //         // } else {
+  //         //   navigate("/");
+  //         // }
+  //       } else {
+  //         console.log("Fail to get user");
+  //       }
+  //     });
+  //   }, 3000);
+  // }, [user]);
+
+
+
   useEffect(() => {
-    setTimeout(() => {
-      onAuthStateChanged(firebaseAuth, (user) => {
-        if (user) {
-          setuser(user);
+    const checkUserDomainAndNavigate = () => {
 
-          // setUserID(prevValue => user.uid)
-          // setStoreEmail(value => user.email)
+      if (!user) return null
 
-          // check for admin domain
-          let userEmail = user.email;
-          // let userID = user.uid;
+        const userEmail = user.email;
+        const domain = userEmail.split("@")[1];
+        console.log({domain})
 
-          const domain = userEmail.split("@")[1];
-
-          // if (domain === "admin.com") {
-          //   console.log("Login as admin");
-          //   navigate("/admin/portal");
-          // } else if (domain === "doctor.com") {
-          //   console.log("Login as doctor");
-          //   navigate("/dashboard");
-          // } else if (domain === "patient.com") {
-          //   console.log("Login as patient");
-          //   navigate("/home");
-          // } else {
-          //   console.log("Invalid email domain");
-          //   navigate("/");
-          // }
-
-          // if (userEmail.slice(-10) === "@admin.com") {
-          //   console.log("Login as admin");
-          // } else if (userEmail.slice(-11) === "@doctor.com") {
-          //   console.log("Login as doctor");
-          //   navigate("/dashboard");
-          // } else if (userEmail.slice(-12) === "@patient.com") {
-          //   console.log("Login as patient");
-          //   navigate("/home");
-          // } else {
-          //   navigate("/");
-          // }
+        if (domain === "admin.com") {
+          console.log("Login as admin");
+          navigate("/admin/portal");
+        } else if (domain === "doctor.com") {
+          console.log("Login as doctor");
+          navigate("/dashboard");
+        } else if (domain === "patient.com") {
+          console.log("Login as patient");
+          navigate("/home");
         } else {
-          console.log("Fail to get user");
+          console.log("Invalid email domain");
+          navigate("/");
         }
-      });
-    }, 3000);
-  }, [user]);
+      
+    };
+ 
+
+    const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
+      console.log({user})
+   
+      setuser(user);
+      checkUserDomainAndNavigate()
+    });
+
+    return  () => unsubscribe(); // Clean up the subscription when the component unmounts
+  }, [navigate]);
+
+
 
   const handleSubmit = async (event) => {
     try {
@@ -121,6 +161,7 @@ export default function LoginUser() {
       Success("User Logged In");
     } catch (error) {
       console.log(error?.message);
+      Error(error?.message);
       if (error instanceof Error) {
         Error(error?.message);
       }

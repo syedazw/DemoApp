@@ -25,6 +25,7 @@ import {
 } from "firebase/firestore";
 import { getStorage, uploadBytes, ref as ref_storage } from "firebase/storage";
 import { getDatabase, set, ref as ref_database } from "firebase/database";
+import { Success } from "../utils/toastify";
 // export const [restrictAccess, setRestrictAccess] = useState(false)
 
 const apiKey = import.meta.env.VITE_REACT_APP_apiKey;
@@ -331,16 +332,6 @@ export const FirebaseProvider = (props) => {
       const docref = doc(db, "Patients", PatientID);
       await deleteDoc(docref);
     }
-    toast.success("Device Successfully Deleted", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
   };
 
   const update = async (patientID) => {

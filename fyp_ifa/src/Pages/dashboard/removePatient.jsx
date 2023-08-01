@@ -3,6 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 import { usefirebase } from "../../context/firebase";
 import { getAuth } from "firebase/auth";
 import DashboardNavigation from "../../Components/dashboardNavigation";
+import { Success } from "../../utils/toastify";
 
 export default function RemovePatient() {
   const firebase = usefirebase();
@@ -47,6 +48,16 @@ export default function RemovePatient() {
         console.log("Error fetching patient data:", error);
       });
   }, []);
+
+  const handleDelete = (PatientID) => {
+    firebase.onDelete(PatientID);
+
+    Success("Patient remove successfully")
+    // Update local state by removing the deleted item
+    setPatientData((prevData) =>
+        prevData.filter((item) => item.id !== PatientID)
+    );
+};
 
   const patdata = [patientData];
   console.log("patiendata", patdata);
@@ -146,7 +157,7 @@ export default function RemovePatient() {
                     <td scope="row">{item.data.fullname}</td>
                     <td scope="row">{item.data.assistant}</td>
                     <td>
-                      <button className="bg-color text-light">Remove</button>
+                      <button className="bg-color text-light" onClick={() => {handleDelete(item.id)}}>Remove</button>
                     </td>
                   </tr>
                 ))}

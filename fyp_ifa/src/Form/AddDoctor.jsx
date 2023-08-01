@@ -1,7 +1,6 @@
 import React from "react"
 import { usefirebase } from '../context/firebase'
-import { toast } from "react-toastify";
-// import LoginUser from "./loginUser";
+import { Error, Success } from "../utils/toastify";// import LoginUser from "./loginUser";
 // import Swal from 'sweetalert2';
 // import Alert from '../App';
 
@@ -71,16 +70,7 @@ export default function AddDoctor() {
         // Add data to firestore
 
         if (!doctorRegister.email.endsWith("@doctor.com")) {
-            return toast.error("Only doctor.com email domains are allowed", {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
+            Error("Only doctor.com email domains are allowed")
         }
 
 

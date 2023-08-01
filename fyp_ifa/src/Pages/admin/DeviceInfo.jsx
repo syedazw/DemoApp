@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { usefirebase } from "../../context/firebase";
 import { useParams } from "react-router-dom";
+import { Success } from "../../utils/toastify";
 
 
 
@@ -32,10 +33,13 @@ export default function DeviceInfo(props) {
 
     const handleDelete = (PatientID) => {
         firebase.onDelete(PatientID);
+
+        Success("Device deleted successfully")
         // Update local state by removing the deleted item
         setPatientData((prevData) =>
             prevData.filter((item) => item.id !== PatientID)
         );
+
     };
 
 

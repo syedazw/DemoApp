@@ -148,7 +148,7 @@ export default function LoginUser2() {
               </a>
               <div className="row">
                 <div className="col-sm-5 col-md-12 ms-4">
-                  <button type="submit" className="mt-4 mx-4 p-2">
+                  <button type="submit" className="mt-4 mx-4 p-2" style={buttonStyle}>
                     Login
                   </button>
 

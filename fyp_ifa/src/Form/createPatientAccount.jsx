@@ -1,7 +1,7 @@
 import React from "react"
 import { usefirebase } from '../context/firebase'
-import { toast } from "react-toastify";
 import { Outlet, Link } from "react-router-dom"
+import { Error, Success } from "../utils/toastify"
 
 export default function PatientInfo() {
 
@@ -71,18 +71,9 @@ export default function PatientInfo() {
         // Add data to firestore
 
         if (!patientRegister.email.endsWith("@patient.com")) {
-            return toast.error("Only patient.com email domains are allowed", {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
+            Error("Only patient.com email domains are allowed")
         }
-
+        
         const collectionName = "Patients";
         const data = {
             fullname: patientRegister.fullname,
@@ -105,7 +96,7 @@ export default function PatientInfo() {
             deviceName: patientRegister.deviceName,
             deviceToken: patientRegister.deviceToken,
             deviceAssignDate: patientRegister.deviceAssignDate
-        };
+        }
 
         try {
             // Add data to Firestore
@@ -117,7 +108,10 @@ export default function PatientInfo() {
                 patientRegister.email,
                 patientRegister.password
             );
+
+            Success("Account created successfully")
             console.log("Patient Account successfully created", newAccount);
+
         } catch (error) {
             console.error(
                 "Error occurred while saving data or creating account:",

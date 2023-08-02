@@ -4,14 +4,14 @@ import { Outlet, Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { usefirebase } from "../../context/firebase";
 import { getAuth } from "firebase/auth";
-import {getFirestore} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import DashboardNavigation from "../../Components/dashboardNavigation";
 import { filterSearch } from "../../utils/search";
 import { Error } from "../../utils/toastify";
 
 export default function Dashboard() {
   const firebase = usefirebase();
-  const auth = getAuth(); 
+  const auth = getAuth();
   const params = useParams();
   // console.log("params is", params);
 
@@ -28,14 +28,14 @@ export default function Dashboard() {
           ...doc.data(),
         }));
         setPatientData(data);
-        console.log("data",data)
+        console.log("data", data)
       })
       .catch((err) => {
         // console.error(err);
         setError("Error retrieving patient data.");
       });
   }, []);
-  console.log("Patient Data---",patientData )
+  console.log("Patient Data---", patientData)
 
   const [docdata, setdocdata] = useState([]);
   useEffect(() => {
@@ -101,7 +101,7 @@ export default function Dashboard() {
       <div className="container-fluid">
         <div className="row">
           {patientData.map((item) => (
-            < Cardiogram key={item.id}
+            <Cardiogram key={item.id}
               id={item.id}
               {...item.data} height={"30rem"} />
           ))}

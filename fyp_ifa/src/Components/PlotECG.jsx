@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getDatabase } from "firebase/database";
 
 const Cardiogram = (props) => {
-  console.log("Props receive by cardiogram component", props.username)
+  console.log("Props receive by cardiogram component", props)
   const navigate = useNavigate(); //create instance for navigation
   const buttonStyle = {
     color: "white",
@@ -119,7 +119,7 @@ const Cardiogram = (props) => {
 
   return (
     <>
-      <div className="card mx-2 col-sm-12 col-md-4" style={{ width: "25rem", height: newHeight, borderColor: alarm ? 'red' : '#041342' }}>
+      <div className="card m-2 col-sm-12 col-md-4" style={{ width: "25rem", height: newHeight, borderColor: alarm ? 'red' : '#041342' }}>
         <p className="card-text mx-3 px-3 mb-0 fw-bold">Patient Name: {props.fullname}</p>
         <p className="card-text mx-3 px-3 mt-0 mb-0 fw-bold d-inline">Device Status:{deviceStatus ? <p className="d-inline text-success"> Connected </p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
         <p className="card-text mx-3 px-3 mt-0 mb-0 fw-bold d-block">Electrodes Status:{electrodeVal ? <p className="d-inline text-success mt-0"> Connected</p> : <p className="d-inline text-danger"> Not Connected </p>}</p>

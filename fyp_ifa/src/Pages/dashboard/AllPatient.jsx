@@ -126,6 +126,8 @@ export default function AllPatient() {
           <h4 className="fw-bold text-center">ALL PATIENTS</h4>
         </div>
       </div>
+
+
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-12 col-sm-12">

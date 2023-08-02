@@ -55,9 +55,9 @@ export default function RemovePatient() {
     Success("Patient remove successfully")
     // Update local state by removing the deleted item
     setPatientData((prevData) =>
-        prevData.filter((item) => item.id !== PatientID)
+      prevData.filter((item) => item.id !== PatientID)
     );
-};
+  };
 
   const patdata = [patientData];
   console.log("patiendata", patdata);
@@ -137,7 +137,7 @@ export default function RemovePatient() {
         </div>
 
         <div className="row">
-          <div className="col-sm-12 col-md-6 mx-auto">
+          <div className="col-sm-12 col-md-4 mx-auto">
             <table className="table justify-content-center table-striped">
               <thead className="bg-color text-light">
                 <tr>
@@ -149,7 +149,6 @@ export default function RemovePatient() {
                 </tr>
               </thead>
               <tbody class="table-group-divider">
-                {/* <table class="table"> */}
                 {patientData.map((item, index) => (
                   <tr key={item.id}>
                     <th scope="row">{index + 1}</th>
@@ -157,7 +156,7 @@ export default function RemovePatient() {
                     <td scope="row">{item.data.fullname}</td>
                     <td scope="row">{item.data.assistant}</td>
                     <td>
-                      <button className="bg-color text-light" onClick={() => {handleDelete(item.id)}}>Remove</button>
+                      <button className="bg-color text-light" onClick={() => { handleDelete(item.id) }}>Remove</button>
                     </td>
                   </tr>
                 ))}

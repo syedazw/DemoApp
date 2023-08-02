@@ -4,10 +4,9 @@ import ApexChart from "./ChartView";
 import { usefirebase } from "../context/firebase";
 import { useParams, useNavigate } from "react-router-dom";
 import { getDatabase } from "firebase/database";
-import { Error } from "../utils/toastify";
 
 const Cardiogram = (props) => {
-  // console.log("Props receive by cardiogram component", props)
+  console.log("Props receive by cardiogram component", props.username)
   const navigate = useNavigate(); //create instance for navigation
   const buttonStyle = {
     color: "white",
@@ -120,85 +119,32 @@ const Cardiogram = (props) => {
 
   return (
     <>
-      <div
-        className="card mx-2 col-sm-12 col-md-4"
-        style={{
-          width: "25rem",
-          height: newHeight,
-          borderColor: alarm ? "red" : "#041342",
-        }}
-      >
-        <p className="card-text mx-3 px-3 mb-0 fw-bold">
-          Patient Name: {props.fullname}
-        </p>
-        <p className="card-text mx-3 px-3 mt-0 mb-0 fw-bold d-inline">
-          Device Status:
-          {deviceStatus ? (
-            <p className="d-inline text-success"> Connected </p>
-          ) : (
-            <p className="d-inline text-danger"> Not Connected </p>
-          )}
-        </p>
-        <p className="card-text mx-3 px-3 mt-0 mb-0 fw-bold d-block">
-          Electrodes Status:
-          {electrodeVal ? (
-            <p className="d-inline text-success mt-0"> Connected</p>
-          ) : (
-            <p className="d-inline text-danger"> Not Connected </p>
-          )}
-        </p>
-        <p className="px-3 pt-0 mx-3 mt-0 fw-bold d-block">
-          Patient Condition:
-          {alarm ? (
-            <p className="d-inline text-danger"> Abnormality Detect </p>
-          ) : (
-            <p className="d-inline text-success"> Normal </p>
-          )}
-        </p>
+      <div className="card mx-2 col-sm-12 col-md-4" style={{ width: "25rem", height: newHeight, borderColor: alarm ? 'red' : '#041342' }}>
+        <p className="card-text mx-3 px-3 mb-0 fw-bold">Patient Name: {props.fullname}</p>
+        <p className="card-text mx-3 px-3 mt-0 mb-0 fw-bold d-inline">Device Status:{deviceStatus ? <p className="d-inline text-success"> Connected </p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
+        <p className="card-text mx-3 px-3 mt-0 mb-0 fw-bold d-block">Electrodes Status:{electrodeVal ? <p className="d-inline text-success mt-0"> Connected</p> : <p className="d-inline text-danger"> Not Connected </p>}</p>
+        <p className="px-3 pt-0 mx-3 mt-0 fw-bold d-block">Patient Condition:{alarm ? (<p className="d-inline text-danger"> Abnormality Detect </p>) : (<p className="d-inline text-success"> Normal </p>)}</p>
         <div className="card-body">
           <ApexChart data={data} title="Patient ECG" />
           <div className="btn-group">
-            <button
-              className="btn text-light m-2"
-              onClick={putDatanew}
-              style={buttonStyle}
-            >
-              Start
-            </button>
-            <button
-              className="btn text-light m-2"
-              onClick={() => setFetching(false)}
-              style={buttonStyle}
-            >
-              Stop
-            </button>
+            <button className="btn text-light m-2" onClick={putDatanew} style={buttonStyle}>Start</button>
+            <button className="btn text-light m-2" onClick={() => setFetching(false)} style={buttonStyle}>Stop</button>
           </div>
           <br></br>
-          {newHeight === "30rem" ? (
-            <button
-              type="button"
-              className="btn btn-success btn-width mb-2 mx-auto d-block"
-              onClick={(e) => navigate(`/patientprofile/${props.id}`)}
-            >
-              View Patient
-            </button>
-          ) : null}
+          {
+            newHeight === "30rem" ?
+              <button type="button" className="btn btn-success btn-width mb-2 mx-auto d-block" onClick={(e) => navigate(`/patientprofile/${props.id}`)}>View Patient</button> :
+              null
+          }
 
-          {isSounding ? (
-            <button
-              data-playing="false"
-              role="switch"
-              aria-checked="false"
-              onClick={() => {
-                gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
-                setIsSounding(false);
-              }}
-              className="btn btn-danger btn-width pt-0 mx-auto"
-            >
-              Stop Alarm
-            </button>
-          ) : null}
+          {isSounding ? <button
+            data-playing="false" role="switch" aria-checked="false"
+            onClick={() => {
+              gainNode.gain.setValueAtTime(0, audioContext.currentTime); // set volume to 0
+              setIsSounding(false);
+            }} className="btn btn-danger btn-width pt-0 mx-auto">Stop Alarm</button> : null}
         </div>
+
       </div>
     </>
   );

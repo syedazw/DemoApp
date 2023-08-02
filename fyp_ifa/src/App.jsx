@@ -31,7 +31,8 @@ import CreateAccountbyAdmin from './Pages/admin/createAccountByAdmin'
 import CreateDoctorAccount from './Pages/admin/CreateDoctorAccount'
 
 
-import LoginUser from './Form/loginUser'
+// import LoginUser from './Form/loginUser'
+import {LoginUser2} from './Form/LoginUser2'
 import PatientInfo from './Form/createPatientAccount'
 import DoctorInfo from './Form/doctorInfo'
 
@@ -42,7 +43,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginUser />}></Route>
+          {/* <Route path="/" element={<LoginUser />}></Route> */}
+          <Route path="/" element={<LoginUser2 />}></Route>
           <Route path="/admin/portal" element={<AdminPortal />}></Route>
           <Route path="/admin/create/account" element={<CreateDoctorAccount />}></Route>   {/* creating account with different user domain */}
           <Route path="/admin/create/patient/account" element={<CreateAccountbyAdmin />}></Route>
@@ -75,7 +77,8 @@ function App() {
 
 
           {/* <Route path="/account" element={<Account />}></Route> */}
-          <Route path="/loginpage" element={<LoginUser />}></Route>
+          {/* <Route path="/loginpage" element={<LoginUser />}></Route> */}
+          <Route path="/" element={<LoginUser2 />}></Route>
           <Route path='/doctor/personal/information' element={<DoctorInfo />}></Route>
           <Route path='/patient/personal/information' element={<PatientInfo />}></Route>
 
